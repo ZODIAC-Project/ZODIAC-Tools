@@ -75,6 +75,8 @@ spec:
           value: "zodiac"
         - name: STORAGE_FILE
           value: "/shared/analysis_logs.jsonl"
+        - name: HTML_FILE
+          value: "/shared/analysis_logs.html"
         volumeMounts:
         - name: logs-volume
           mountPath: /shared
@@ -88,15 +90,20 @@ spec:
             import http.server
             import socketserver
             import os
-            # THE FIX: Tell Python to look in the /shared folder
+            
+            # 1. Go to the logs folder
             os.chdir('/shared')
             
+            # 2. Configure how files are handled
             handler = http.server.SimpleHTTPRequestHandler
-            # This tells the server to treat .jsonl as plain text so it doesn't download
-            handler.extensions_map.update({'.jsonl': 'text/plain'})
+            handler.extensions_map.update({
+                '.jsonl': 'text/plain', # Show raw logs as text
+                '.html': 'text/html',   # Show dashboard as a webpage
+            })
             
+            # 3. Start the server
             with socketserver.TCPServer(("", 8080), handler) as httpd:
-                print("Serving logs from /shared at port 8080...")
+                print("Serving Dashboard at port 8080...")
                 httpd.serve_forever()
         ports:
         - containerPort: 8080
