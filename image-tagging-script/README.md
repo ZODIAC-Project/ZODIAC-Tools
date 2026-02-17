@@ -9,7 +9,7 @@ This script can only be used for YAML files with a single image reference. If yo
 Quick usage
 - Pipe the script to bash and pass image name and k8s file:
 
-	Curl -sSL https://git.tu-berlin.de/<path>/raw/branch/image_tagging_script.sh | bash -s -- myrepo/myimage path/to/deployment.yaml
+	Curl -sSL https://git.tu-berlin.de/ZODIAC-Project/ZODIAC-Tools/-/raw/main/image-tagging-script/image_tagging_script.sh | bash -s -- myrepo/myimage path/to/deployment.yaml
 
 Examples
 - Build and update `deployment.yaml` with image `myrepo/myimage`:

@@ -1,0 +1,2 @@
+# Requirements for log analysis scripts
+# No external dependencies needed for basic functionality
