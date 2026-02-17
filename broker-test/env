@@ -1,0 +1,3 @@
+BROKER=localhost
+PORT=1883
+TOPIC=tests/retained/test1
