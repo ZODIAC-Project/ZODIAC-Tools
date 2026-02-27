@@ -91,7 +91,7 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
 ```
-replace the environment variables IMAGE_NAME, CONTEXT and DOCKERFILE depending on your application. If one repository should build more than one dockerfile, create more than one github action.  
+replace the environment variables `IMAGE_NAME`, `CONTEXT` and `DOCKERFILE` depending on your application. If one repository should build more than one dockerfile, create more than one github action.  
 
 2. build the image once by pushing to main. The github action should run successfully. The tag should automatically be `0.1.0-cicd` or similar
 
@@ -107,7 +107,7 @@ metadata:
     keel.sh/policy: minor
     keel.sh/trigger: poll
 ```
-(also see how the other deployment files do it)
+(you can also look at how the other deployment files do it)
 
 6. make sure that the container image tag is set to `0.1.0-cicd` in your deployment file
 ```yaml
