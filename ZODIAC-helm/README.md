@@ -39,8 +39,8 @@ helm install keel keel/keel --namespace zodiac --set watchNamespace=zodiac
 ```
 
 ## adding new applications
-
-1. add the following github action to the repository of your application
+1. add a gitlab token as a secret to your repository with the name `ZODIAC_CI_TOKEN` (I can give you the one I created for CI on request)
+2. add the following github action to the repository of your application
 ```yaml
 name: Deploy <name of your application>
 
@@ -93,13 +93,13 @@ jobs:
 ```
 replace the `name` in line one and the environment variables `IMAGE_NAME`, `CONTEXT` and `DOCKERFILE` depending on your application. If one repository should build more than one dockerfile, create more than one github action.  
 
-2. build the image once by pushing to main. The github action should run successfully. The tag should automatically be `0.1.0-cicd` or similar
+3. build the image once by pushing to main. The github action should run successfully. The tag should automatically be `0.1.0-cicd` or similar
 
-3. add a deployment file to the `templates` folder here in this repository
+4. add a deployment file to the `templates` folder here in this repository
 
-4. move any environment variables to `values.yaml`
+5. move any environment variables to `values.yaml`
 
-5. add keel annotations to your deployment file
+6. add keel annotations to your deployment file
 ```yaml
 metadata:
   <...>
@@ -109,8 +109,8 @@ metadata:
 ```
 (you can also look at how the other deployment files do it)
 
-6. make sure that the container image tag is set to `0.1.0-cicd` in your deployment file
+7. make sure that the container image tag is set to `0.1.0-cicd` in your deployment file
 ```yaml
 image: "{{ .Values.meta.imageUrl }}/<application-name>:0.1.0-cicd"
 ```
-7. run `helm upgrade zodiac . -n zodiac`
+8. run `helm upgrade zodiac . -n zodiac`
