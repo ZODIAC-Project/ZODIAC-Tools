@@ -42,7 +42,7 @@ helm install keel keel/keel --namespace zodiac --set watchNamespace=zodiac
 
 1. add the following github action to the repository of your application
 ```yaml
-name: Deploy MCP Client
+name: Deploy <name of your application>
 
 on:
   push:
@@ -91,7 +91,7 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
 ```
-replace the environment variables `IMAGE_NAME`, `CONTEXT` and `DOCKERFILE` depending on your application. If one repository should build more than one dockerfile, create more than one github action.  
+replace the `name` in line one and the environment variables `IMAGE_NAME`, `CONTEXT` and `DOCKERFILE` depending on your application. If one repository should build more than one dockerfile, create more than one github action.  
 
 2. build the image once by pushing to main. The github action should run successfully. The tag should automatically be `0.1.0-cicd` or similar
 
