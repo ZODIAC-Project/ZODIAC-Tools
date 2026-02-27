@@ -23,7 +23,7 @@ spec:
         - name: regcred
       containers:
         - name: mcp-client
-          image: "{{ .Values.meta.imageUrl }}/mcp-client"
+          image: "{{ .Values.meta.imageUrl }}/mcp-client:0.2.0-cicd"
           imagePullPolicy: IfNotPresent
           env:
             - name: LOGGING_LEVEL
