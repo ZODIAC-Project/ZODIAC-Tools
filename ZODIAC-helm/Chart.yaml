@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ZODIAC-helm
+description: A Helm chart for setting up the applications related to the ZODIAC project
+type: application
+
+version: 0.1.3345
+appVersion: "1.16.0"
