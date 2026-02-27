@@ -75,7 +75,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: github worker
-          password: ${{ secrets.HIVEZODIAC_CI_TOKEN }}
+          password: ${{ secrets.ZODIAC_CI_TOKEN }}
       - name: Set version
         run: echo "VERSION=0.${{ github.run_number }}.0-cicd" >> $GITHUB_ENV
       - name: Build and push docker image
