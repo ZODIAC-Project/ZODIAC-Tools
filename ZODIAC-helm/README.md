@@ -114,3 +114,4 @@ metadata:
 image: "{{ .Values.meta.imageUrl }}/<application-name>:0.1.0-cicd"
 ```
 8. run `helm upgrade zodiac . -n zodiac`
+9. if everything works, add your application to the list of applications above :)

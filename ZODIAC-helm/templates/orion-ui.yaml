@@ -23,7 +23,7 @@ spec:
         - name: regcred
       containers:
         - name: orion-ui
-          image: "{{ .Values.meta.imageUrl }}/orion-ui"
+          image: "{{ .Values.meta.imageUrl }}/orion-ui:0.2.0-cicd"
           env:
             - name: VITE_CHAT_API_BASE
               value: {{.Values.orionUi.chatApiBase}}
