@@ -26,3 +26,9 @@ orionUi:
 agent:
   apiPort: 3000
   redisPort: 6379
+
+logCollector:
+  kubePod: "mcp-client-55b569c777-sz9x4"
+  kubeNamespace: "zodiac"
+  storageFile: "/shared/analysis_logs.jsonl"
+  htmlFile: "/shared/analysis_logs.html"
