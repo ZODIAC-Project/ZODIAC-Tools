@@ -2,6 +2,11 @@ meta:
   imageUrl: git.tu-berlin.de:5000/zodiac/zodiac-meta
   loggingLevel: DEBUG
 
+hivezodiac:
+  httpPort: 8080
+  mqttPort: 1883
+  websocketPort: 8000
+
 mcp:
   clientPort: 8001
   serverPort: 8000
@@ -17,3 +22,7 @@ orionUi:
   chatApiBase: "mcp-client-service:8001"
   chatApiPath: "/chat"
   agentApiBase: "http://agent-api:3000"
+
+agent:
+  apiPort: 3000
+  redisPort: 6379
