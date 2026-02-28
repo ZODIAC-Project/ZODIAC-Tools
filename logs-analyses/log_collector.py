@@ -3,6 +3,7 @@ import json
 import os
 import re
 import sys
+import time
 from collections import deque
 from pathlib import Path
 from datetime import datetime
@@ -12,7 +13,6 @@ STORAGE_FILE = os.getenv('STORAGE_FILE', '/shared/analysis_logs.jsonl')
 HTML_FILE = os.getenv('HTML_FILE', '/shared/index.html')
 MAX_LOGS = int(os.getenv('MAX_LOGS', '1000'))
 KUBE_NAMESPACE = os.getenv('KUBE_NAMESPACE', 'default')
-KUBE_POD = os.getenv('KUBE_POD')
 KUBE_CONTAINER = os.getenv('KUBE_CONTAINER')
 
 # HTML Template for the Dashboard
@@ -128,13 +128,31 @@ def stream_pod_logs(namespace, pod, container=None):
     except Exception as e:
         print(f"API Error: {e}", file=sys.stderr)
 
+def get_running_pod():
+    pods = client.CoreV1Api().list_namespaced_pod(
+        namespace=KUBE_NAMESPACE,
+        label_selector="app=mcp-client"
+    ).items
+
+    for pod in pods:
+        if pod.status.phase == "Running":
+            return pod.metadata.name
+
+    return None
+
 def main():
     storage_path = Path(STORAGE_FILE)
     storage_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if not KUBE_POD:
-        print("Error: KUBE_POD not set.")
-        sys.exit(1)
+    while True:
+        pod_name = get_running_pod()
+
+        if not pod_name:
+            print("No running mcp-client pod found. Retrying...", file=sys.stderr)
+            time.sleep(2)
+            continue
+        else:
+            break
 
     logs = deque(maxlen=MAX_LOGS)
     
@@ -144,15 +162,15 @@ def main():
                 try: logs.append(json.loads(line.strip()))
                 except: continue
 
-    print(f"Starting dashboard for {KUBE_POD}...")
-    update_dashboard(logs, KUBE_POD)
+    print(f"Starting dashboard for {pod_name}...")
+    update_dashboard(logs, pod_name)
 
-    for line in stream_pod_logs(KUBE_NAMESPACE, KUBE_POD, KUBE_CONTAINER):
+    for line in stream_pod_logs(KUBE_NAMESPACE, pod_name, KUBE_CONTAINER):
         data = parse_analysis_log(line)
         if data:
             logs.append(data)
             save_logs(logs, storage_path)
-            update_dashboard(logs, KUBE_POD)
+            update_dashboard(logs, pod_name)
             print(f"Log stored and Dashboard updated. Total: {len(logs)}")
 
 if __name__ == '__main__':
