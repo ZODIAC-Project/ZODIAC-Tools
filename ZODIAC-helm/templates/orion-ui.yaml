@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: orion-ui
+  labels:
+    app: orion-ui
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orion-ui
+  template:
+    metadata:
+      labels:
+        app: orion-ui
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: orion-ui
+          image: "{{ .Values.meta.imageUrl }}/orion-ui:0.2.0-cicd"
+          env:
+            - name: VITE_CHAT_API_BASE
+              value: {{.Values.orionUi.chatApiBase}}
+            - name: VITE_CHAT_API_PATH
+              value: {{.Values.orionUi.chatApiPath}}
+            - name: VITE_AGENT_API_BASE
+              value: {{.Values.orionUi.agentApiBase}}
+          ports:
+            - containerPort: {{.Values.orionUi.port}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: orion-ui
+  labels:
+    app: orion-ui
+spec:
+  type: NodePort
+  selector:
+    app: orion-ui
+  ports:
+    - name: http
+      port: {{.Values.orionUi.port}}
+      targetPort: {{.Values.orionUi.port}}
+      nodePort: 30081

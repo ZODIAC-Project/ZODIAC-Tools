@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: mcp-client
+  labels:
+    app: mcp-client
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-client
+  template:
+    metadata:
+      labels:
+        app: mcp-client
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: mcp-client
+          image: "{{ .Values.meta.imageUrl }}/mcp-client:0.2.0-cicd"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LOGGING_LEVEL
+              value: "{{ .Values.meta.loggingLevel }}"
+            - name: LLM_URL
+              value: {{.Values.mcp.env.llmUrl}}
+            - name: MCP_URL
+              value: {{.Values.mcp.env.mcpUrl}}
+            - name: MODEL
+              value: {{.Values.mcp.env.model}}
+            - name: SYSTEM_PROMPT
+              value: {{.Values.mcp.env.systemPrompt}}
+            - name: TOKEN_LIMIT
+              value: {{.Values.mcp.env.tokenLimit|quote}}
+          ports:
+            - containerPort: {{.Values.mcp.clientPort}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: mcp-client-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mcp-client
+  ports:
+    - protocol: TCP
+      port: {{.Values.mcp.clientPort}}
+      targetPort: {{.Values.mcp.clientPort}}

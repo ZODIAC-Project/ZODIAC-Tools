@@ -3,6 +3,7 @@ import json
 import os
 import re
 import sys
+import time
 from collections import deque
 from pathlib import Path
 from datetime import datetime
@@ -13,7 +14,6 @@ STORAGE_FILE = os.getenv('STORAGE_FILE', '/shared/analysis_logs.jsonl')
 HTML_FILE = os.getenv('HTML_FILE', '/shared/index.html')
 MAX_LOGS = int(os.getenv('MAX_LOGS', '1000'))
 KUBE_NAMESPACE = os.getenv('KUBE_NAMESPACE', 'default')
-KUBE_POD = os.getenv('KUBE_POD')
 KUBE_CONTAINER = os.getenv('KUBE_CONTAINER')
 KUBE_LABEL_SELECTOR = os.getenv('KUBE_LABEL_SELECTOR')
 
@@ -116,10 +116,15 @@ def save_logs(logs, storage_path):
             f.write(json.dumps(log) + '\\n')
 
 def stream_pod_logs(namespace, pod, container=None):
+    # Ensure Kubernetes client is configured (in-cluster or kubeconfig)
     try:
         config.load_incluster_config()
     except config.ConfigException:
-        config.load_kube_config()
+        try:
+            config.load_kube_config()
+        except Exception:
+            # If both methods fail, raise to let caller handle/log
+            raise
 
     v1 = client.CoreV1Api()
     w = watch.Watch()
@@ -130,58 +135,42 @@ def stream_pod_logs(namespace, pod, container=None):
     except Exception as e:
         print(f"API Error: {e}", file=sys.stderr)
 
-
-def is_pod_ready(pod):
-    """Return True if pod is Running and all container_statuses are ready."""
-    if not pod:
-        return False
-    if pod.status.phase != 'Running':
-        return False
-    statuses = pod.status.container_statuses or []
-    if not statuses:
-        return False
-    return all((getattr(s, 'ready', False) for s in statuses))
-
-
-def wait_for_pod_by_label(v1, namespace, label_selector, timeout_seconds=None):
-    """Return the name of a pod matching the label selector that is Running+Ready.
-    First checks existing pods and returns the newest ready pod. If none found,
-    it watches for pod events and returns the first that becomes ready.
-    """
+def get_running_pod():
+    # Ensure Kubernetes client is configured before making API calls
     try:
-        pods = v1.list_namespaced_pod(namespace=namespace, label_selector=label_selector).items
-    except Exception as e:
-        print(f"Failed listing pods for selector {label_selector}: {e}", file=sys.stderr)
-        pods = []
+        config.load_incluster_config()
+    except config.ConfigException:
+        try:
+            config.load_kube_config()
+        except Exception:
+            # If configuration cannot be loaded, propagate an informative error
+            print("Failed to load Kubernetes configuration (in-cluster or kubeconfig).", file=sys.stderr)
+            raise
 
-    ready_pods = [p for p in pods if is_pod_ready(p)]
-    if ready_pods:
-        # prefer the most recently started/created
-        ready_pods.sort(key=lambda p: p.status.start_time or p.metadata.creation_timestamp, reverse=True)
-        return ready_pods[0].metadata.name
+    pods = client.CoreV1Api().list_namespaced_pod(
+        namespace=KUBE_NAMESPACE,
+        label_selector=KUBE_LABEL_SELECTOR
+    ).items
 
-    w = watch.Watch()
-    try:
-        for event in w.stream(v1.list_namespaced_pod, namespace=namespace, label_selector=label_selector, timeout_seconds=timeout_seconds):
-            pod = event.get('object')
-            if is_pod_ready(pod):
-                w.stop()
-                return pod.metadata.name
-    except Exception as e:
-        print(f"Watch failed for selector {label_selector}: {e}", file=sys.stderr)
+    for pod in pods:
+        if pod.status.phase == "Running":
+            return pod.metadata.name
+
     return None
-
 
 def main():
     storage_path = Path(STORAGE_FILE)
     storage_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Determine target pod
-    target_pod = KUBE_POD
+    while True:
+        pod_name = get_running_pod()
 
-    if not target_pod and not KUBE_LABEL_SELECTOR:
-        print("Error: Either KUBE_POD or KUBE_LABEL_SELECTOR must be set.")
-        sys.exit(1)
+        if not pod_name:
+            print("No running mcp-client pod found. Retrying...", file=sys.stderr)
+            time.sleep(2)
+            continue
+        else:
+            break
 
     logs = deque(maxlen=MAX_LOGS)
     
@@ -191,53 +180,16 @@ def main():
                 try: logs.append(json.loads(line.strip()))
                 except: continue
 
-    print(f"Starting dashboard...")
+    print(f"Starting dashboard for {pod_name}...")
+    update_dashboard(logs, pod_name)
 
-    # If explicit pod given, use it. Otherwise resolve by label selector and watch for changes.
-    if target_pod:
-        update_dashboard(logs, target_pod)
-        for line in stream_pod_logs(KUBE_NAMESPACE, target_pod, KUBE_CONTAINER):
-            data = parse_analysis_log(line)
-            if data:
-                logs.append(data)
-                save_logs(logs, storage_path)
-                update_dashboard(logs, target_pod)
-                print(f"Log stored and Dashboard updated. Total: {len(logs)}")
-    else:
-        # use label selector and watch for pods becoming ready; restart streaming on pod changes
-        try:
-            try:
-                config.load_incluster_config()
-            except config.ConfigException:
-                config.load_kube_config()
-            v1 = client.CoreV1Api()
-        except Exception as e:
-            print(f"Failed to initialize Kubernetes client: {e}", file=sys.stderr)
-            sys.exit(1)
-
-        while True:
-            pod_name = wait_for_pod_by_label(v1, KUBE_NAMESPACE, KUBE_LABEL_SELECTOR)
-            if not pod_name:
-                print("No ready pod found yet, retrying in 2s...", file=sys.stderr)
-                time.sleep(2)
-                continue
-
-            print(f"Selected pod {pod_name} for label {KUBE_LABEL_SELECTOR}")
+    for line in stream_pod_logs(KUBE_NAMESPACE, pod_name, KUBE_CONTAINER):
+        data = parse_analysis_log(line)
+        if data:
+            logs.append(data)
+            save_logs(logs, storage_path)
             update_dashboard(logs, pod_name)
-
-            try:
-                for line in stream_pod_logs(KUBE_NAMESPACE, pod_name, KUBE_CONTAINER):
-                    data = parse_analysis_log(line)
-                    if data:
-                        logs.append(data)
-                        save_logs(logs, storage_path)
-                        update_dashboard(logs, pod_name)
-                        print(f"Log stored and Dashboard updated. Total: {len(logs)}")
-            except Exception as e:
-                print(f"Streaming error for pod {pod_name}: {e}", file=sys.stderr)
-
-            print("Stream ended for pod, will attempt to find new pod (if any)...")
-            time.sleep(1)
+            print(f"Log stored and Dashboard updated. Total: {len(logs)}")
 
 if __name__ == '__main__':
     main()

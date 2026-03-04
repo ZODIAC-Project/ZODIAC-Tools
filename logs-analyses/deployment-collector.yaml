@@ -66,12 +66,9 @@ spec:
       containers:
       # --- CONTAINER 1: The Collector ---
       - name: log-collector
-        image: mathiskae/log-collector:label 
+        image: mathiskae/log-collector:mergednew
         imagePullPolicy: Always
         env:
-        # Set this if you want to target a specific pod 
-        #- name: KUBE_POD
-        #  value: "mcp-client-5d59ccb46-2rz76"
         - name: KUBE_NAMESPACE
           value: "zodiac"
         - name: STORAGE_FILE

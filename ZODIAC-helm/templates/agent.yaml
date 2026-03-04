@@ -1,0 +1,125 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: agent-redis
+  labels:
+    app: agent-redis
+spec:
+  type: ClusterIP
+  ports:
+    - name: redis
+      port: {{.Values.agent.redisPort}}
+      targetPort: {{.Values.agent.redisPort}}
+      protocol: TCP
+  selector:
+    app: agent-redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: agent-redis
+  labels:
+    app: agent-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-redis
+  template:
+    metadata:
+      labels:
+        app: agent-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: {{.Values.agent.redisPort}}
+          resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: agent-api
+  labels:
+    app: agent-api
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{.Values.agent.apiPort}}
+      targetPort: {{.Values.agent.apiPort}}
+      protocol: TCP
+  selector:
+    app: agent-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: agent-api
+  labels:
+    app: agent-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-api
+  template:
+    metadata:
+      labels:
+        app: agent-api
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: agent-api
+          image: "{{ .Values.meta.imageUrl }}/agent:0.1.0-cicd"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{.Values.agent.apiPort}}
+          env:
+            - name: REDIS_URL
+              value: redis://agent-redis:{{.Values.agent.redisPort}}
+            - name: MCP_CLIENT_URL
+              value: http://mcp-client-service:{{.Values.mcp.clientPort}}/chat
+            - name: PORT
+              value: "{{.Values.agent.apiPort}}"
+          resources: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: agent-worker
+  labels:
+    app: agent-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-worker
+  template:
+    metadata:
+      labels:
+        app: agent-worker
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: agent-worker
+          image: "{{ .Values.meta.imageUrl }}/agent:0.1.0-cicd"
+          imagePullPolicy: Always
+          command: ["npm", "run", "worker"]
+          env:
+            - name: REDIS_URL
+              value: redis://agent-redis:{{.Values.agent.redisPort}}
+            - name: MCP_CLIENT_URL
+              value: http://mcp-client-service:{{.Values.mcp.clientPort}}/chat
+          resources: {}
