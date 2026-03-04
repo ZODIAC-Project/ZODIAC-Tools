@@ -31,12 +31,15 @@ USAGE
 
 # Print the usage info if requested 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-        usage
-        exit 0
+    usage
+    exit 0
 fi
 
 # Default Dockerfile path
 DOCKERFILE_PATH="Dockerfile"
+
+# Default platform for docker build. If empty, build will use the host architecture.
+PLATFORM=""
 
 # Optional registry credentials (can be provided via CLI flags or env)
 REGISTRY_USER=""
@@ -77,6 +80,15 @@ while [[ $# -gt 0 ]]; do
             REGISTRY_TOKEN="$1"
             shift
             ;;
+        -p|--platform)
+            shift
+            if [ -z "$1" ]; then
+                echo "Error: --platform requires a value (e.g. linux/amd64)"
+                exit 1
+            fi
+            PLATFORM="$1"
+            shift
+            ;;
         --token-file)
             shift
             if [ -z "$1" ]; then
@@ -115,6 +127,11 @@ if [ -n "$CONTAINER_NAME" ]; then
     echo "| Container Name in YAML: $CONTAINER_NAME"
 fi
 echo "| Dockerfile Path: $DOCKERFILE_PATH"
+if [ -n "${PLATFORM}" ]; then
+    echo "| Platform: ${PLATFORM}"
+else
+    echo "| Platform: (host architecture - omitted)"
+fi
 echo "| Username: ${REGISTRY_USER:-(not set)}"
 if [ -n "$TOKEN_FILE" ]; then
     echo "| Token File: $TOKEN_FILE"
@@ -191,7 +208,13 @@ fi
 
 BUILD_LOG=$(mktemp /tmp/image-build-log.XXXXXX)
 echo "| Building (quiet). Build output logged to $BUILD_LOG"
-if ! docker build --platform linux/amd64 -f "$DOCKERFILE_PATH" -t "$FULL_IMAGE_NAME" . --provenance=false > "$BUILD_LOG" 2>&1; then
+# If PLATFORM is set, pass --platform to docker build. Otherwise let Docker choose host arch.
+if [ -n "$PLATFORM" ]; then
+    BUILD_CMD=(docker build --platform "$PLATFORM" -f "$DOCKERFILE_PATH" -t "$FULL_IMAGE_NAME" . --provenance=false)
+else
+    BUILD_CMD=(docker build -f "$DOCKERFILE_PATH" -t "$FULL_IMAGE_NAME" . --provenance=false)
+fi
+if ! "${BUILD_CMD[@]}" > "$BUILD_LOG" 2>&1; then
     echo "| Error: docker build failed. Showing build output (first 500 lines):"
     sed -n '1,500p' "$BUILD_LOG" || true
     rm -f "$BUILD_LOG"

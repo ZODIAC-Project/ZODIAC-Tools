@@ -66,17 +66,21 @@ spec:
       containers:
       # --- CONTAINER 1: The Collector ---
       - name: log-collector
-        image: git.tu-berlin.de:5000/zodiac/zodiac-meta/log-collector:latest
+        image: mathiskae/log-collector:label 
         imagePullPolicy: Always
         env:
-        - name: KUBE_POD
-          value: "mcp-client-55b569c777-sz9x4"
+        # Set this if you want to target a specific pod 
+        #- name: KUBE_POD
+        #  value: "mcp-client-5d59ccb46-2rz76"
         - name: KUBE_NAMESPACE
           value: "zodiac"
         - name: STORAGE_FILE
           value: "/shared/analysis_logs.jsonl"
         - name: HTML_FILE
           value: "/shared/analysis_logs.html"
+        # looks for pods with label `app=mcp-client` in the specified namespace
+        - name: KUBE_LABEL_SELECTOR
+          value: "app=mcp-client"
         volumeMounts:
         - name: logs-volume
           mountPath: /shared

@@ -51,8 +51,8 @@ Mount this PVC in your main application pod at `/shared`.
 Build the Docker image:
 
 ```bash
-docker build -f Dockerfile.fetcher -t your-registry/log-collector:latest .
-docker push your-registry/log-collector:latest
+docker build -f Dockerfile -t <repo>/log-collector:latest .
+docker push <repo>/log-collector:latest
 ```
 
 ### 4. Deploy

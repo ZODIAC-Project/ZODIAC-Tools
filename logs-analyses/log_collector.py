@@ -7,6 +7,7 @@ from collections import deque
 from pathlib import Path
 from datetime import datetime
 from kubernetes import client, config, watch
+import time
 
 STORAGE_FILE = os.getenv('STORAGE_FILE', '/shared/analysis_logs.jsonl')
 HTML_FILE = os.getenv('HTML_FILE', '/shared/index.html')
@@ -14,6 +15,7 @@ MAX_LOGS = int(os.getenv('MAX_LOGS', '1000'))
 KUBE_NAMESPACE = os.getenv('KUBE_NAMESPACE', 'default')
 KUBE_POD = os.getenv('KUBE_POD')
 KUBE_CONTAINER = os.getenv('KUBE_CONTAINER')
+KUBE_LABEL_SELECTOR = os.getenv('KUBE_LABEL_SELECTOR')
 
 # HTML Template for the Dashboard
 HTML_TEMPLATE = """
@@ -128,12 +130,57 @@ def stream_pod_logs(namespace, pod, container=None):
     except Exception as e:
         print(f"API Error: {e}", file=sys.stderr)
 
+
+def is_pod_ready(pod):
+    """Return True if pod is Running and all container_statuses are ready."""
+    if not pod:
+        return False
+    if pod.status.phase != 'Running':
+        return False
+    statuses = pod.status.container_statuses or []
+    if not statuses:
+        return False
+    return all((getattr(s, 'ready', False) for s in statuses))
+
+
+def wait_for_pod_by_label(v1, namespace, label_selector, timeout_seconds=None):
+    """Return the name of a pod matching the label selector that is Running+Ready.
+    First checks existing pods and returns the newest ready pod. If none found,
+    it watches for pod events and returns the first that becomes ready.
+    """
+    try:
+        pods = v1.list_namespaced_pod(namespace=namespace, label_selector=label_selector).items
+    except Exception as e:
+        print(f"Failed listing pods for selector {label_selector}: {e}", file=sys.stderr)
+        pods = []
+
+    ready_pods = [p for p in pods if is_pod_ready(p)]
+    if ready_pods:
+        # prefer the most recently started/created
+        ready_pods.sort(key=lambda p: p.status.start_time or p.metadata.creation_timestamp, reverse=True)
+        return ready_pods[0].metadata.name
+
+    w = watch.Watch()
+    try:
+        for event in w.stream(v1.list_namespaced_pod, namespace=namespace, label_selector=label_selector, timeout_seconds=timeout_seconds):
+            pod = event.get('object')
+            if is_pod_ready(pod):
+                w.stop()
+                return pod.metadata.name
+    except Exception as e:
+        print(f"Watch failed for selector {label_selector}: {e}", file=sys.stderr)
+    return None
+
+
 def main():
     storage_path = Path(STORAGE_FILE)
     storage_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if not KUBE_POD:
-        print("Error: KUBE_POD not set.")
+    # Determine target pod
+    target_pod = KUBE_POD
+
+    if not target_pod and not KUBE_LABEL_SELECTOR:
+        print("Error: Either KUBE_POD or KUBE_LABEL_SELECTOR must be set.")
         sys.exit(1)
 
     logs = deque(maxlen=MAX_LOGS)
@@ -144,16 +191,53 @@ def main():
                 try: logs.append(json.loads(line.strip()))
                 except: continue
 
-    print(f"Starting dashboard for {KUBE_POD}...")
-    update_dashboard(logs, KUBE_POD)
+    print(f"Starting dashboard...")
 
-    for line in stream_pod_logs(KUBE_NAMESPACE, KUBE_POD, KUBE_CONTAINER):
-        data = parse_analysis_log(line)
-        if data:
-            logs.append(data)
-            save_logs(logs, storage_path)
-            update_dashboard(logs, KUBE_POD)
-            print(f"Log stored and Dashboard updated. Total: {len(logs)}")
+    # If explicit pod given, use it. Otherwise resolve by label selector and watch for changes.
+    if target_pod:
+        update_dashboard(logs, target_pod)
+        for line in stream_pod_logs(KUBE_NAMESPACE, target_pod, KUBE_CONTAINER):
+            data = parse_analysis_log(line)
+            if data:
+                logs.append(data)
+                save_logs(logs, storage_path)
+                update_dashboard(logs, target_pod)
+                print(f"Log stored and Dashboard updated. Total: {len(logs)}")
+    else:
+        # use label selector and watch for pods becoming ready; restart streaming on pod changes
+        try:
+            try:
+                config.load_incluster_config()
+            except config.ConfigException:
+                config.load_kube_config()
+            v1 = client.CoreV1Api()
+        except Exception as e:
+            print(f"Failed to initialize Kubernetes client: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        while True:
+            pod_name = wait_for_pod_by_label(v1, KUBE_NAMESPACE, KUBE_LABEL_SELECTOR)
+            if not pod_name:
+                print("No ready pod found yet, retrying in 2s...", file=sys.stderr)
+                time.sleep(2)
+                continue
+
+            print(f"Selected pod {pod_name} for label {KUBE_LABEL_SELECTOR}")
+            update_dashboard(logs, pod_name)
+
+            try:
+                for line in stream_pod_logs(KUBE_NAMESPACE, pod_name, KUBE_CONTAINER):
+                    data = parse_analysis_log(line)
+                    if data:
+                        logs.append(data)
+                        save_logs(logs, storage_path)
+                        update_dashboard(logs, pod_name)
+                        print(f"Log stored and Dashboard updated. Total: {len(logs)}")
+            except Exception as e:
+                print(f"Streaming error for pod {pod_name}: {e}", file=sys.stderr)
+
+            print("Stream ended for pod, will attempt to find new pod (if any)...")
+            time.sleep(1)
 
 if __name__ == '__main__':
     main()
