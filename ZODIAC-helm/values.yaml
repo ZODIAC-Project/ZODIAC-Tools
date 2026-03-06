@@ -3,6 +3,7 @@ meta:
   loggingLevel: DEBUG
 
 hivezodiac:
+  serviceName: hivezodiac
   httpPort: 8080
   mqttPort: 1883
   websocketPort: 8000

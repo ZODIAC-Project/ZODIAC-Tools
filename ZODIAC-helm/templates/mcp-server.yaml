@@ -26,8 +26,14 @@ spec:
           image: "{{ .Values.meta.imageUrl }}/mcp-server:0.1.0-cicd"
           imagePullPolicy: IfNotPresent
           env:
-            - name: LOGGING_LEVEL
+            - name: LOG_LEVEL
               value: "{{ .Values.meta.loggingLevel }}"
+            - name: MQTT_SERVER
+              value: {{.Values.hivezodiac.serviceName}}
+            - name: MQTT_CLIENT_PORT
+              value: "{{.Values.hivezodiac.mqttPort}}"
+            - name: MCP_SERVER_PORT
+              value: "{{.Values.mcp.serverPort}}"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 

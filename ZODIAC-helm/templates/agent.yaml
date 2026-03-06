@@ -65,6 +65,9 @@ metadata:
   name: agent-api
   labels:
     app: agent-api
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

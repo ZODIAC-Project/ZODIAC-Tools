@@ -3,6 +3,7 @@ name: Deploy Log Collector
 on:
   push:
     branches: ["main"]
+    paths: ["logs-analyses/**"]
 
 env:
   REGISTRY: git.tu-berlin.de:5000/zodiac/zodiac-meta
