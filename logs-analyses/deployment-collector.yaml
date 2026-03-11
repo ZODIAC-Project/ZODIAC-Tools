@@ -66,7 +66,7 @@ spec:
       containers:
       # --- CONTAINER 1: The Collector ---
       - name: log-collector
-        image: mathiskae/log-collector:mergednew
+        image: git.tu-berlin.de:5000/zodiac/zodiac-meta/log-collector@sha256:bd7ee00b46f6498a97cfa757c46c3352c9f7f9f515a5e74d01d94bf6ccbfecef
         imagePullPolicy: Always
         env:
         - name: KUBE_NAMESPACE

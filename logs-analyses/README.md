@@ -86,3 +86,8 @@ To analyze the collected logs, you can:
 - Mount the PVC and read `/shared/analysis_logs.jsonl`
 - Each line is a JSON object containing the analysis log data
 - Use tools like `jq` or Python to query and analyze the data
+
+## Image tagging script
+./image-tagging-script/image_tagging_script.sh --token-file image-tagging-script/token-file.txt -f logs-analyses/Dockerfile git.tu-berlin.de:5000/zodiac/zodiac-meta/log-collector logs-analyses/deployment-collector.yaml
+
+./image-tagging-script/image_tagging_script.sh --token-file image-tagging-script/token-file.txt -p linux/amd64 -f logs-analyses/Dockerfile git.tu-berlin.de:5000/zodiac/zodiac-meta/log-collector logs-analyses/deployment-collector.yaml
