@@ -1,0 +1,96 @@
+# Service account that the Keel controller will run as
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: keel
+  namespace: zodiac
+
+---
+# Role with permissions restricted to the zodiac namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: keel-role
+  namespace: zodiac
+rules:
+  # adjust the resource list as required by your installation
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "daemonsets", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+# RoleBinding tying the service account to the role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: keel-rolebinding
+  namespace: zodiac
+subjects:
+  - kind: ServiceAccount
+    name: keel
+    namespace: zodiac
+roleRef:
+  kind: Role
+  name: keel-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# Simple Deployment for the Keel controller in the zodiac namespace
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keel
+  namespace: zodiac
+  labels:
+    app: keel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keel
+  template:
+    metadata:
+      labels:
+        app: keel
+    spec:
+      serviceAccountName: keel
+      containers:
+        - name: keel
+          image: keelhq/keel:latest
+          # add any other flags you need for your environment
+          ports:
+            - containerPort: 8080
+
+---
+# Keel needs to list/watch certain resources cluster-wide.
+# A namespaced Role cannot satisfy this requirement, so
+# we supply a minimal ClusterRole and bind it to the same
+# service account.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: keel-cluster-list
+rules:
+  - apiGroups: ["apps"]
+    resources: ["daemonsets", "statefulsets", "deployments"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["cronjobs"]
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: keel-cluster-list-binding
+subjects:
+  - kind: ServiceAccount
+    name: keel
+    namespace: zodiac
+roleRef:
+  kind: ClusterRole
+  name: keel-cluster-list
+  apiGroup: rbac.authorization.k8s.io
