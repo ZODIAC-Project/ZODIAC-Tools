@@ -31,6 +31,8 @@ spec:
               value: {{.Values.orionUi.chatApiPath}}
             - name: VITE_AGENT_API_BASE
               value: {{.Values.orionUi.agentApiBase}}
+            - name: VITE_MCP_CLIENT_URL
+              value: {{.Values.orionUi.clientUrl}}
           ports:
             - containerPort: {{.Values.orionUi.port}}
 ---

@@ -47,10 +47,11 @@ metadata:
   namespace: zodiac
   name: mcp-client-service
 spec:
-  type: ClusterIP
+  type: NodePort  # Changes from ClusterIP
   selector:
     app: mcp-client
   ports:
-    - protocol: TCP
-      port: {{.Values.mcp.clientPort}}
-      targetPort: {{.Values.mcp.clientPort}}
+  - protocol: TCP
+    port: {{.Values.mcp.clientPort}}
+    targetPort: {{.Values.mcp.clientPort}}
+    nodePort: {{.Values.mcp.externalPort}}  # This will be the port in your URL 

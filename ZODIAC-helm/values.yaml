@@ -11,6 +11,7 @@ hivezodiac:
 mcp:
   clientPort: 8001
   serverPort: 8000
+  externalPort: 30084
   env:
     model: "gpt-oss:120b"
     llmUrl: "http://elise.ise.tu-berlin.de:11434"
@@ -23,6 +24,7 @@ orionUi:
   chatApiBase: "mcp-client-service:8001"
   chatApiPath: "/chat"
   agentApiBase: "http://agent-api:3000"
+  clientUrl: "http://130.149.158.32:30084/health"
 
 agent:
   apiPort: 3000
