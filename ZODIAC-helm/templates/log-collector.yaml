@@ -80,6 +80,8 @@ spec:
               value: {{.Values.logCollector.storageFile}}
             - name: HTML_FILE
               value: {{.Values.logCollector.htmlFile}}
+            - name: KUBE_LABEL_SELECTOR
+              value: {{.Values.logCollector.kubeLabelSelector}}
           volumeMounts:
             - name: logs-volume
               mountPath: /shared

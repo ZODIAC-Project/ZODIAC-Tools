@@ -34,3 +34,4 @@ logCollector:
   kubeNamespace: "zodiac"
   storageFile: "/shared/analysis_logs.jsonl"
   htmlFile: "/shared/analysis_logs.html"
+  kubeLabelSelector: "app=mcp-client"
