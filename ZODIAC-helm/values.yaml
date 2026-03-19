@@ -21,7 +21,7 @@ mcp:
 
 orionUi:
   port: 80
-  chatApiBase: "mcp-client-service:8001"
+  chatApiBase: "http://130.149.158.32:30084"
   chatApiPath: "/chat"
   agentApiBase: "http://agent-api:3000"
   clientUrl: "http://130.149.158.32:30084/health"
