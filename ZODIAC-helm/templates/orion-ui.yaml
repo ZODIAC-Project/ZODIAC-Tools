@@ -1,3 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: zodiac
+  name: orion-ui-config
+data:
+  config.js: |
+    window.__APP_CONFIG__ = {
+      VITE_CHAT_API_BASE: "{{ .Values.orionUi.chatApiBase }}",
+      VITE_CHAT_API_PATH: "{{ .Values.orionUi.chatApiPath }}",
+      VITE_AGENT_API_BASE: "{{ .Values.orionUi.agentApiBase }}",
+      VITE_BROKER_URL: "{{ .Values.orionUi.brokerUrl }}",
+      VITE_MCP_CLIENT_URL: "{{ .Values.orionUi.clientUrl }}",
+      VITE_LLM_URL: "{{ .Values.mcp.env.llmUrl }}",
+    };
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,20 +37,23 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: orion-ui-config
+
       containers:
         - name: orion-ui
           image: "{{ .Values.meta.imageUrl }}/orion-ui:0.2.0-cicd"
-          env:
-            - name: VITE_CHAT_API_BASE
-              value: {{.Values.orionUi.chatApiBase}}
-            - name: VITE_CHAT_API_PATH
-              value: {{.Values.orionUi.chatApiPath}}
-            - name: VITE_AGENT_API_BASE
-              value: {{.Values.orionUi.agentApiBase}}
-            - name: VITE_MCP_CLIENT_URL
-              value: {{.Values.orionUi.clientUrl}}
+
           ports:
-            - containerPort: {{.Values.orionUi.port}}
+            - containerPort: {{ .Values.orionUi.port }}
+
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
 ---
 apiVersion: v1
 kind: Service
@@ -49,6 +68,6 @@ spec:
     app: orion-ui
   ports:
     - name: http
-      port: {{.Values.orionUi.port}}
-      targetPort: {{.Values.orionUi.port}}
+      port: {{ .Values.orionUi.port }}
+      targetPort: {{ .Values.orionUi.port }}
       nodePort: 30081

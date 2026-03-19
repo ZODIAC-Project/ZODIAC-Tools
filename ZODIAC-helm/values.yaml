@@ -25,6 +25,7 @@ orionUi:
   chatApiPath: "/chat"
   agentApiBase: "http://agent-api:3000"
   clientUrl: "http://130.149.158.32:30084/health"
+  brokerUrl: "http://mqtt-broker:1883"
 
 agent:
   apiPort: 3000
