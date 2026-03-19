@@ -49,11 +49,12 @@ metadata:
   labels:
     app: agent-api
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - name: http
       port: {{.Values.agent.apiPort}}
       targetPort: {{.Values.agent.apiPort}}
+      nodePort: {{.Values.agent.externalPort}}
       protocol: TCP
   selector:
     app: agent-api
