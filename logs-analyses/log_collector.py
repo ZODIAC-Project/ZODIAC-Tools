@@ -161,35 +161,59 @@ def get_running_pod():
 def main():
     storage_path = Path(STORAGE_FILE)
     storage_path.parent.mkdir(parents=True, exist_ok=True)
-
-    while True:
-        pod_name = get_running_pod()
-
-        if not pod_name:
-            print("No running mcp-client pod found. Retrying...", file=sys.stderr)
-            time.sleep(2)
-            continue
-        else:
-            break
-
+    # Load existing logs into memory
     logs = deque(maxlen=MAX_LOGS)
-    
     if storage_path.exists():
         with open(storage_path, 'r') as f:
             for line in f:
-                try: logs.append(json.loads(line.strip()))
-                except: continue
+                try:
+                    logs.append(json.loads(line.strip()))
+                except Exception:
+                    continue
 
-    print(f"Starting dashboard for {pod_name}...")
-    update_dashboard(logs, pod_name)
+    current_pod = None
 
-    for line in stream_pod_logs(KUBE_NAMESPACE, pod_name, KUBE_CONTAINER):
-        data = parse_analysis_log(line)
-        if data:
-            logs.append(data)
-            save_logs(logs, storage_path)
-            update_dashboard(logs, pod_name)
-            print(f"Log stored and Dashboard updated. Total: {len(logs)}")
+    # Main loop: continuously look up the running pod and stream its logs.
+    # If the pod changes (rolling update / restart), the streamer will stop
+    # and the loop will attach to the new Running pod automatically.
+    while True:
+        try:
+            pod_name = get_running_pod()
+        except Exception as e:
+            print(f"Error finding running pod: {e}", file=sys.stderr)
+            time.sleep(2)
+            continue
+
+        if not pod_name:
+            if current_pod is not None:
+                print("Previously-watched pod disappeared. Waiting for a new pod...", file=sys.stderr)
+                current_pod = None
+            else:
+                print("No running mcp-client pod found. Retrying...", file=sys.stderr)
+            time.sleep(2)
+            continue
+
+        if pod_name != current_pod:
+            current_pod = pod_name
+            print(f"Now watching pod: {current_pod}")
+            update_dashboard(logs, current_pod)
+
+        # Stream logs from the currently selected pod. If the stream ends
+        # (pod terminated or API error), the for-loop will exit and the
+        # outer while-loop will pick up the new pod on the next iteration.
+        try:
+            for line in stream_pod_logs(KUBE_NAMESPACE, current_pod, KUBE_CONTAINER):
+                data = parse_analysis_log(line)
+                if data:
+                    logs.append(data)
+                    save_logs(logs, storage_path)
+                    update_dashboard(logs, current_pod)
+                    print(f"Log stored and Dashboard updated. Total: {len(logs)}")
+        except Exception as e:
+            # If streaming fails, log and retry the pod lookup loop.
+            print(f"Streaming error: {e}", file=sys.stderr)
+            time.sleep(1)
+            continue
 
 if __name__ == '__main__':
     main()
