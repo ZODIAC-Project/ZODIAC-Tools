@@ -38,6 +38,8 @@ spec:
               value: {{.Values.mcp.env.systemPrompt}}
             - name: TOKEN_LIMIT
               value: {{.Values.mcp.env.tokenLimit|quote}}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{.Values.mcp.env.otel_exporter_endpoint}}
           ports:
             - containerPort: {{.Values.mcp.clientPort}}
 ---
