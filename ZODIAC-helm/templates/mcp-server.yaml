@@ -34,6 +34,8 @@ spec:
               value: "{{.Values.hivezodiac.mqttPort}}"
             - name: MCP_SERVER_PORT
               value: "{{.Values.mcp.serverPort}}"
+            - name: AGENT_SERVER_URL
+              value: "{{.Values.orionUi.agentApiBase}}/agents"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 

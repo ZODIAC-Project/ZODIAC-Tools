@@ -24,14 +24,14 @@ orionUi:
   port: 80
   chatApiBase: "http://130.149.158.32:30084"
   chatApiPath: "/chat"
-  agentApiBase: "http://130.149.158.132:30085"
+  agentApiBase: "http://130.149.158.132:30086"
   clientUrl: "http://130.149.158.32:30084/health"
   brokerUrl: "http://mqtt-broker:1883"
 
 agent:
   apiPort: 3000
   redisPort: 6379
-  externalPort: 30085
+  externalPort: 30086
 
 logCollector:
   kubeNamespace: "zodiac"
