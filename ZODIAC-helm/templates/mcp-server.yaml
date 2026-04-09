@@ -35,7 +35,7 @@ spec:
             - name: MCP_SERVER_PORT
               value: "{{.Values.mcp.serverPort}}"
             - name: AGENT_SERVER_URL
-              value: "{{.Values.orionUi.agentApiBase}}/agents"
+              value: "{{.Values.agent.newUrl}}/agents"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 
