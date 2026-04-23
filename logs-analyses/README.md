@@ -11,37 +11,6 @@ The system consists of a single deployment that:
 - Provides a way to later analyze which system and user prompts result in what responses
 
 ## Setup
-
-### 1. Modify Main Application
-
-Ensure your main application logs to a file on a persistent volume. For Python applications using the `logging` module:
-
-```python
-import logging
-
-# Configure logging to file on shared volume
-logging.basicConfig(
-    filename='/shared/logs/app.log',
-    level=logging.INFO,
-    format='[%(levelname)s] %(message)s'
-)
-```
-
-### 2. Create Persistent Volume
-
-Create a PVC to store logs:
-
-```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: logs-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi  # Adjust as needed
 ```
 
 Mount this PVC in your main application pod at `/shared`.
@@ -51,8 +20,12 @@ Mount this PVC in your main application pod at `/shared`.
 Build the Docker image:
 
 ```bash
-docker build -f Dockerfile -t <repo>/log-collector:latest .
-docker push <repo>/log-collector:latest
+docker build -f Dockerfile -t mathiskae/log-collector:latest .
+docker push mathiskae/log-collector:latest
+```
+
+```bash
+minikube image load mathiskae/log-collector:latest
 ```
 
 ### 4. Deploy
