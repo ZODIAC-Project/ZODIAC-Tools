@@ -29,10 +29,8 @@ orionUi:
   brokerUrl: "http://mqtt-broker:1883"
 
 agent:
-  apiPort: 3000
-  redisPort: 6379
-  externalPort: 30085
-  newUrl: http://130.149.158.132:30086
+  port: 30086
+  url: http://130.149.158.132:30086
 
 logCollector:
   kubeNamespace: "zodiac"

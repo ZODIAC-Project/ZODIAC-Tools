@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: new-agent
+  labels:
+    app: new-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: new-agent
+  template:
+    metadata:
+      labels:
+        app: new-agent
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: new-agent
+          image: "{{ .Values.meta.imageUrl }}/new-agent:0.5.0-cicd"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.agent.port }}
+          env:
+            - name: MCP_URL
+              value: "{{.Values.orionUi.chatApiBase}}{{.Values.orionUi.chatApiPath}}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: new-agent-service
+spec:
+  type: NodePort
+  selector:
+    app: new-agent
+  ports:
+    - protocol: TCP
+      port: {{ .Values.agent.port }}
+      targetPort: {{ .Values.agent.port }}
+      nodePort: {{ .Values.agent.port }}

@@ -35,7 +35,7 @@ spec:
             - name: MCP_SERVER_PORT
               value: "{{.Values.mcp.serverPort}}"
             - name: AGENT_SERVER_URL
-              value: "{{.Values.agent.newUrl}}/agents"
+              value: "{{.Values.agent.url}}/agents"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 
