@@ -37,3 +37,12 @@ logCollector:
   storageFile: "/shared/analysis_logs.jsonl"
   htmlFile: "/shared/analysis_logs.html"
   kubeLabelSelector: "app=mcp-client"
+
+streamManager:
+  port: 8002
+  nodePort: 30002
+  mqttBroker: "hivezodiac"
+  agentCallbackPort: 8080
+  agentCallbackPath: "/ingest"
+  maxTopicsPerSession: 20
+
