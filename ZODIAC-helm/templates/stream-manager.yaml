@@ -31,13 +31,13 @@ spec:
             - name: MQTT_BROKER
               value: {{ .Values.streamManager.mqttBroker }}
             - name: AGENT_CALLBACK_PORT
-              value: {{ .Values.streamManager.agentCallbackPort }}
+              value: "{{ .Values.streamManager.agentCallbackPort }}"
             - name: AGENT_CALLBACK_PATH
               value: {{ .Values.streamManager.agentCallbackPath }}
             - name: MAX_TOPICS_PER_SESSION
-              value: {{ .Values.streamManager.maxTopicsPerSession }}
+              value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT
-              value: {{ .Values.streamManager.port }}
+              value: "{{ .Values.streamManager.port }}"
           ports:
             - containerPort: 8002
 ---
