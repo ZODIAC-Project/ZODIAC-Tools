@@ -15,9 +15,9 @@ def send(msg, session_id = None):
     if session_id is None:
         session_id = str(uuid.uuid4())
     response = requests.post(f"{MCP_URL}/chat", json={"message": msg, "session_id": session_id})
-    assert response.status_code == 200
+    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code} (response was: '{response.text}')"
     data = response.json()
-    assert "response" in data
+    assert "response" in data, f"Response JSON should contain 'response' key but was: {data}"
     return data["response"]
 
 def tools_listen(on_message):
@@ -41,4 +41,13 @@ def toolcall_listen() -> tuple[bool, str | None]:
         except (ConnectionRefusedError, OSError) as exc:
             raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
     return asyncio.run(handle())
- 
+
+# test the output of llms with another llm, allowing for some fuzziness in the response (e.g. different wording, additional text, etc.)
+def fuzzy_assert(test_string, rule):
+    out_prompt = f"Does the following message follow this rule? Message: '{test_string}' Rule: {rule} Answer with 'True' or 'False' followed by a brief explanation."
+
+    response = send(out_prompt)
+    if "False" in response:
+        assert False, f"LLM returned '{response}' for test string: '{test_string}'"
+    if "True" not in response:
+        assert False, f"While the LLM did not return 'False' it also did not return 'True' - it returned '{response}' instead for test string: '{test_string}'"
