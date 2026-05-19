@@ -23,17 +23,17 @@ spec:
         - name: regcred
       containers:
         - name: stream-manager
-          image: "{{ .Values.meta.imageUrl }}/stream-manager:0.2.0-cicd"
+          image: "{{ .Values.meta.imageUrl }}/stream-manager:0.4.0-cicd"
           imagePullPolicy: IfNotPresent
           env:
             - name: LOGGING_LEVEL
-              value: {{ .Values.meta.loggingLevel }}
+              value: "{{ .Values.meta.loggingLevel }}"
             - name: MQTT_BROKER
-              value: {{ .Values.streamManager.mqttBroker }}
+              value: "{{ .Values.streamManager.mqttBroker }}"
             - name: AGENT_CALLBACK_PORT
               value: "{{ .Values.streamManager.agentCallbackPort }}"
             - name: AGENT_CALLBACK_PATH
-              value: {{ .Values.streamManager.agentCallbackPath }}
+              value: "{{ .Values.streamManager.agentCallbackPath }}"
             - name: MAX_TOPICS_PER_SESSION
               value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT

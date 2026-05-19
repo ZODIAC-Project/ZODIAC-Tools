@@ -70,12 +70,13 @@ HTML_TEMPLATE = """
 """
 
 def parse_analysis_log(line):
-    if '[ANALYSIS_LOG]' not in line:
-        return None
-    match = re.search(r'\[ANALYSIS_LOG\]\s*(\{.*\})', line)
+    # Detect JSON payloads in log lines, even when they do not contain a literal tag.
+    match = re.search(r'(\{.*\})', line)
     if match:
         try:
             data = json.loads(match.group(1))
+            if data.get('message') != 'analysis_log':
+                return None
             if 'timestamp' not in data:
                 data['_captured_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             return data
@@ -129,11 +130,22 @@ def stream_pod_logs(namespace, pod, container=None):
     v1 = client.CoreV1Api()
     w = watch.Watch()
     try:
-        for line in w.stream(v1.read_namespaced_pod_log, name=pod, namespace=namespace, 
-                             container=container, follow=True, _request_timeout=None):
+        for line in w.stream(
+            v1.read_namespaced_pod_log,
+            name=pod,
+            namespace=namespace,
+            container=container,
+            follow=True,
+            _request_timeout=None,
+        ):
             yield line
     except Exception as e:
         print(f"API Error: {e}", file=sys.stderr)
+    finally:
+        try:
+            w.stop()
+        except Exception:
+            pass
 
 def get_running_pod():
     # Ensure Kubernetes client is configured before making API calls
