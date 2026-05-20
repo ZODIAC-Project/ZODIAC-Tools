@@ -42,7 +42,6 @@ streamManager:
   port: 8002
   nodePort: 30002
   mqttBroker: "hivezodiac"
-  agentCallbackPort: 8080
-  agentCallbackPath: "/ingest"
   maxTopicsPerSession: 20
+  agentserverUrl: "http://130.149.158.132:30085"
 

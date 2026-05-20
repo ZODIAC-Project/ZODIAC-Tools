@@ -30,10 +30,8 @@ spec:
               value: "{{ .Values.meta.loggingLevel }}"
             - name: MQTT_BROKER
               value: "{{ .Values.streamManager.mqttBroker }}"
-            - name: AGENT_CALLBACK_PORT
-              value: "{{ .Values.streamManager.agentCallbackPort }}"
-            - name: AGENT_CALLBACK_PATH
-              value: "{{ .Values.streamManager.agentCallbackPath }}"
+            - name: AGENT_SERVER_URL
+              value: "{{ .Values.streamManager.agentserverUrl }}"
             - name: MAX_TOPICS_PER_SESSION
               value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT
