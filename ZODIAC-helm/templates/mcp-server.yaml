@@ -36,6 +36,12 @@ spec:
               value: "{{.Values.mcp.serverPort}}"
             - name: AGENT_SERVER_URL
               value: "{{.Values.agent.url}}/agents"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{.Values.mcp.env.otel_exporter_endpoint}}
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_SERVICE_NAME
+              value: "mcp-server"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 
