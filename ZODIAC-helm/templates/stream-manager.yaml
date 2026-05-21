@@ -45,20 +45,6 @@ metadata:
   namespace: zodiac
   name: stream-manager
 spec:
-  type: ClusterIP
-  selector:
-    app: stream-manager
-  ports:
-    - protocol: TCP
-      port: {{.Values.streamManager.port}}
-      targetPort: {{.Values.streamManager.port}}
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: zodiac
-  name: stream-manager-external
-spec:
   type: NodePort
   selector:
     app: stream-manager

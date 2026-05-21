@@ -42,6 +42,8 @@ spec:
               value: "http/protobuf"
             - name: OTEL_SERVICE_NAME
               value: "mcp-server"
+            - name: stream_manager_url
+              value: "{{.Values.mcp.env.stream_manager_url}}"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 

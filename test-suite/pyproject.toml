@@ -9,6 +9,8 @@ dependencies = [
     "pytest>=9.0.3",
     "requests>=2.33.1",
     "websockets>=16.0",
+    "aiomqtt>=2.0.0",
+    
 ]
 
 [dependency-groups]
