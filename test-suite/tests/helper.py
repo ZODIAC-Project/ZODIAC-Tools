@@ -13,7 +13,8 @@ MCP_URL = os.getenv("MCP_URL", "http://130.149.158.32:30084")
 AGENT_URL = os.getenv("AGENTS_URL", "http://130.149.158.132:30086")
 TOOL_USE_WS = os.getenv("TOOL_USE_WS", "ws://130.149.158.133:30084/tool-use")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
-MQTT_PORT = int(os.getenv("MQTT_PORT", "30769"))
+MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
+STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
 
 def send(msg, session_id = None):
     if session_id is None:
@@ -75,4 +76,9 @@ def listen_to_a_mqtt_topic(topic:str,timeout: float = 10.0) -> str:
                     return str(message.payload.decode())
 
     return asyncio.run(handle())
+
+def get_subscriptions():
+    response = requests.get(f"{STREAM_MANAGER_URL}/subscriptions")
+    assert response.status_code == 200, f"Could not reach stream manager: {response.text}"
+    return response.json()
     

@@ -7,6 +7,7 @@ hivezodiac:
   httpPort: 8080
   mqttPort: 1883
   websocketPort: 8000
+  mqttNodePort: 30069
 
 mcp:
   clientPort: 8001

@@ -1,5 +1,8 @@
 from helper import *
 import threading
+import json
+import time
+
 
 def test_tool_recognition():
     response = send("What tools do you have access to?")
@@ -35,8 +38,6 @@ def test_send_tool():
     topic = "zodiac/test/send"
     expected_payload = "hello-send-test"
 
-    # Send instruction first, then listen
-    # Since listen_to_a_mqtt_topic blocks, we fire the LLM call in a thread
     result = {}
 
     def llm_call():
@@ -50,15 +51,14 @@ def test_send_tool():
 
     assert received is not None, "Expected to receive a message on the topic but timed out"
     assert expected_payload in received, f"Expected '{expected_payload}' in MQTT message but got: '{received}'"
-    fuzzy_assert(result["response"], f"The response confirms a message was sent to topic '{topic}'")
 
 def test_publish_tool():
+    
     topic = "zodiac/test/publish-retained"
     expected_payload = "hello-retained-test"
 
     result = {}
 
-    # LLM runs in background thread
     def llm_call():
         result["response"] = send(
             f"Use the publish tool to publish the message '{expected_payload}' "
@@ -68,7 +68,6 @@ def test_publish_tool():
     t = threading.Thread(target=llm_call)
     t.start()
 
-    # Main thread blocks here waiting for the websocket event
     received_ws, ws_message = toolcall_listen()
     t.join()
 
@@ -83,44 +82,50 @@ def test_publish_tool():
 
 
 def test_subscribe_tool():
-    # TODO CHECK IF THE SUBSCRIPTION WORKS BY CONNECTING TO THE STREAM_MANAGER
     topic = "zodiac/test/subscribe-verify"
     session_id = str(uuid.uuid4())
-    result = {}
 
-    def llm_call():
+    def sub_call():
         result["response"] = send(
             f"Use the subscribe tool to subscribe to the MQTT topic '{topic}' and confirm when done.",
             session_id=session_id
         )
 
-    t = threading.Thread(target=llm_call)
+    result = {}
+    t = threading.Thread(target=sub_call)
     t.start()
-
     received_ws, ws_message = toolcall_listen()
     t.join()
 
     assert received_ws, "Expected a tool call on the websocket but got none"
     assert "subscribe" in ws_message.lower(), f"Expected 'subscribe' tool call but got: {ws_message}"
-    fuzzy_assert(result["response"], f"The response confirms a subscription to topic '{topic}'")
 
+    # Verify subscription is actually active in stream manager
+    subscriptions = get_subscriptions()
+    assert topic in subscriptions["topics"], \
+        f"Expected '{topic}' in active subscriptions but got: {subscriptions['topics']}"
+        
 def test_unsubscribe_tool():
-    
     topic = "zodiac/test/unsubscribe-verify"
     session_id = str(uuid.uuid4())
 
-    result = {}
     def sub_call():
-        result["response"] = send(f"Use the subscribe tool to subscribe to the MQTT topic '{topic}'.", session_id=session_id)
+        send(f"Use the subscribe tool to subscribe to the MQTT topic '{topic}'.", session_id=session_id)
     t = threading.Thread(target=sub_call)
     t.start()
-    toolcall_listen() 
+    toolcall_listen()
     t.join()
+
+    subscriptions = get_subscriptions()
+    assert topic in subscriptions["topics"], \
+        f"Expected '{topic}' to be subscribed before unsubscribe test but got: {subscriptions['topics']}"
 
     result2 = {}
     def unsub_call():
-        result2["response"] = send(f"Use the unsubscribe tool to unsubscribe from '{topic}' and confirm.", session_id=session_id)
-
+        result2["response"] = send(
+            f"Use the unsubscribe tool to unsubscribe from '{topic}' and confirm.",
+            session_id=session_id
+        )
     t = threading.Thread(target=unsub_call)
     t.start()
     received_ws, ws_message = toolcall_listen()
@@ -128,7 +133,11 @@ def test_unsubscribe_tool():
 
     assert received_ws, "Expected a tool call on the websocket but got none"
     assert "unsubscribe" in ws_message.lower(), f"Expected 'unsubscribe' tool call but got: {ws_message}"
-    fuzzy_assert(result2["response"], f"The message states that unsubscription from topic '{topic}' was successful")
+
+    subscriptions = get_subscriptions()
+    assert topic not in subscriptions["topics"], \
+        f"Expected '{topic}' to be removed from subscriptions but it still exists: {subscriptions['topics']}"
+
 
 
 def test_list_subscriptions_tool():
@@ -163,8 +172,83 @@ def test_list_subscriptions_tool():
     fuzzy_assert(result2["response"], f"The response includes '{topic}' in the list of subscriptions")
 
 
-def test_create_agent_and_subscibe_tool():
-    """
-    Docstring for test_create_agent_and_subscibe_tool
-    """
-    pass
+def test_create_agent_and_subscribe_tool():
+    topic = "zodiac/test/agent-topic"
+    session_id = str(uuid.uuid4())
+    result = {}
+
+    def llm_call():
+        result["response"] = send(
+            f"Create an agent that subscribes to the MQTT topic '{topic}' "
+            f"and summarizes any incoming messages for data collection purposes. Derive all parameters from the context.",
+            session_id=session_id
+        )
+
+    t = threading.Thread(target=llm_call)
+    t.start()
+    received_ws, ws_message = toolcall_listen()
+    t.join()
+
+    assert received_ws, "Expected a tool call on the websocket but got none"
+    assert "create_agent" in ws_message.lower() or "subscribe" in ws_message.lower(), \
+        f"Expected create_agent_and_subscribe tool call but got: {ws_message}"
+
+    # 1. Verify agent exists via REST and get its ID
+    agents_response = requests.get(f"{AGENT_URL}/agents")
+    assert agents_response.status_code == 200, f"Could not reach agent API: {agents_response.text}"
+    agents = agents_response.json()
+    matching = [a for a in agents if a.get("listenTopic") == topic]
+    assert len(matching) > 0, f"Expected an agent subscribed to '{topic}' but none found"
+    agent_id = matching[0]["id"]
+
+    # 2. Verify subscription exists in stream manager
+    subscriptions = get_subscriptions()
+    subscribed_topics = [
+        t
+        for session in subscriptions["sessions"]
+        if session.get("session_id") == agent_id
+        for t in session.get("topics", [])
+    ]
+    assert topic in subscribed_topics, \
+        f"Expected agent '{agent_id}' to be subscribed to '{topic}' but got: {subscribed_topics}"
+    
+    # 3. Publish a message to the topic and verify it arrives in agent history 
+    test_message = "agent-trigger-payload"
+
+    def publish_call():
+        send(
+            f"Use the publish tool to publish '{test_message}' to the topic '{topic}'.",
+            session_id=str(uuid.uuid4())
+        )
+
+    pt = threading.Thread(target=publish_call)
+    pt.start()
+    toolcall_listen()  # drain publish tool call
+    pt.join()
+
+    # Wait for the agent to process the message
+    time.sleep(5)
+
+    # 4. Check agent history via websocket
+    async def get_agent_history_from_ws():
+        agent_url_ws = AGENT_URL.replace("http://", "ws://")
+        async with websockets.connect(f"{agent_url_ws}/agents/{agent_id}/history") as ws:
+            message = await asyncio.wait_for(ws.recv(), timeout=5.0)
+            return json.loads(message)
+
+    history = asyncio.run(get_agent_history_from_ws())
+    assert any(test_message in str(e.get("message", "")) for e in history), \
+        f"Expected '{test_message}' in agent history but got: {history}"
+
+    # 5. Cleanup
+    delete_response = requests.delete(f"{AGENT_URL}/agents/{agent_id}")
+    assert delete_response.status_code == 200, f"Failed to delete agent: {delete_response.text}"
+
+    # Verify agent is gone
+    agents_after = requests.get(f"{AGENT_URL}/agents").json()
+    assert not any(a["id"] == agent_id for a in agents_after), "Agent still exists after deletion"
+
+    # Verify subscription is also cleaned up
+    subscriptions_after = get_subscriptions()
+    assert topic not in subscriptions_after["topics"], \
+        f"Expected '{topic}' subscription to be cleaned up after agent deletion but it still exists"

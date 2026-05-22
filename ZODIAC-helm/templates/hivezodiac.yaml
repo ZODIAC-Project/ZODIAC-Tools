@@ -6,7 +6,7 @@ metadata:
   labels:
     app: hivezodiac
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - name: http
       port: {{.Values.hivezodiac.httpPort}}
@@ -15,6 +15,7 @@ spec:
     - name: mqtt
       port: {{.Values.hivezodiac.mqttPort}}
       targetPort: {{.Values.hivezodiac.mqttPort}}
+      nodePort: {{.Values.hivezodiac.mqttNodePort}}
       protocol: TCP
     - name: websocket
       port: {{.Values.hivezodiac.websocketPort}}
