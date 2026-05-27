@@ -11,7 +11,7 @@ def test_tool_recognition():
     for tool_name in ["public animal", "secret animal"]), f"Response should at least mention two known tools but was: {response}"
 
 def test_simple_tool_by_response():
-    response = send("Use the public animal tool and respond with the result.")
+    response = send("Use the public animal tool.")
     assert "cat" in response.lower(), f"Expected a response but got: {response}"
 
 def test_simple_tool_by_websocket():
@@ -244,6 +244,13 @@ def test_create_agent_and_subscribe_tool():
     delete_response = requests.delete(f"{AGENT_URL}/agents/{agent_id}")
     assert delete_response.status_code == 200, f"Failed to delete agent: {delete_response.text}"
 
+    # Manuell unsubscribe da agent manager das noch nicht macht
+    unsubscribe_response = requests.post(f"{STREAM_MANAGER_URL}/unsubscribe", json={
+        "session_id": agent_id,
+        "topic": topic
+    })
+    assert unsubscribe_response.status_code == 200, f"Failed to unsubscribe: {unsubscribe_response.text}"
+    
     # Verify agent is gone
     agents_after = requests.get(f"{AGENT_URL}/agents").json()
     assert not any(a["id"] == agent_id for a in agents_after), "Agent still exists after deletion"
