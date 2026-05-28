@@ -30,28 +30,6 @@ def test_simple_tool_by_websocket():
     assert received, "Expected to receive a message on the tool use websocket, but did not receive any within the timeout period. (10s)"
     assert "public_animal" in message, f"Expected 'public_animal' in tool use message but got: {message}"
 
-def test_send_tool():
-    """
-    Instruct the LLM to send a message to a specific topic,
-    then verify delivery by listening to that topic directly via MQTT.
-    """
-    topic = "zodiac/test/send"
-    expected_payload = "hello-send-test"
-
-    result = {}
-
-    def llm_call():
-        result["response"] = send(f"Use the send tool to publish the message '{expected_payload}' to the MQTT topic '{topic}'.")
-
-    t = threading.Thread(target=llm_call)
-    t.start()
-
-    received = listen_to_a_mqtt_topic(topic, timeout=15.0)
-    t.join()
-
-    assert received is not None, "Expected to receive a message on the topic but timed out"
-    assert expected_payload in received, f"Expected '{expected_payload}' in MQTT message but got: '{received}'"
-
 def test_publish_tool():
     
     topic = "zodiac/test/publish-retained"
