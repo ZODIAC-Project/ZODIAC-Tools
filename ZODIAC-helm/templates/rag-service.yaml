@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: rag-service
+  labels:
+    app: rag-service
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-service
+  template:
+    metadata:
+      labels:
+        app: rag-service
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: rag-service
+          image: "{{ .Values.meta.imageUrl }}/rag-service:0.1.0-cicd"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RAG_SERVICE_PORT
+              value: "{{ .Values.ragService.port }}"
+            - name: CHROMA_DATA_DIR
+              value: "{{ .Values.ragService.chromaDataDir }}"
+            - name: CHROMA_COLLECTION_PREFIX
+              value: "{{ .Values.ragService.collectionPrefix }}"
+            - name: CHROMA_USE_DEFAULT_EMBEDDINGS
+              value: "{{ .Values.ragService.useDefaultEmbeddings }}"
+            - name: RAG_DEFAULT_TOP_K
+              value: "{{ .Values.ragService.defaultTopK }}"
+          ports:
+            - containerPort: {{ .Values.ragService.port }}
+          volumeMounts:
+            - name: rag-data
+              mountPath: {{ .Values.ragService.chromaDataDir }}
+      volumes:
+        - name: rag-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: {{ .Values.ragService.serviceName }}
+  labels:
+    app: rag-service
+spec:
+  type: ClusterIP
+  selector:
+    app: rag-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.ragService.port }}
+      targetPort: {{ .Values.ragService.port }}

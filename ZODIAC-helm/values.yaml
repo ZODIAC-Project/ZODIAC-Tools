@@ -47,3 +47,10 @@ streamManager:
   maxTopicsPerSession: 20
   agentserverUrl: "http://130.149.158.132:30086"
 
+ragService:
+  serviceName: "rag-service"
+  port: 30110
+  chromaDataDir: "/data/chroma"
+  collectionPrefix: "zodiac"
+  useDefaultEmbeddings: "true"
+  defaultTopK: "5"
