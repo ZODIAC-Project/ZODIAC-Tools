@@ -19,6 +19,8 @@ spec:
       labels:
         app: rag-service
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: rag-service
           image: "ghcr.io/zodiac-project/rag-service:0.1.0-cicd"
