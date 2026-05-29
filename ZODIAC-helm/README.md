@@ -118,4 +118,8 @@ image: "{{ .Values.meta.imageUrl }}/<application-name>:0.1.0-cicd"
 helm uninstall zodiac -n zodiac
 helm install zodiac . -n zodiac
 ```
+or upgrade the helm chart  
+```bash
+helm upgrade zodiac ./ZODIAC-helm -n zodiac -f ZODIAC-helm/values.yaml --rollback-on-failure --debug
+```
 9. if everything works, add your application to the list of applications above :)
