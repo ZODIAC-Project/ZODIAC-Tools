@@ -1,0 +1,150 @@
+from .helper import STREAM_MANAGER_URL,AGENT_URL, create_agent
+import httpx
+
+def test_subsidy_demo():
+    """ This test script is used to simulate a demo architecture where agents retrieve and publish data regarding 
+     subsidies. 
+     **Agent 1- timed agent**
+    Generate Fördermittel/ Subsidy Descriptions using the rag tool 
+        - using the rag tool
+        - post each description to the topic zodiac/subsidy/new 
+        - the descriptions should have the following contend 
+            - Criteria to get the subsidy 
+            - form and extend of Subsidy 
+    **Agent 2 - run once agent**
+    Get the Customer List from rag and make a sub-Agent for each Customer
+        - Task for each Sub-Agent:
+            - Listen to the topic zodiac/subsidy/new
+            - evaluate if you customer description fits into any Subsidy Description arriving at the topic. 
+            - If a subsidy fits and seems appropriate, post a subsidy proposal to the topic zodiac/subsidy/customer/your-id/proposal
+    **Agent 3 - event based agent **
+    Listen to the topic zodiac/subsidy/customer/#/proposal
+        - evaluate if the proposal is good and the customer fits to the subsidy 
+        - if so, send a message using the tool_send_email with the proposal  
+    """
+    # topics 
+    new_subsidy_topic = "zodiac/subsidy/new"
+    customer_proposal_topic = "zodiac/subsidy/customer/#/proposal"
+    ##########################################
+    # Agent 3
+    ##########################################
+    # Start Agent 3 and test if it is running 
+    task_agent3 = """I am an agent that listens to subsidy proposals and evaluates if they are good. 
+    If they are good, I send an email to the customer using the tool_send_email."""
+    
+    agent3_id = create_agent(
+        runOnce=False,
+        text=task_agent3,
+        purpose="evaluation",
+        memoryWindow=5,
+        listenTopic=customer_proposal_topic,
+    )
+    assert agent3_id is not None, "Failed to create Agent 3 that is supposed to listen to subsidy proposals."
+    # Assert that the agent is running 
+    agents = httpx.get(f"{AGENT_URL}/agents", timeout=5.0).json()
+    agent3_info = next((a for a in agents if a.get("id") == agent3_id), None)
+    assert agent3_info is not None, f"Failed to find Agent 3 with id {agent3_id}"
+    assert agent3_info.get("listenTopic") == customer_proposal_topic, (
+        f"Expected Agent 3 to listen to {customer_proposal_topic} but got {agent3_info.get('listenTopic')}"
+    )
+    assert "evaluation" in agent3_info.get("purposes", []), (
+        f"Expected Agent 3 to have purpose 'evaluation' but got {agent3_info.get('purposes')}"
+    )
+        
+    # Subscribe the agent to the proposal topic 
+    payload = {
+    "session_id": agent3_id,
+    "topic": customer_proposal_topic,
+    "purposes": ["evaluation"],
+    }
+    stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
+    assert stream_manager_resp_3.status_code == 200, f"Failed to subscribe Agent 3 to stream manager: {stream_manager_resp_3.text}"
+    
+    # Assert that agent is subscribed 
+    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
+    agent3_subscriptions = [
+        t
+        for session in subscriptions["sessions"]
+        if session.get("session_id") == agent3_id
+        for t in session.get("topics", [])
+    ]
+    assert customer_proposal_topic in agent3_subscriptions, f"Expected Agent 3 to be subscribed to {customer_proposal_topic}"
+    
+    #######################################
+    # Agent 2
+    ########################################
+    # Create Agent 2 
+    task_agent2 = """Get the cusomer list from rag and make a sub-Agent for each Customer.
+    The task of the sub-agent is to listen to the topic zodiac/subsidy/new 
+    and evaluate on each incomming message if the subsidy description fits to the customer description.
+    If it fits and seems appropriate, post a subsidy proposal to the topic zodiac/subsidy/customer/your-id/proposal
+    Give each sub-agent the customer description as context and the task to 
+    evaluate the subsidy descriptions based on the customer description and post proposals if appropriate."""
+    
+    agent2_id = create_agent(
+        runOnce=True,
+        text=task_agent2,
+        purpose="subsidy-matching",
+        memoryWindow=5,
+        listenTopic=new_subsidy_topic,
+    )
+    assert agent2_id is not None, "Failed to create Agent 2 that is supposed to listen to new subsidy descriptions."
+    # Assert that the agent is running
+    agents = httpx.get(f"{AGENT_URL}/agents", timeout=5.0).json()
+    agent2_info = next((a for a in agents if a.get("id") == agent2_id), None)
+    assert agent2_info is not None, f"Failed to retrieve info for Agent 2: {agent2_info}"
+    assert agent2_info.get("listenTopic") == new_subsidy_topic, (
+        f"Expected Agent 2 to listen to {new_subsidy_topic} but got {agent2_info.get('listenTopic')}"
+    )
+    assert "subsidy-matching" in agent2_info.get("purposes", []), (
+        f"Expected Agent 2 to have purpose 'subsidy-matching' but got {agent2_info.get('purposes')}"
+    )
+    # Subscribe the agent to the new subsidy topic
+    payload = {
+    "session_id": agent2_id,
+    "topic": new_subsidy_topic,
+    "purposes": ["subsidy-matching"],
+    }
+    stream_manager_resp_2 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
+    assert stream_manager_resp_2.status_code == 200, f"Failed to subscribe Agent 2 to stream manager: {stream_manager_resp_2.text}"
+    # Assert that agent is subscribed
+    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
+    agent2_subscriptions = [
+        t
+        for session in subscriptions["sessions"]
+        if session.get("session_id") == agent2_id
+        for t in session.get("topics", [])
+    ]
+    assert new_subsidy_topic in agent2_subscriptions, f"Expected Agent 2 to be subscribed to {new_subsidy_topic}"   
+    
+    ##########################################
+    # Agent 1
+    ##########################################
+    # Create Agent 1 that generates subsidy descriptions and posts them to the topic zodiac/subsidy/new 
+    task_agent1 = """Generate Subsidy Descriptions using the rag tool.
+                    Use the publish tool to post each description to the topic zodiac/subsidy/new.
+                    The descriptions should have the following content:
+                    - Criteria to get the subsidy
+                    - Form and extent of the subsidy.
+                    - purpose of the subsidy.
+                    - any other relevant information that could be useful for customers to evaluate if the subsidy is interesting for them.
+                    """
+    agent1_id = create_agent(
+        runOnce=False,
+        text=task_agent1,
+        purpose="subsidy-description-generation",
+        memoryWindow=5,
+        intervalMs=60000, # generate a new description every minute
+        )
+    assert agent1_id is not None, "Failed to create Agent 1 that is supposed to generate subsidy descriptions."
+    # Assert that the agent is running
+    agents = httpx.get(f"{AGENT_URL}/agents", timeout=5.0).json()
+    agent1_info = next((a for a in agents if a.get("id") == agent1_id), None)
+    assert agent1_info is not None, f"Failed to retrieve info for Agent 1: {agent1_info}"
+    assert agent1_info.get("intervalMs") == 60000, (
+        f"Expected Agent 1 intervalMs to be 60000 but got {agent1_info.get('intervalMs')}"
+    )
+    assert "subsidy-description-generation" in agent1_info.get("purposes", []), (
+        f"Expected Agent 1 to have purpose 'subsidy-description-generation' but got {agent1_info.get('purposes')}"
+    )
+    

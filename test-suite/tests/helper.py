@@ -4,6 +4,7 @@ import websockets
 import asyncio
 from dotenv import load_dotenv
 import uuid
+from typing import Optional
 
 import aiomqtt 
 
@@ -82,3 +83,28 @@ def get_subscriptions():
     assert response.status_code == 200, f"Could not reach stream manager: {response.text}"
     return response.json()
     
+    
+def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: int, intervalMs: Optional[int] = None, listenTopic: Optional[str] = None, purposes: Optional[list[str]] = None):
+    if purposes is None:
+        purposes = [purpose] if purpose else None
+    if not purposes:
+        raise ValueError("create_agent requires 'purpose' or 'purposes' to be provided")
+
+    payload = {
+        "runOnce": runOnce,
+        "text": text,
+        "purposes": purposes,
+        "memoryWindow": memoryWindow,
+    }
+    if intervalMs:
+        payload["intervalMs"] = intervalMs
+    if listenTopic:
+        payload["listenTopic"] = listenTopic
+    
+    response = requests.post(f"{AGENT_URL}/agents", json=payload)
+    assert response.status_code == 200, (
+        f"Failed to create agent: status {response.status_code}, response {response.text}"
+    )
+    data = response.json()
+    assert "id" in data, f"Agent creation response missing id: {data}"
+    return data["id"]
