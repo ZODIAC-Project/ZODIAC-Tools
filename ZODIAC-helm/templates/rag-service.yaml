@@ -36,6 +36,10 @@ spec:
               value: "{{ .Values.ragService.useDefaultEmbeddings }}"
             - name: RAG_DEFAULT_TOP_K
               value: "{{ .Values.ragService.defaultTopK }}"
+            - name: RAG_AUTO_INGEST_LOCAL_DATA
+              value: "{{ .Values.ragService.autoIngestLocalData }}"
+            - name: RAG_AUTO_INGEST_ONLY_IF_EMPTY
+              value: "{{ .Values.ragService.autoIngestOnlyIfEmpty }}"
           ports:
             - containerPort: {{.Values.ragService.port}}
           volumeMounts:

@@ -54,3 +54,5 @@ ragService:
   collectionPrefix: "zodiac"
   useDefaultEmbeddings: "true"
   defaultTopK: "5"
+  autoIngestLocalData: "true"
+  autoIngestOnlyIfEmpty: "true"
