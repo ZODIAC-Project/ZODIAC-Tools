@@ -79,18 +79,16 @@ def fuzzy_assert(test_string, rule):
     if "True" not in response:
         assert False, f"While the LLM did not return 'False' it also did not return 'True' - it returned '{response}' instead for test string: '{test_string}'"
         
-def listen_to_a_mqtt_topic(topic:str,timeout: float = 10.0) -> str:
-    """
-    This function establishes a mqtt connection to a broker and listens to a topic
-    Return:
-        The message received on the topic
-    """
+def listen_to_a_mqtt_topic(topic: str, timeout: float = 10.0) -> str | None:
     async def handle():
-        async with aiomqtt.Client(MQTT_BROKER, port=MQTT_PORT) as client:
-            await client.subscribe(topic)
-            async with asyncio.timeout(timeout):
-                async for message in client.messages:
-                    return str(message.payload.decode())
+        async with aiomqtt.Client(MQTT_BROKER, port=MQTT_PORT) as c:
+            await c.subscribe(topic)
+            try:
+                async with asyncio.timeout(timeout):
+                    async for message in c.messages:
+                        return str(message.payload.decode())
+            except TimeoutError:
+                return None  # kein Timeout-Exception nach außen
 
     return asyncio.run(handle())
 
