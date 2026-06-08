@@ -40,12 +40,16 @@ def create_agent1():
 
 def create_agent2():
     task_agent2 = """Use the tool search_knowledge_base with collection="customers".
-    Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer.
-    Give each sub-agent the corresponding customer description as context.
-    Each sub-agent must listen to the topic zodiac/subsidy/new and evaluate each incoming subsidy description
-    against its customer description. If a subsidy fits and seems appropriate, publish a subsidy proposal to
-    zodiac/subsidy/customer/<customer-id>/proposal.
-    Do not use the default collection and do not query foerderprogramme_export."""
+    Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer. Do not use the default collection and do not query foerderprogramme_export.
+    How to create a sub-agent: 
+    1. Give each sub-agent its customer description as context. 
+    2. Each sub-agent must listen to the topic zodiac/subsidy/new. 
+    3. Give the Agents the following task as a quote: "Evaluate each incoming subsidy description
+    against your customer description. If a subsidy fits and seems appropriate, publish a subsidy proposal to
+    zodiac/subsidy/customer/<your-customer-id>/proposal. Dont spawn a sub-agent."
+    
+    Give the sub-agent the 3. point as a quote and dont change anything to it 
+    """
 
     agent2_id = create_agent(
         runOnce=True,

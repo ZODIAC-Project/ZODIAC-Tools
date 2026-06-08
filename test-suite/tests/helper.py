@@ -4,9 +4,15 @@ import websockets
 import asyncio
 from dotenv import load_dotenv
 import uuid
+import logging
 from typing import Optional
+import time
 
 import aiomqtt 
+import paho.mqtt.client as mqtt
+from .purpose_client import PurposeClient
+from paho.mqtt.enums import CallbackAPIVersion
+
 
 load_dotenv()
 
@@ -16,6 +22,16 @@ TOOL_USE_WS = os.getenv("TOOL_USE_WS", "ws://130.149.158.133:30084/tool-use")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
 MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
+
+paho_client = mqtt.Client(
+    callback_api_version=CallbackAPIVersion.VERSION1, 
+    client_id="purpose_paho_func", 
+    clean_session=True
+)
+
+client = PurposeClient(paho_client)
+client.connect(MQTT_BROKER, MQTT_PORT, 60)
+client.loop_start()
 
 def send(msg, session_id = None):
     if session_id is None:
@@ -108,3 +124,45 @@ def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: in
     data = response.json()
     assert "id" in data, f"Agent creation response missing id: {data}"
     return data["id"]
+
+def subscribe_with_purpose(topic: str, ap: str, qos=0, presub=False):
+    response = client.subscribe_with_purpose(topic, ap, qos=qos)
+    logging.debug(f"Subscribed to topic {topic} with purpose {ap} and QoS {qos}. Response: {response}")
+    if isinstance(response, tuple):
+        result, mid = response
+        return {"status": "success" if result == 0 else "error", "result": result, "mid": mid}
+    return response
+    
+    
+def publish_message(topic: str, payload: str, qos=0, retain=False):
+    response = client.send(topic, payload, qos=qos)
+    if hasattr(response, "rc"):
+        return {"status": "success" if response.rc == 0 else "error", "rc": response.rc, "mid": getattr(response, "mid", None)}
+    logging.debug(f"Published message to topic {topic} with payload '{payload}', QoS {qos}, retain {retain}.")
+    return response
+
+def reserve_topic(topic: str, aip: list = [], pip: list = [], dontwait=False):
+    response = client.reserve(topic, aip=aip, pip=pip, dontwait=dontwait)
+    if isinstance(response, int):
+        return {"status": "success", "mid": response}
+    logging.debug(f"Reserved topic {topic} with AIP {aip} and PIP {pip}. Response: {response}")
+    return response
+
+def send_and_expect(topic: str, payload: str, purposes: list = []):
+    response = client.send_and_expect(topic, payload, purposes=purposes)
+    if hasattr(response, "rc"):
+        status = "success" if response.rc == 0 else "error"
+        return {"status": status, "rc": response.rc, "mid": getattr(response, "mid", None)}
+    return response
+
+def send_and_reject(topic: str, payload: str, purposes: list = []):
+    response = client.send_and_reject(topic, payload, purposes=purposes)
+    if hasattr(response, "rc"):
+        status = "success" if response.rc == 0 else "error"
+        return {"status": status, "rc": response.rc, "mid": getattr(response, "mid", None)}
+    return response
+
+def reset():
+    client.reset_broker()
+    time.sleep(1)
+    client.reset_connection()
