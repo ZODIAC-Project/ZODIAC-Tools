@@ -41,7 +41,12 @@ spec:
   selector:
     app: agent-api
   ports:
-    - protocol: TCP
+    - name: http-legacy
+      protocol: TCP
+      port: 3000
+      targetPort: {{ .Values.agent.port }}
+      nodePort: {{ .Values.agent.legacyNodePort }}
+    - name: http-agent
+      protocol: TCP
       port: {{ .Values.agent.port }}
       targetPort: {{ .Values.agent.port }}
-      nodePort: {{ .Values.agent.port }}
