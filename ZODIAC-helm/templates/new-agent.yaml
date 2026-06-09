@@ -50,3 +50,4 @@ spec:
       protocol: TCP
       port: {{ .Values.agent.port }}
       targetPort: {{ .Values.agent.port }}
+      nodePort: {{ .Values.agent.nodePort }}
