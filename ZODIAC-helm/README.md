@@ -9,9 +9,7 @@ This contains the helm chart for deploying the ZODIAC stack onto a k8s cluster. 
 - orion-ui
 - mcp-client
 - mcp-server
-- agent-api
-- agent-redis
-- agent-worker
+- agent
 - log-collector
 
 

@@ -26,7 +26,7 @@ orionUi:
   port: 80
   chatApiBase: "http://130.149.158.32:30084"
   chatApiPath: "/chat"
-  agentApiBase: "http://130.149.158.132:30085"
+  agentApiBase: "http://130.149.158.32:30086"
   clientUrl: "http://130.149.158.32:30084/health"
   brokerUrl: "http://mqtt-broker:1883"
 
@@ -45,7 +45,7 @@ streamManager:
   nodePort: 30002
   mqttBroker: "hivezodiac"
   maxTopicsPerSession: 20
-  agentserverUrl: "http://130.149.158.132:30086"
+  agentserverUrl: "http://agent-api:30086"
 
 ragService:
   serviceName: "rag-service"

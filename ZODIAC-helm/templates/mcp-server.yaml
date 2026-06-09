@@ -35,7 +35,7 @@ spec:
             - name: MCP_SERVER_PORT
               value: "{{.Values.mcp.serverPort}}"
             - name: AGENT_SERVER_URL
-              value: "{{.Values.agent.url}}/agents"
+              value: "http://agent-api:{{ .Values.agent.port }}/agent"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{.Values.mcp.env.otel_exporter_endpoint}}
             - name: OTEL_EXPORTER_OTLP_PROTOCOL

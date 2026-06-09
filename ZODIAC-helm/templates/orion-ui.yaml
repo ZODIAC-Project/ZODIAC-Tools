@@ -9,6 +9,7 @@ data:
       VITE_CHAT_API_BASE: "{{ .Values.orionUi.chatApiBase }}",
       VITE_CHAT_API_PATH: "{{ .Values.orionUi.chatApiPath }}",
       VITE_AGENT_API_BASE: "{{ .Values.orionUi.agentApiBase }}",
+      VITE_TOOL_USE_URL: "{{ .Values.orionUi.chatApiBase }}/tool-use",
       VITE_BROKER_URL: "{{ .Values.orionUi.brokerUrl }}",
       VITE_MCP_CLIENT_URL: "{{ .Values.orionUi.clientUrl }}",
       VITE_LLM_URL: "{{ .Values.mcp.env.llmUrl }}",
