@@ -36,6 +36,8 @@ spec:
               value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT
               value: "{{ .Values.streamManager.port }}"
+            - name: AGENT_SERVER_URL
+              value: "{{ .Values.agent.url }}"
           ports:
             - containerPort: 8002
 ---

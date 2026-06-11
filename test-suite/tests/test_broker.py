@@ -3,7 +3,15 @@
 import time
 import pytest
 
-from .helper import client, reset, reserve_topic, send_and_expect, send_and_reject, subscribe_with_purpose, publish_message
+from .helper import (
+    client,
+    reset,
+    reserve_topic,
+    send_and_expect,
+    send_and_reject,
+    subscribe_with_purpose,
+    publish_message
+)
 
 TOPIC = "zodiac/tests/broker_tests/purpose_topic"
 PURPOSE_ALLOWED = "allowed"
@@ -14,6 +22,25 @@ PURPOSE_NOT_ALLOWED = "not_allowed"
 def clean_state():
     reset()
     yield
+    
+def subscribe_and_receive(agent_id: str, topic: str, expected_payload: str, timeout: float = 5.0) -> bool:
+    """subscribe to a topic and wait for the message to arrive."""
+    subscribe_response = subscribe_with_purpose(topic, PURPOSE_ALLOWED)
+    assert subscribe_response["status"] == "success", f"Failed to subscribe with allowed purpose: {subscribe_response}"
+
+    client.wait_for_subscriptions()
+
+    publish_response = send_and_expect(topic, expected_payload)
+    assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
+
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        stats = client.show_stats()
+        if stats > 0:
+            return True
+        time.sleep(0.5)
+    return False
+    
 
 
 def test_allowed_subscription():

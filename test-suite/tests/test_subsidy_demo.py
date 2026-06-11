@@ -1,8 +1,8 @@
-from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent
+from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client 
 import httpx
 
 new_subsidy_topic = "zodiac/subsidy/new"
-customer_proposal_topic = "zodiac/subsidy/customer/#/proposal"
+customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 
 
 def create_agent1():
@@ -73,7 +73,7 @@ def create_agent2():
     payload = {
         "session_id": agent2_id,
         "topic": new_subsidy_topic,
-        "purposes": ["subsidy-matching"],
+        "purpose": "subsidy-matching",
     }
     stream_manager_resp_2 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
     assert stream_manager_resp_2.status_code == 200, (
@@ -82,10 +82,10 @@ def create_agent2():
 
     subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
     agent2_subscriptions = [
-        t
+        s["topic"]
         for session in subscriptions["sessions"]
         if session.get("session_id") == agent2_id
-        for t in session.get("topics", [])
+        for s in session.get("subscriptions", [])
     ]
     assert new_subsidy_topic in agent2_subscriptions, (
         f"Expected Agent 2 to be subscribed to {new_subsidy_topic}"
@@ -119,7 +119,7 @@ def create_agent3():
     payload = {
         "session_id": agent3_id,
         "topic": customer_proposal_topic,
-        "purposes": ["evaluation"],
+        "purpose": "evaluation",
     }
     stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
     assert stream_manager_resp_3.status_code == 200, (
@@ -128,10 +128,10 @@ def create_agent3():
 
     subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
     agent3_subscriptions = [
-        t
+        s["topic"]
         for session in subscriptions["sessions"]
         if session.get("session_id") == agent3_id
-        for t in session.get("topics", [])
+        for s in session.get("subscriptions", [])
     ]
     assert customer_proposal_topic in agent3_subscriptions, (
         f"Expected Agent 3 to be subscribed to {customer_proposal_topic}"
@@ -140,6 +140,15 @@ def create_agent3():
 
 
 def test_subsidy_demo():
+    
+    client.set_purpose_setting("filter_on_subscribe", True)
+    client.set_purpose_setting("filter_on_publish", False)
+    client.set_purpose_setting("filter_hybrid", False)
+    
+    reserve_topic(new_subsidy_topic, aip=["subsidy-matching"])
+    reserve_topic(customer_proposal_topic, aip=["evaluation"])
+
+    
     agent3_id = create_agent3()
     agent2_id = create_agent2()
     agent1_id = create_agent1()
