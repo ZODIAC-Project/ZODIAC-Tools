@@ -1,13 +1,13 @@
-from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client 
+from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client
 import httpx
 
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
-PURPOSE = "admin"
+PURPOSE = "wrong-purpose"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="admin".
+    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="wrong-purpose".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
@@ -40,7 +40,7 @@ def create_agent1():
 
 
 def create_agent2():
-    task_agent2 = """Use the tool search_knowledge_base with collection="customers" and purpose="admin".
+    task_agent2 = """Use the tool search_knowledge_base with collection="customers" and purpose="wrong-purpose".
     Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer. Do not use the default collection and do not query foerderprogramme_export.
     How to create a sub-agent: 
     1. Give each sub-agent its customer description as context. 
@@ -141,15 +141,14 @@ def create_agent3():
 
 
 def test_subsidy_demo():
-    
+
     client.set_purpose_setting("filter_on_subscribe", True)
     client.set_purpose_setting("filter_on_publish", False)
     client.set_purpose_setting("filter_hybrid", False)
-    
+
     reserve_topic(new_subsidy_topic, aip=[PURPOSE])
     reserve_topic(customer_proposal_topic, aip=[PURPOSE])
 
-    
     agent3_id = create_agent3()
     agent2_id = create_agent2()
     agent1_id = create_agent1()
