@@ -7,7 +7,7 @@ PURPOSE = "wrong-purpose"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies".
+    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="wrong-purpose".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
@@ -40,7 +40,7 @@ def create_agent1():
 
 
 def create_agent2():
-    task_agent2 = """Use the tool search_knowledge_base with collection="customers".
+    task_agent2 = """Use the tool search_knowledge_base with collection="customers" and purpose="wrong-purpose".
     Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer. Do not use the default collection and do not query foerderprogramme_export.
     How to create a sub-agent: 
     1. Give each sub-agent its customer description as context. 
