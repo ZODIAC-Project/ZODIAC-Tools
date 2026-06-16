@@ -34,7 +34,7 @@ agent:
   port: 30086
   nodePort: 30086
   legacyNodePort: 30085
-  url: "http://130.149.158.32:30086"
+  url: "http://130.149.158.132:30086"
 
 logCollector:
   kubeNamespace: "zodiac"
