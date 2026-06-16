@@ -3,10 +3,11 @@ import httpx
 
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
+PURPOSE = "admin"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="admin".
+    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
@@ -20,7 +21,7 @@ def create_agent1():
     agent1_id = create_agent(
         runOnce=False,
         text=task_agent1,
-        purpose="subsidy-description-generation",
+        purpose=PURPOSE,
         memoryWindow=5,
         intervalMs=60000,
     )
@@ -32,14 +33,14 @@ def create_agent1():
     assert agent1_info.get("intervalMs") == 60000, (
         f"Expected Agent 1 intervalMs to be 60000 but got {agent1_info.get('intervalMs')}"
     )
-    assert "subsidy-description-generation" in agent1_info.get("purposes", []), (
-        f"Expected Agent 1 to have purpose 'subsidy-description-generation' but got {agent1_info.get('purposes')}"
+    assert PURPOSE in agent1_info.get("purposes", []), (
+        f"Expected Agent 1 to have purpose '{PURPOSE}' but got {agent1_info.get('purposes')}"
     )
     return agent1_id
 
 
 def create_agent2():
-    task_agent2 = """Use the tool search_knowledge_base with collection="customers" and purpose="admin".
+    task_agent2 = """Use the tool search_knowledge_base with collection="customers".
     Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer. Do not use the default collection and do not query foerderprogramme_export.
     How to create a sub-agent: 
     1. Give each sub-agent its customer description as context. 
@@ -54,7 +55,7 @@ def create_agent2():
     agent2_id = create_agent(
         runOnce=True,
         text=task_agent2,
-        purpose="subsidy-matching",
+        purpose=PURPOSE,
         memoryWindow=5,
         listenTopic=new_subsidy_topic,
     )
@@ -66,14 +67,14 @@ def create_agent2():
     assert agent2_info.get("listenTopic") == new_subsidy_topic, (
         f"Expected Agent 2 to listen to {new_subsidy_topic} but got {agent2_info.get('listenTopic')}"
     )
-    assert "subsidy-matching" in agent2_info.get("purposes", []), (
-        f"Expected Agent 2 to have purpose 'subsidy-matching' but got {agent2_info.get('purposes')}"
+    assert PURPOSE in agent2_info.get("purposes", []), (
+        f"Expected Agent 2 to have purpose '{PURPOSE}' but got {agent2_info.get('purposes')}"
     )
 
     payload = {
         "session_id": agent2_id,
         "topic": new_subsidy_topic,
-        "purpose": "subsidy-matching",
+        "purpose": PURPOSE,
     }
     stream_manager_resp_2 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
     assert stream_manager_resp_2.status_code == 200, (
@@ -100,7 +101,7 @@ def create_agent3():
     agent3_id = create_agent(
         runOnce=False,
         text=task_agent3,
-        purpose="evaluation",
+        purpose=PURPOSE,
         memoryWindow=5,
         listenTopic=customer_proposal_topic,
     )
@@ -112,14 +113,14 @@ def create_agent3():
     assert agent3_info.get("listenTopic") == customer_proposal_topic, (
         f"Expected Agent 3 to listen to {customer_proposal_topic} but got {agent3_info.get('listenTopic')}"
     )
-    assert "evaluation" in agent3_info.get("purposes", []), (
-        f"Expected Agent 3 to have purpose 'evaluation' but got {agent3_info.get('purposes')}"
+    assert PURPOSE in agent3_info.get("purposes", []), (
+        f"Expected Agent 3 to have purpose '{PURPOSE}' but got {agent3_info.get('purposes')}"
     )
 
     payload = {
         "session_id": agent3_id,
         "topic": customer_proposal_topic,
-        "purpose": "evaluation",
+        "purpose": PURPOSE,
     }
     stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
     assert stream_manager_resp_3.status_code == 200, (
@@ -145,8 +146,8 @@ def test_subsidy_demo():
     client.set_purpose_setting("filter_on_publish", False)
     client.set_purpose_setting("filter_hybrid", False)
     
-    reserve_topic(new_subsidy_topic, aip=["subsidy-matching"])
-    reserve_topic(customer_proposal_topic, aip=["evaluation"])
+    reserve_topic(new_subsidy_topic, aip=[PURPOSE])
+    reserve_topic(customer_proposal_topic, aip=[PURPOSE])
 
     
     agent3_id = create_agent3()
