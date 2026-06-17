@@ -1,5 +1,5 @@
 import pytest
-from helper import *
+from .helper import *
 
 def test_simple_fuzzy_assert():
     response = send("how do I center a div in CSS?")
