@@ -1,0 +1,519 @@
+{
+  "configuration" : { },
+  "description" : "Architecture model for the ZODIAC platform derived from the codebase.",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedDate" : "2026-06-17T08:35:29Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Uses the Orion UI to chat with the platform, manage agents, and observe live MQTT-backed workflows.",
+      "id" : "1",
+      "name" : "End User",
+      "properties" : {
+        "structurizr.dsl.identifier" : "user"
+      },
+      "relationships" : [ {
+        "description" : "Chats with, manages agents in, and observes the platform via",
+        "destinationId" : "5",
+        "id" : "15",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Chats with, manages agents in, and observes the platform via",
+        "destinationId" : "4",
+        "id" : "16",
+        "linkedRelationshipId" : "15",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "description" : "External LLM endpoint used by the MCP client for tool-using conversations.",
+      "documentation" : { },
+      "id" : "2",
+      "name" : "LLM Provider",
+      "properties" : {
+        "structurizr.dsl.identifier" : "llm"
+      },
+      "tags" : "Element,Software System"
+    }, {
+      "description" : "Prometheus, Grafana, Tempo, Loki, and the OpenTelemetry Collector for metrics, logs, and traces.",
+      "documentation" : { },
+      "id" : "3",
+      "name" : "Observability Stack",
+      "properties" : {
+        "structurizr.dsl.identifier" : "observability"
+      },
+      "tags" : "Element,Software System"
+    }, {
+      "containers" : [ {
+        "description" : "Vue 3/Vite frontend for chat, agent control, monitoring links, and broker interaction.",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Orion UI",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.ui"
+        },
+        "relationships" : [ {
+          "description" : "Sends chat requests to",
+          "destinationId" : "6",
+          "id" : "17",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "HTTP /chat"
+        }, {
+          "description" : "Creates and manages agents via",
+          "destinationId" : "8",
+          "id" : "18",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Observes broker-backed flows via",
+          "destinationId" : "12",
+          "id" : "19",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "WebSocket / MQTT"
+        }, {
+          "description" : "Opens dashboards in",
+          "destinationId" : "3",
+          "id" : "20",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Vue 3, Vite, Nginx"
+      }, {
+        "description" : "HTTP chat endpoint that connects the UI and agent workflows to the MCP server and external LLM.",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "MCP Client",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.mcpClient"
+        },
+        "relationships" : [ {
+          "description" : "Uses tools from",
+          "destinationId" : "7",
+          "id" : "25",
+          "sourceId" : "6",
+          "tags" : "Relationship",
+          "technology" : "MCP over HTTP"
+        }, {
+          "description" : "Requests completions from",
+          "destinationId" : "2",
+          "id" : "26",
+          "sourceId" : "6",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Exports telemetry to",
+          "destinationId" : "3",
+          "id" : "28",
+          "sourceId" : "6",
+          "tags" : "Relationship",
+          "technology" : "OTLP"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python"
+      }, {
+        "description" : "Purpose-aware tool server exposing MQTT, subscription, agent, and RAG tools over MCP/HTTP.",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "PurposeAwareMCP Server",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.mcpServer"
+        },
+        "relationships" : [ {
+          "description" : "Publishes, subscribes, and reserves purpose-aware topics in",
+          "destinationId" : "12",
+          "id" : "29",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "MQTT / HTTP"
+        }, {
+          "description" : "Creates stream subscriptions in",
+          "destinationId" : "9",
+          "id" : "30",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Creates and inspects agents in",
+          "destinationId" : "8",
+          "id" : "31",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Queries and ingests knowledge in",
+          "destinationId" : "10",
+          "id" : "32",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Exports telemetry to",
+          "destinationId" : "3",
+          "id" : "33",
+          "sourceId" : "7",
+          "tags" : "Relationship",
+          "technology" : "OTLP"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python, FastMCP"
+      }, {
+        "description" : "Creates, lists, and manages agents that call into the MCP client.",
+        "documentation" : { },
+        "id" : "8",
+        "name" : "Agent API",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.agentApi"
+        },
+        "relationships" : [ {
+          "description" : "Delegates agent work to",
+          "destinationId" : "6",
+          "id" : "22",
+          "sourceId" : "8",
+          "tags" : "Relationship",
+          "technology" : "HTTP /chat"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python, FastAPI"
+      }, {
+        "description" : "Manages browser and agent subscriptions to MQTT topics and forwards live events.",
+        "documentation" : { },
+        "id" : "9",
+        "name" : "Stream Manager",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.streamManager"
+        },
+        "relationships" : [ {
+          "description" : "Calls agent endpoints to attach live subscriptions",
+          "destinationId" : "8",
+          "id" : "23",
+          "sourceId" : "9",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Subscribes to and forwards live topic traffic from",
+          "destinationId" : "12",
+          "id" : "24",
+          "sourceId" : "9",
+          "tags" : "Relationship",
+          "technology" : "MQTT"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Service"
+      }, {
+        "description" : "FastAPI service for ingesting local data and serving purpose-filtered similarity search results.",
+        "documentation" : { },
+        "id" : "10",
+        "name" : "RAG Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.ragService"
+        },
+        "relationships" : [ {
+          "description" : "Reads and writes vectors and purpose metadata in",
+          "destinationId" : "11",
+          "id" : "34",
+          "sourceId" : "10",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python, FastAPI, ChromaDB"
+      }, {
+        "description" : "Embedded persistent vector store used by the RAG service; stores embeddings and purpose-tagged metadata.",
+        "documentation" : { },
+        "id" : "11",
+        "name" : "Chroma Data Store",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.ragStore"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "ChromaDB, local volume"
+      }, {
+        "description" : "HiveMQ-based MQTT broker exposing HTTP, MQTT, and WebSocket endpoints.",
+        "documentation" : { },
+        "id" : "12",
+        "name" : "HiveZODIAC Broker",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.broker"
+        },
+        "tags" : "Element,Container",
+        "technology" : "HiveMQ"
+      }, {
+        "description" : "Purpose-based access control extension embedded into the broker runtime; enforces PBAC rules for MQTT subscriptions and publishes.",
+        "documentation" : { },
+        "id" : "13",
+        "name" : "HivePBAC Extension",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.brokerExtension"
+        },
+        "relationships" : [ {
+          "description" : "Runs inside",
+          "destinationId" : "12",
+          "id" : "35",
+          "sourceId" : "13",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Java, HiveMQ Extension"
+      }, {
+        "description" : "Collects analysis logs from Kubernetes pods for troubleshooting and validation.",
+        "documentation" : { },
+        "id" : "14",
+        "name" : "Log Collector",
+        "properties" : {
+          "structurizr.dsl.identifier" : "zodiac.logCollector"
+        },
+        "relationships" : [ {
+          "description" : "Publishes collected operational data to",
+          "destinationId" : "3",
+          "id" : "36",
+          "sourceId" : "14",
+          "tags" : "Relationship",
+          "technology" : "Logs / analysis outputs"
+        }, {
+          "description" : "Observes runtime behavior of",
+          "destinationId" : "8",
+          "id" : "37",
+          "sourceId" : "14",
+          "tags" : "Relationship",
+          "technology" : "Kubernetes logs"
+        }, {
+          "description" : "Observes runtime behavior of",
+          "destinationId" : "6",
+          "id" : "38",
+          "sourceId" : "14",
+          "tags" : "Relationship",
+          "technology" : "Kubernetes logs"
+        }, {
+          "description" : "Observes runtime behavior of",
+          "destinationId" : "7",
+          "id" : "39",
+          "sourceId" : "14",
+          "tags" : "Relationship",
+          "technology" : "Kubernetes logs"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python"
+      } ],
+      "description" : "Purpose-aware AI and MQTT platform for orchestration, live streams, agent management, and RAG-backed subsidy workflows.",
+      "documentation" : { },
+      "id" : "4",
+      "name" : "ZODIAC Platform",
+      "properties" : {
+        "structurizr.dsl.identifier" : "zodiac"
+      },
+      "relationships" : [ {
+        "description" : "Opens dashboards in",
+        "destinationId" : "3",
+        "id" : "21",
+        "linkedRelationshipId" : "20",
+        "sourceId" : "4",
+        "technology" : "HTTP"
+      }, {
+        "description" : "Requests completions from",
+        "destinationId" : "2",
+        "id" : "27",
+        "linkedRelationshipId" : "26",
+        "sourceId" : "4",
+        "technology" : "HTTP"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "ZODIAC Architecture",
+  "properties" : {
+    "structurizr.inspection.error" : "7",
+    "structurizr.dsl" : "d29ya3NwYWNlICJaT0RJQUMgQXJjaGl0ZWN0dXJlIiAiQXJjaGl0ZWN0dXJlIG1vZGVsIGZvciB0aGUgWk9ESUFDIHBsYXRmb3JtIGRlcml2ZWQgZnJvbSB0aGUgY29kZWJhc2UuIiB7CgogICAgIWlkZW50aWZpZXJzIGhpZXJhcmNoaWNhbAoKICAgIG1vZGVsIHsKICAgICAgICB1c2VyID0gcGVyc29uICJFbmQgVXNlciIgIlVzZXMgdGhlIE9yaW9uIFVJIHRvIGNoYXQgd2l0aCB0aGUgcGxhdGZvcm0sIG1hbmFnZSBhZ2VudHMsIGFuZCBvYnNlcnZlIGxpdmUgTVFUVC1iYWNrZWQgd29ya2Zsb3dzLiIKCiAgICAgICAgbGxtID0gc29mdHdhcmVTeXN0ZW0gIkxMTSBQcm92aWRlciIgIkV4dGVybmFsIExMTSBlbmRwb2ludCB1c2VkIGJ5IHRoZSBNQ1AgY2xpZW50IGZvciB0b29sLXVzaW5nIGNvbnZlcnNhdGlvbnMuIgogICAgICAgIG9ic2VydmFiaWxpdHkgPSBzb2Z0d2FyZVN5c3RlbSAiT2JzZXJ2YWJpbGl0eSBTdGFjayIgIlByb21ldGhldXMsIEdyYWZhbmEsIFRlbXBvLCBMb2tpLCBhbmQgdGhlIE9wZW5UZWxlbWV0cnkgQ29sbGVjdG9yIGZvciBtZXRyaWNzLCBsb2dzLCBhbmQgdHJhY2VzLiIKCiAgICAgICAgem9kaWFjID0gc29mdHdhcmVTeXN0ZW0gIlpPRElBQyBQbGF0Zm9ybSIgIlB1cnBvc2UtYXdhcmUgQUkgYW5kIE1RVFQgcGxhdGZvcm0gZm9yIG9yY2hlc3RyYXRpb24sIGxpdmUgc3RyZWFtcywgYWdlbnQgbWFuYWdlbWVudCwgYW5kIFJBRy1iYWNrZWQgc3Vic2lkeSB3b3JrZmxvd3MuIiB7CiAgICAgICAgICAgIHVpID0gY29udGFpbmVyICJPcmlvbiBVSSIgIlZ1ZSAzL1ZpdGUgZnJvbnRlbmQgZm9yIGNoYXQsIGFnZW50IGNvbnRyb2wsIG1vbml0b3JpbmcgbGlua3MsIGFuZCBicm9rZXIgaW50ZXJhY3Rpb24uIiAiVnVlIDMsIFZpdGUsIE5naW54IgoKICAgICAgICAgICAgbWNwQ2xpZW50ID0gY29udGFpbmVyICJNQ1AgQ2xpZW50IiAiSFRUUCBjaGF0IGVuZHBvaW50IHRoYXQgY29ubmVjdHMgdGhlIFVJIGFuZCBhZ2VudCB3b3JrZmxvd3MgdG8gdGhlIE1DUCBzZXJ2ZXIgYW5kIGV4dGVybmFsIExMTS4iICJQeXRob24iCiAgICAgICAgICAgIG1jcFNlcnZlciA9IGNvbnRhaW5lciAiUHVycG9zZUF3YXJlTUNQIFNlcnZlciIgIlB1cnBvc2UtYXdhcmUgdG9vbCBzZXJ2ZXIgZXhwb3NpbmcgTVFUVCwgc3Vic2NyaXB0aW9uLCBhZ2VudCwgYW5kIFJBRyB0b29scyBvdmVyIE1DUC9IVFRQLiIgIlB5dGhvbiwgRmFzdE1DUCIKICAgICAgICAgICAgYWdlbnRBcGkgPSBjb250YWluZXIgIkFnZW50IEFQSSIgIkNyZWF0ZXMsIGxpc3RzLCBhbmQgbWFuYWdlcyBhZ2VudHMgdGhhdCBjYWxsIGludG8gdGhlIE1DUCBjbGllbnQuIiAiUHl0aG9uLCBGYXN0QVBJIgogICAgICAgICAgICBzdHJlYW1NYW5hZ2VyID0gY29udGFpbmVyICJTdHJlYW0gTWFuYWdlciIgIk1hbmFnZXMgYnJvd3NlciBhbmQgYWdlbnQgc3Vic2NyaXB0aW9ucyB0byBNUVRUIHRvcGljcyBhbmQgZm9yd2FyZHMgbGl2ZSBldmVudHMuIiAiU2VydmljZSIKCiAgICAgICAgICAgIHJhZ1NlcnZpY2UgPSBjb250YWluZXIgIlJBRyBTZXJ2aWNlIiAiRmFzdEFQSSBzZXJ2aWNlIGZvciBpbmdlc3RpbmcgbG9jYWwgZGF0YSBhbmQgc2VydmluZyBwdXJwb3NlLWZpbHRlcmVkIHNpbWlsYXJpdHkgc2VhcmNoIHJlc3VsdHMuIiAiUHl0aG9uLCBGYXN0QVBJLCBDaHJvbWFEQiIKICAgICAgICAgICAgcmFnU3RvcmUgPSBjb250YWluZXIgIkNocm9tYSBEYXRhIFN0b3JlIiAiRW1iZWRkZWQgcGVyc2lzdGVudCB2ZWN0b3Igc3RvcmUgdXNlZCBieSB0aGUgUkFHIHNlcnZpY2U7IHN0b3JlcyBlbWJlZGRpbmdzIGFuZCBwdXJwb3NlLXRhZ2dlZCBtZXRhZGF0YS4iICJDaHJvbWFEQiwgbG9jYWwgdm9sdW1lIiAiRGF0YWJhc2UiCgogICAgICAgICAgICBicm9rZXIgPSBjb250YWluZXIgIkhpdmVaT0RJQUMgQnJva2VyIiAiSGl2ZU1RLWJhc2VkIE1RVFQgYnJva2VyIGV4cG9zaW5nIEhUVFAsIE1RVFQsIGFuZCBXZWJTb2NrZXQgZW5kcG9pbnRzLiIgIkhpdmVNUSIKICAgICAgICAgICAgYnJva2VyRXh0ZW5zaW9uID0gY29udGFpbmVyICJIaXZlUEJBQyBFeHRlbnNpb24iICJQdXJwb3NlLWJhc2VkIGFjY2VzcyBjb250cm9sIGV4dGVuc2lvbiBlbWJlZGRlZCBpbnRvIHRoZSBicm9rZXIgcnVudGltZTsgZW5mb3JjZXMgUEJBQyBydWxlcyBmb3IgTVFUVCBzdWJzY3JpcHRpb25zIGFuZCBwdWJsaXNoZXMuIiAiSmF2YSwgSGl2ZU1RIEV4dGVuc2lvbiIKCiAgICAgICAgICAgIGxvZ0NvbGxlY3RvciA9IGNvbnRhaW5lciAiTG9nIENvbGxlY3RvciIgIkNvbGxlY3RzIGFuYWx5c2lzIGxvZ3MgZnJvbSBLdWJlcm5ldGVzIHBvZHMgZm9yIHRyb3VibGVzaG9vdGluZyBhbmQgdmFsaWRhdGlvbi4iICJQeXRob24iCiAgICAgICAgfQoKICAgICAgICB1c2VyIC0+IHpvZGlhYy51aSAiQ2hhdHMgd2l0aCwgbWFuYWdlcyBhZ2VudHMgaW4sIGFuZCBvYnNlcnZlcyB0aGUgcGxhdGZvcm0gdmlhIgoKICAgICAgICB6b2RpYWMudWkgLT4gem9kaWFjLm1jcENsaWVudCAiU2VuZHMgY2hhdCByZXF1ZXN0cyB0byIgIkhUVFAgL2NoYXQiCiAgICAgICAgem9kaWFjLnVpIC0+IHpvZGlhYy5hZ2VudEFwaSAiQ3JlYXRlcyBhbmQgbWFuYWdlcyBhZ2VudHMgdmlhIiAiSFRUUCIKICAgICAgICB6b2RpYWMudWkgLT4gem9kaWFjLmJyb2tlciAiT2JzZXJ2ZXMgYnJva2VyLWJhY2tlZCBmbG93cyB2aWEiICJXZWJTb2NrZXQgLyBNUVRUIgogICAgICAgIHpvZGlhYy51aSAtPiBvYnNlcnZhYmlsaXR5ICJPcGVucyBkYXNoYm9hcmRzIGluIiAiSFRUUCIKCiAgICAgICAgem9kaWFjLmFnZW50QXBpIC0+IHpvZGlhYy5tY3BDbGllbnQgIkRlbGVnYXRlcyBhZ2VudCB3b3JrIHRvIiAiSFRUUCAvY2hhdCIKICAgICAgICB6b2RpYWMuc3RyZWFtTWFuYWdlciAtPiB6b2RpYWMuYWdlbnRBcGkgIkNhbGxzIGFnZW50IGVuZHBvaW50cyB0byBhdHRhY2ggbGl2ZSBzdWJzY3JpcHRpb25zIiAiSFRUUCIKICAgICAgICB6b2RpYWMuc3RyZWFtTWFuYWdlciAtPiB6b2RpYWMuYnJva2VyICJTdWJzY3JpYmVzIHRvIGFuZCBmb3J3YXJkcyBsaXZlIHRvcGljIHRyYWZmaWMgZnJvbSIgIk1RVFQiCgogICAgICAgIHpvZGlhYy5tY3BDbGllbnQgLT4gem9kaWFjLm1jcFNlcnZlciAiVXNlcyB0b29scyBmcm9tIiAiTUNQIG92ZXIgSFRUUCIKICAgICAgICB6b2RpYWMubWNwQ2xpZW50IC0+IGxsbSAiUmVxdWVzdHMgY29tcGxldGlvbnMgZnJvbSIgIkhUVFAiCiAgICAgICAgem9kaWFjLm1jcENsaWVudCAtPiBvYnNlcnZhYmlsaXR5ICJFeHBvcnRzIHRlbGVtZXRyeSB0byIgIk9UTFAiCgogICAgICAgIHpvZGlhYy5tY3BTZXJ2ZXIgLT4gem9kaWFjLmJyb2tlciAiUHVibGlzaGVzLCBzdWJzY3JpYmVzLCBhbmQgcmVzZXJ2ZXMgcHVycG9zZS1hd2FyZSB0b3BpY3MgaW4iICJNUVRUIC8gSFRUUCIKICAgICAgICB6b2RpYWMubWNwU2VydmVyIC0+IHpvZGlhYy5zdHJlYW1NYW5hZ2VyICJDcmVhdGVzIHN0cmVhbSBzdWJzY3JpcHRpb25zIGluIiAiSFRUUCIKICAgICAgICB6b2RpYWMubWNwU2VydmVyIC0+IHpvZGlhYy5hZ2VudEFwaSAiQ3JlYXRlcyBhbmQgaW5zcGVjdHMgYWdlbnRzIGluIiAiSFRUUCIKICAgICAgICB6b2RpYWMubWNwU2VydmVyIC0+IHpvZGlhYy5yYWdTZXJ2aWNlICJRdWVyaWVzIGFuZCBpbmdlc3RzIGtub3dsZWRnZSBpbiIgIkhUVFAiCiAgICAgICAgem9kaWFjLm1jcFNlcnZlciAtPiBvYnNlcnZhYmlsaXR5ICJFeHBvcnRzIHRlbGVtZXRyeSB0byIgIk9UTFAiCgogICAgICAgIHpvZGlhYy5yYWdTZXJ2aWNlIC0+IHpvZGlhYy5yYWdTdG9yZSAiUmVhZHMgYW5kIHdyaXRlcyB2ZWN0b3JzIGFuZCBwdXJwb3NlIG1ldGFkYXRhIGluIgoKICAgICAgICB6b2RpYWMuYnJva2VyRXh0ZW5zaW9uIC0+IHpvZGlhYy5icm9rZXIgIlJ1bnMgaW5zaWRlIgogICAgICAgIHpvZGlhYy5sb2dDb2xsZWN0b3IgLT4gb2JzZXJ2YWJpbGl0eSAiUHVibGlzaGVzIGNvbGxlY3RlZCBvcGVyYXRpb25hbCBkYXRhIHRvIiAiTG9ncyAvIGFuYWx5c2lzIG91dHB1dHMiCiAgICAgICAgem9kaWFjLmxvZ0NvbGxlY3RvciAtPiB6b2RpYWMuYWdlbnRBcGkgIk9ic2VydmVzIHJ1bnRpbWUgYmVoYXZpb3Igb2YiICJLdWJlcm5ldGVzIGxvZ3MiCiAgICAgICAgem9kaWFjLmxvZ0NvbGxlY3RvciAtPiB6b2RpYWMubWNwQ2xpZW50ICJPYnNlcnZlcyBydW50aW1lIGJlaGF2aW9yIG9mIiAiS3ViZXJuZXRlcyBsb2dzIgogICAgICAgIHpvZGlhYy5sb2dDb2xsZWN0b3IgLT4gem9kaWFjLm1jcFNlcnZlciAiT2JzZXJ2ZXMgcnVudGltZSBiZWhhdmlvciBvZiIgIkt1YmVybmV0ZXMgbG9ncyIKICAgIH0KCiAgICB2aWV3cyB7CiAgICAgICAgc3lzdGVtQ29udGV4dCB6b2RpYWMgInN5c3RlbS1jb250ZXh0IiAiU3lzdGVtIGNvbnRleHQgZm9yIHRoZSBaT0RJQUMgcGxhdGZvcm0uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0IGxyCiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIgem9kaWFjICJjb250YWluZXJzIiAiQ29udGFpbmVyIHZpZXcgZm9yIHRoZSBaT0RJQUMgcGxhdGZvcm0uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgdXNlcgogICAgICAgICAgICBpbmNsdWRlIGxsbQogICAgICAgICAgICBpbmNsdWRlIG9ic2VydmFiaWxpdHkKICAgICAgICAgICAgaW5jbHVkZSB6b2RpYWMudWkKICAgICAgICAgICAgaW5jbHVkZSB6b2RpYWMubWNwQ2xpZW50CiAgICAgICAgICAgIGluY2x1ZGUgem9kaWFjLm1jcFNlcnZlcgogICAgICAgICAgICBpbmNsdWRlIHpvZGlhYy5hZ2VudEFwaQogICAgICAgICAgICBpbmNsdWRlIHpvZGlhYy5zdHJlYW1NYW5hZ2VyCiAgICAgICAgICAgIGluY2x1ZGUgem9kaWFjLnJhZ1NlcnZpY2UKICAgICAgICAgICAgaW5jbHVkZSB6b2RpYWMucmFnU3RvcmUKICAgICAgICAgICAgaW5jbHVkZSB6b2RpYWMuYnJva2VyCiAgICAgICAgICAgIGluY2x1ZGUgem9kaWFjLmJyb2tlckV4dGVuc2lvbgogICAgICAgICAgICBpbmNsdWRlIHpvZGlhYy5sb2dDb2xsZWN0b3IKICAgICAgICAgICAgYXV0b0xheW91dCBscgogICAgICAgIH0KCiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmZmZmZmYKICAgICAgICAgICAgICAgIGNvbG9yICMwYjVmZmYKICAgICAgICAgICAgICAgIHN0cm9rZSAjMGI1ZmZmCiAgICAgICAgICAgICAgICBzdHJva2VXaWR0aCAyCiAgICAgICAgICAgICAgICBzaGFwZSBwZXJzb24KICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2ZmZmZmZgogICAgICAgICAgICAgICAgY29sb3IgIzExNjhiZAogICAgICAgICAgICAgICAgc3Ryb2tlICMxMTY4YmQKICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoIDIKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2ZmZmZmZgogICAgICAgICAgICAgICAgY29sb3IgIzQzOGRkNQogICAgICAgICAgICAgICAgc3Ryb2tlICM0MzhkZDUKICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoIDIKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgc2hhcGUgY3lsaW5kZXIKICAgICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgdGhlbWUgZGVmYXVsdAogICAgfQp9",
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "configuration" : {
+      "styles" : {
+        "elements" : [ {
+          "background" : "#ffffff",
+          "color" : "#438dd5",
+          "stroke" : "#438dd5",
+          "strokeWidth" : 2,
+          "tag" : "Container"
+        }, {
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#ffffff",
+          "color" : "#0b5fff",
+          "shape" : "Person",
+          "stroke" : "#0b5fff",
+          "strokeWidth" : 2,
+          "tag" : "Person"
+        }, {
+          "background" : "#ffffff",
+          "color" : "#1168bd",
+          "stroke" : "#1168bd",
+          "strokeWidth" : 2,
+          "tag" : "Software System"
+        } ]
+      },
+      "terminology" : { },
+      "themes" : [ "https://static.structurizr.com/themes/default/theme.json" ]
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "Container view for the ZODIAC platform.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "containers",
+      "name" : "Container View: ZODIAC Platform",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "15"
+      }, {
+        "id" : "17"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "25"
+      }, {
+        "id" : "26"
+      }, {
+        "id" : "28"
+      }, {
+        "id" : "29"
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "31"
+      }, {
+        "id" : "32"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "34"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "37"
+      }, {
+        "id" : "38"
+      }, {
+        "id" : "39"
+      } ],
+      "softwareSystemId" : "4"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "System context for the ZODIAC platform.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "system-context",
+      "name" : "System Context View: ZODIAC Platform",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "16"
+      }, {
+        "id" : "21"
+      }, {
+        "id" : "27"
+      } ],
+      "softwareSystemId" : "4"
+    } ]
+  }
+}
