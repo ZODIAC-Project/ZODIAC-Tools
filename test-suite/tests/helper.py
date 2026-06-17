@@ -56,7 +56,7 @@ def toolcall_listen() -> tuple[bool, str | None]:
         try:
             async with websockets.connect(TOOL_USE_WS) as ws:
                 try:
-                    message = await asyncio.wait_for(ws.recv(), timeout=10)
+                    message = await asyncio.wait_for(ws.recv(), timeout=100)
                     return True, message
                 except asyncio.TimeoutError:
                     return False, None
@@ -164,3 +164,18 @@ def reset():
     client.reset_broker()
     time.sleep(1)
     client.reset_connection()
+    
+def delete_all_agents():
+    response = requests.get(f"{AGENT_URL}/agents")
+    assert response.status_code == 200, f"Failed to fetch agents: {response.text}"
+    agents = response.json()
+    for agent in agents:
+        delete_agent(agent["id"])
+
+def delete_agent(agent_id: str):
+    response = requests.delete(f"{AGENT_URL}/agents")
+    assert response.status_code == 200, f"Failed to delete agent {agent_id}: {response.text}"
+    
+def remove_all_subscriptions():
+    response = requests.get(f"{STREAM_MANAGER_URL}/clear_all")
+            

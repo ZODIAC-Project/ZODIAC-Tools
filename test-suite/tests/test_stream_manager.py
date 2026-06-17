@@ -32,7 +32,10 @@ def get_agent_history(agent_id: str, limit: int = 80) -> list:
     assert response.status_code == 200, (
         f"Failed to fetch history for agent {agent_id}: {response.text}"
     )
-    return response.json()
+    data = response.json()
+    if isinstance(data, dict):
+        return data.get("history", [])
+    return data
 
 
 def subscribe_agent_to_stream_manager(agent_id: str, topic: str, purpose: str):

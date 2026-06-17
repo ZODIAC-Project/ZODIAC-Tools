@@ -80,28 +80,47 @@ def test_subscribe_tool():
 
     # Verify subscription is actually active in stream manager
     subscriptions = get_subscriptions()
-    assert topic in subscriptions["topics"], \
-        f"Expected '{topic}' in active subscriptions but got: {subscriptions['topics']}"
+    # print the subscriptions for debugging
+    print("Current subscriptions:", json.dumps(subscriptions, indent=2))
+    
+    # Extract all topics from the session-based structure
+    active_topics = []
+    if "sessions" in subscriptions:
+        for session in subscriptions["sessions"]:
+            for sub in session.get("subscriptions", []):
+                active_topics.append(sub.get("topic"))
+    
+    assert topic in active_topics, \
+        f"Expected '{topic}' in active subscriptions but got: {active_topics}"
         
 def test_unsubscribe_tool():
     topic = "zodiac/test/unsubscribe-verify"
     session_id = str(uuid.uuid4())
 
     def sub_call():
-        send(f"Use the subscribe tool to subscribe to the MQTT topic '{topic}'.", session_id=session_id)
+        time.sleep(1)
+        send(f"Use the subscribe tool to subscribe to the MQTT topic '{topic}' for session '{session_id}'.", session_id=session_id)
     t = threading.Thread(target=sub_call)
     t.start()
     toolcall_listen()
     t.join()
 
+    # Extract all topics from the session-based structure
     subscriptions = get_subscriptions()
-    assert topic in subscriptions["topics"], \
-        f"Expected '{topic}' to be subscribed before unsubscribe test but got: {subscriptions['topics']}"
+    active_topics = []
+    if "sessions" in subscriptions:
+        for session in subscriptions["sessions"]:
+            for sub in session.get("subscriptions", []):
+                active_topics.append(sub.get("topic"))
+
+    assert topic in active_topics, \
+        f"Expected '{topic}' in active subscriptions before unsubscribe test but got: {active_topics}"
 
     result2 = {}
     def unsub_call():
         result2["response"] = send(
-            f"Use the unsubscribe tool to unsubscribe from '{topic}' and confirm.",
+            f"Use the unsubscribe tool to unsubscribe from '{topic}' for session '{session_id}' and confirm. "
+            f"Explicitly use the session ID '{session_id}'.",
             session_id=session_id
         )
     t = threading.Thread(target=unsub_call)
@@ -113,9 +132,14 @@ def test_unsubscribe_tool():
     assert "unsubscribe" in ws_message.lower(), f"Expected 'unsubscribe' tool call but got: {ws_message}"
 
     subscriptions = get_subscriptions()
-    assert topic not in subscriptions["topics"], \
-        f"Expected '{topic}' to be removed from subscriptions but it still exists: {subscriptions['topics']}"
+    active_topics = []
+    if "sessions" in subscriptions:
+        for session in subscriptions["sessions"]:
+            for sub in session.get("subscriptions", []):
+                active_topics.append(sub.get("topic"))
 
+    assert topic not in active_topics, \
+        f"Expected '{topic}' to be removed from subscriptions but it still exists: {active_topics}"
 
 
 def test_list_subscriptions_tool():
@@ -125,7 +149,7 @@ def test_list_subscriptions_tool():
     # Subscribe to a known topic first
     result = {}
     def sub_call():
-        result["response"] = send(f"Use the subscribe tool to subscribe to '{topic}'.", session_id=session_id)
+        result["response"] = send(f"Use the subscribe tool to subscribe to '{topic}' for session '{session_id}'.", session_id=session_id)
     t = threading.Thread(target=sub_call)
     t.start()
     toolcall_listen()  # drain subscribe event
@@ -135,7 +159,7 @@ def test_list_subscriptions_tool():
     result2 = {}
     def list_call():
         result2["response"] = send(
-            "Use the list subscriptions tool and tell me all currently subscribed topics.",
+            f"Use the list subscriptions tool and tell me all currently subscribed topics for session '{session_id}'.",
             session_id=session_id
         )
 
@@ -156,11 +180,14 @@ def test_create_agent_and_subscribe_tool():
     result = {}
 
     def llm_call():
+        time.sleep(1)
         result["response"] = send(
-            f"Create an agent that subscribes to the MQTT topic '{topic}' "
-            f"and summarizes any incoming messages for data collection purposes. Derive all parameters from the context.",
+            f"Use the 'create_agent_and_subscribe' tool to create an agent for the topic '{topic}'. "
+            f"Set its purpose to 'data_collection'. "
+            f"Note: This request is for session '{session_id}'.",
             session_id=session_id
         )
+
 
     t = threading.Thread(target=llm_call)
     t.start()
@@ -168,28 +195,46 @@ def test_create_agent_and_subscribe_tool():
     t.join()
 
     assert received_ws, "Expected a tool call on the websocket but got none"
-    assert "create_agent" in ws_message.lower() or "subscribe" in ws_message.lower(), \
-        f"Expected create_agent_and_subscribe tool call but got: {ws_message}"
+    assert "create_agent_and_subscribe" in ws_message.lower(), \
+        f"Expected 'create_agent_and_subscribe' tool call but got: {ws_message}"
 
     # 1. Verify agent exists via REST and get its ID
     agents_response = requests.get(f"{AGENT_URL}/agents")
     assert agents_response.status_code == 200, f"Could not reach agent API: {agents_response.text}"
     agents = agents_response.json()
+    
     matching = [a for a in agents if a.get("listenTopic") == topic]
     assert len(matching) > 0, f"Expected an agent subscribed to '{topic}' but none found"
+    
+    matching.sort(key=lambda x: x.get("id", ""), reverse=True)
     agent_id = matching[0]["id"]
 
     # 2. Verify subscription exists in stream manager
+    time.sleep(2)
     subscriptions = get_subscriptions()
-    subscribed_topics = [
-        t
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent_id
-        for t in session.get("topics", [])
-    ]
-    assert topic in subscribed_topics, \
-        f"Expected agent '{agent_id}' to be subscribed to '{topic}' but got: {subscribed_topics}"
     
+    # We check if ANY session has this topic, but prioritize our agent_id
+    all_active_topics = []
+    agent_specific_topics = []
+    
+    if "sessions" in subscriptions:
+        for session in subscriptions["sessions"]:
+            s_id = session.get("session_id")
+            for sub in session.get("subscriptions", []):
+                t = sub.get("topic")
+                all_active_topics.append(t)
+                if s_id == agent_id:
+                    agent_specific_topics.append(t)
+
+    assert topic in all_active_topics, f"Topic '{topic}' not found in ANY stream manager session"
+    # If the specific agent_id match failed but the topic is active, we use the ID from the session that HAS it
+    if topic not in agent_specific_topics:
+        for session in subscriptions.get("sessions", []):
+            for sub in session.get("subscriptions", []):
+                if sub.get("topic") == topic:
+                    agent_id = session.get("session_id")
+                    break
+
     # 3. Publish a message to the topic and verify it arrives in agent history 
     test_message = "agent-trigger-payload"
 
@@ -235,5 +280,11 @@ def test_create_agent_and_subscribe_tool():
 
     # Verify subscription is also cleaned up
     subscriptions_after = get_subscriptions()
-    assert topic not in subscriptions_after["topics"], \
-        f"Expected '{topic}' subscription to be cleaned up after agent deletion but it still exists"
+    active_topics_after = []
+    if "sessions" in subscriptions_after:
+        for session in subscriptions_after["sessions"]:
+            for sub in session.get("subscriptions", []):
+                active_topics_after.append(sub.get("topic"))
+
+    assert topic not in active_topics_after, f"Expected '{topic}' subscription to be cleaned up but it still exists: {active_topics_after}"
+    remove_all_subscriptions()

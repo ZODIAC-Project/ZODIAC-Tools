@@ -1,3 +1,4 @@
+import time
 from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client 
 import httpx
 
@@ -40,16 +41,21 @@ def create_agent1():
 
 
 def create_agent2():
+    # This has to be a onetime fire agent 
     task_agent2 = """Use the tool search_knowledge_base with collection="customers" and purpose="admin".
-    Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer. Do not use the default collection and do not query foerderprogramme_export.
-    How to create a sub-agent: 
+    Retrieve the customer list only from the "customers" collection and create one sub-agent for each customer.  
+    Do not use the default collection and do not query foerderprogramme_export.
+    Use the tool create_agent_and_subscribe to create sub-agents with the following properties:
+    
+    How to create a sub-agent ALL OF THE FOLLOWING POINTS MUST BE FULFILLED: 
     1. Give each sub-agent its customer description as context. 
     2. Each sub-agent must listen to the topic zodiac/subsidy/new. 
-    3. Give the Agents the following task as a quote: "Evaluate each incoming subsidy description
+    3. Give the Agents the following task as a quote: "You are {ALL AVAILABLE INFOS HERE}. Evaluate each incoming subsidy description
     against your customer description. If a subsidy fits and seems appropriate, publish a subsidy proposal to
     zodiac/subsidy/customer/<your-customer-id>/proposal. Dont spawn a sub-agent."
+    4. The Purpose has to be "admin" for creating all sub-agents. 
     
-    Give the sub-agent the 3. point as a quote and dont change anything to it 
+    Give the sub-agent the 3 points as a quote and dont change anything to it 
     """
 
     agent2_id = create_agent(
@@ -57,42 +63,13 @@ def create_agent2():
         text=task_agent2,
         purpose=PURPOSE,
         memoryWindow=5,
-        listenTopic=new_subsidy_topic,
+        intervalMs=400,
     )
     assert agent2_id is not None, "Failed to create Agent 2 that is supposed to listen to new subsidy descriptions."
 
     agents = httpx.get(f"{AGENT_URL}/agents", timeout=5.0).json()
     agent2_info = next((a for a in agents if a.get("id") == agent2_id), None)
     assert agent2_info is not None, f"Failed to retrieve info for Agent 2: {agent2_info}"
-    assert agent2_info.get("listenTopic") == new_subsidy_topic, (
-        f"Expected Agent 2 to listen to {new_subsidy_topic} but got {agent2_info.get('listenTopic')}"
-    )
-    assert PURPOSE in agent2_info.get("purposes", []), (
-        f"Expected Agent 2 to have purpose '{PURPOSE}' but got {agent2_info.get('purposes')}"
-    )
-
-    payload = {
-        "session_id": agent2_id,
-        "topic": new_subsidy_topic,
-        "purpose": PURPOSE,
-    }
-    stream_manager_resp_2 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert stream_manager_resp_2.status_code == 200, (
-        f"Failed to subscribe Agent 2 to stream manager: {stream_manager_resp_2.text}"
-    )
-
-    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
-    agent2_subscriptions = [
-        s["topic"]
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent2_id
-        for s in session.get("subscriptions", [])
-    ]
-    assert new_subsidy_topic in agent2_subscriptions, (
-        f"Expected Agent 2 to be subscribed to {new_subsidy_topic}"
-    )
-    return agent2_id
-
 
 def create_agent3():
     task_agent3 = """I am an agent that listens to subsidy proposals and evaluates if they are good. 
@@ -142,8 +119,8 @@ def create_agent3():
 
 def test_subsidy_demo():
     
-    client.set_purpose_setting("filter_on_subscribe", True)
-    client.set_purpose_setting("filter_on_publish", False)
+    client.set_purpose_setting("filter_on_subscribe", False)
+    client.set_purpose_setting("filter_on_publish", True)
     client.set_purpose_setting("filter_hybrid", False)
     
     reserve_topic(new_subsidy_topic, aip=[PURPOSE])
@@ -152,4 +129,5 @@ def test_subsidy_demo():
     
     agent3_id = create_agent3()
     agent2_id = create_agent2()
+    time.sleep(10)
     agent1_id = create_agent1()
