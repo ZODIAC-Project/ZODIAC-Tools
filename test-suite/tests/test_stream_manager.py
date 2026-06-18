@@ -195,12 +195,14 @@ class TestStreamManagerForwarding:
             text="You are a passive listener. Do not do anything, just receive messages.",
             purpose=PURPOSE_ALLOWED,
             memoryWindow=20,
+            listenTopic=TEST_TOPIC,
         )
         agent_denied = create_agent(
             runOnce=False,
             text="You are a passive listener. Do not do anything, just receive messages.",
             purpose=PURPOSE_NOT_ALLOWED,
             memoryWindow=20,
+            listenTopic=TEST_TOPIC,
         )
 
         subscribe_agent_to_stream_manager(agent_allowed, TEST_TOPIC, PURPOSE_ALLOWED)
