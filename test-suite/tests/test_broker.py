@@ -13,9 +13,14 @@ from .helper import (
     publish_message
 )
 
-TOPIC = "zodiac/tests/broker_tests/purpose_topic"
-PURPOSE_ALLOWED = "allowed"
-PURPOSE_NOT_ALLOWED = "not_allowed"
+# isolate this test. ensure that no other reservations are set above or below this. 
+run_id = int(time.time() * 1000)
+
+TOPIC = f"zodiac/tests/{run_id}/broker_tests/purpose_topic"
+ALLOWED = "allowed"
+AIP = [ALLOWED, "debug"] # allowed intended purposes
+FORBIDDEN = "not_allowed"
+PIP = [FORBIDDEN] # prohibited intended purposes
 
 
 @pytest.fixture(autouse=True)
@@ -25,7 +30,7 @@ def clean_state():
     
 def subscribe_and_receive(agent_id: str, topic: str, expected_payload: str, timeout: float = 5.0) -> bool:
     """subscribe to a topic and wait for the message to arrive."""
-    subscribe_response = subscribe_with_purpose(topic, PURPOSE_ALLOWED)
+    subscribe_response = subscribe_with_purpose(topic, AIP)
     assert subscribe_response["status"] == "success", f"Failed to subscribe with allowed purpose: {subscribe_response}"
 
     client.wait_for_subscriptions()
@@ -45,10 +50,10 @@ def subscribe_and_receive(agent_id: str, topic: str, expected_payload: str, time
 
 def test_allowed_subscription():
     """Nachrichten auf einem reservierten Topic kommen an wenn der Purpose erlaubt ist."""
-    reserve_response = reserve_topic(TOPIC, aip=[PURPOSE_ALLOWED])
+    reserve_response = reserve_topic(TOPIC, aip=AIP)
     assert reserve_response["status"] == "success", f"Failed to reserve topic: {reserve_response}"
 
-    subscribe_response = subscribe_with_purpose(TOPIC, PURPOSE_ALLOWED)
+    subscribe_response = subscribe_with_purpose(TOPIC, ALLOWED)
     assert subscribe_response["status"] == "success", f"Failed to subscribe with allowed purpose: {subscribe_response}"
 
     client.wait_for_subscriptions()
@@ -59,6 +64,8 @@ def test_allowed_subscription():
     time.sleep(1)
     assert client.show_stats() == 0, "Expected allowed message to be received"
 
+
+# the client actually has built-in tools to test this kind of stuff, could be used here as well
 
 def test_not_allowed_subscription():
     """Nachrichten auf einem reservierten Topic kommen NICHT an wenn der Purpose nicht erlaubt ist.
@@ -71,8 +78,8 @@ def test_not_allowed_subscription():
     client.set_purpose_setting("filter_on_publish", False)
     client.set_purpose_setting("filter_hybrid", False)
 
-    reserve_topic(TOPIC, aip=[PURPOSE_ALLOWED])
-    subscribe_with_purpose(TOPIC, PURPOSE_NOT_ALLOWED)
+    reserve_topic(TOPIC, aip=AIP)
+    subscribe_with_purpose(TOPIC, FORBIDDEN)
     client.wait_for_subscriptions()
 
     publish_response = send_and_reject(TOPIC, b"Test message for not allowed subscription")
@@ -93,8 +100,8 @@ def test_broker_suback_on_forbidden_subscription():
     client.set_purpose_setting("filter_on_publish", False)
     client.set_purpose_setting("filter_hybrid", False)
 
-    reserve_topic(TOPIC, aip=[PURPOSE_ALLOWED])
-    raw_response = subscribe_with_purpose(TOPIC, PURPOSE_NOT_ALLOWED)
+    reserve_topic(TOPIC, aip=AIP)
+    raw_response = subscribe_with_purpose(TOPIC, PIP)
 
     print(f"\nSUBACK response: {raw_response}")
     print(f"  status:  {raw_response.get('status')}")
@@ -111,8 +118,8 @@ def test_broker_disconnects_on_forbidden_subscription():
     client.set_purpose_setting("filter_on_publish", False)
     client.set_purpose_setting("filter_hybrid", False)
 
-    reserve_topic(TOPIC, aip=[PURPOSE_ALLOWED])
-    subscribe_with_purpose(TOPIC, PURPOSE_NOT_ALLOWED)
+    reserve_topic(TOPIC, aip=AIP)
+    subscribe_with_purpose(TOPIC, PIP)
     client.wait_for_subscriptions()
 
     time.sleep(1)
