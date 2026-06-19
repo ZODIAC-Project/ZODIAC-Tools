@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: zodiac
-  name: agent-api
+  name: new-agent
   labels:
-    app: agent-api
+    app: new-agent
   annotations:
     keel.sh/policy: minor
     keel.sh/trigger: poll
@@ -13,16 +13,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: agent-api
+      app: new-agent
   template:
     metadata:
       labels:
-        app: agent-api
+        app: new-agent
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: agent
+        - name: new-agent
           image: "{{ .Values.meta.imageUrl }}/new-agent:0.5.0-cicd"
           imagePullPolicy: IfNotPresent
           ports:
@@ -39,7 +39,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: agent-api
+    app: new-agent
   ports:
     - name: http-legacy
       protocol: TCP

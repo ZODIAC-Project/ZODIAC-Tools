@@ -31,13 +31,11 @@ spec:
             - name: MQTT_BROKER
               value: "{{ .Values.streamManager.mqttBroker }}"
             - name: AGENT_SERVER_URL
-              value: "{{ .Values.agent.url}}"
+              value: "{{ .Values.streamManager.agentserverUrl }}"
             - name: MAX_TOPICS_PER_SESSION
               value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT
               value: "{{ .Values.streamManager.port }}"
-            - name: AGENT_SERVER_URL
-              value: "{{ .Values.agent.url }}"
           ports:
             - containerPort: 8002
 ---

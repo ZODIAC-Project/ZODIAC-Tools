@@ -18,6 +18,8 @@ def test_random_number():
 
 def test_math():
     response = send("what is 452 * 3?")
+    #remove commas or other formatting from the response (1,356 is still acceptable)
+    response = response.replace(',', '').replace('.', '')
     numbers = re.findall(r'\d+', response)
     assert numbers, f"No numbers found in response: '{response}'"
     # first number might not be the answer, so we need to check all numbers in the response

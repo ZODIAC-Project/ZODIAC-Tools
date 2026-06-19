@@ -32,7 +32,10 @@ def get_agent_history(agent_id: str, limit: int = 80) -> list:
     assert response.status_code == 200, (
         f"Failed to fetch history for agent {agent_id}: {response.text}"
     )
-    return response.json()
+    data = response.json()
+    if isinstance(data, dict):
+        return data.get("history", [])
+    return data
 
 
 def subscribe_agent_to_stream_manager(agent_id: str, topic: str, purpose: str):
@@ -192,12 +195,14 @@ class TestStreamManagerForwarding:
             text="You are a passive listener. Do not do anything, just receive messages.",
             purpose=PURPOSE_ALLOWED,
             memoryWindow=20,
+            listenTopic=TEST_TOPIC,
         )
         agent_denied = create_agent(
             runOnce=False,
             text="You are a passive listener. Do not do anything, just receive messages.",
             purpose=PURPOSE_NOT_ALLOWED,
             memoryWindow=20,
+            listenTopic=TEST_TOPIC,
         )
 
         subscribe_agent_to_stream_manager(agent_allowed, TEST_TOPIC, PURPOSE_ALLOWED)
