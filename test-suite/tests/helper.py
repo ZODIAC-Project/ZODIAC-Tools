@@ -1,3 +1,4 @@
+import pytest
 import os
 import requests
 import websockets
@@ -123,6 +124,30 @@ def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: in
     assert "id" in data, f"Agent creation response missing id: {data}"
     return data["id"]
 
+def register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
+    payload = {
+        "session_id": agent_id,
+        "topic": topic,
+        "purpose": purpose,
+    }
+    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
+    assert response.status_code == 200, (
+        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
+    )
+    return response.json()
+
+def raw_register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
+    payload = {
+        "session_id": agent_id,
+        "topic": topic,
+        "purpose": purpose,
+    }
+    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
+    assert response.status_code == 200, (
+        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
+    )
+    return response.json()
+
 def subscribe_with_purpose(topic: str, ap: str, qos=0, presub=False):
     response = client.subscribe_with_purpose(topic, ap, qos=qos)
     logging.debug(f"Subscribed to topic {topic} with purpose {ap} and QoS {qos}. Response: {response}")
@@ -173,9 +198,13 @@ def delete_all_agents():
         delete_agent(agent["id"])
 
 def delete_agent(agent_id: str):
-    response = requests.delete(f"{AGENT_URL}/agents")
+    response = requests.delete(f"{AGENT_URL}/agents/{agent_id}")
     assert response.status_code == 200, f"Failed to delete agent {agent_id}: {response.text}"
     
 def remove_all_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/clear_all")
-            
+
+@pytest.fixture(autouse=True)
+def cleanup_agents():
+    yield
+    delete_all_agents()
