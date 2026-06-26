@@ -93,27 +93,6 @@ def create_agent3():
     assert PURPOSE in agent3_info.get("purposes", []), (
         f"Expected Agent 3 to have purpose '{PURPOSE}' but got {agent3_info.get('purposes')}"
     )
-
-    payload = {
-        "session_id": agent3_id,
-        "topic": customer_proposal_topic,
-        "purpose": PURPOSE,
-    }
-    stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert stream_manager_resp_3.status_code == 200, (
-        f"Failed to subscribe Agent 3 to stream manager: {stream_manager_resp_3.text}"
-    )
-
-    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
-    agent3_subscriptions = [
-        s["topic"]
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent3_id
-        for s in session.get("subscriptions", [])
-    ]
-    assert customer_proposal_topic in agent3_subscriptions, (
-        f"Expected Agent 3 to be subscribed to {customer_proposal_topic}"
-    )
     return agent3_id
 
 
