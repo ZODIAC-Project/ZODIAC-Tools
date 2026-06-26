@@ -1,0 +1,508 @@
+{
+  "base_url": "http://130.149.158.133:30084",
+  "scenario_file": "/Users/sonak/arbeit/zodiak/ZODIAC-Tools/test-suite/benchmark/scenarios.json",
+  "generated_at_epoch": 1782461566.541821,
+  "warmup_runs": 1,
+  "measured_repeats": 5,
+  "results": [
+    {
+      "name": "baseline_no_tool",
+      "description": "Simple greeting that should usually avoid tool use.",
+      "summary": {
+        "runs": 5,
+        "successes": 5,
+        "failures": 0,
+        "min_duration_sec": 7.231,
+        "max_duration_sec": 21.465,
+        "mean_duration_sec": 12.554,
+        "median_duration_sec": 9.256
+      },
+      "runs": [
+        {
+          "started_at_epoch": 1782461593.35598,
+          "duration_sec": 21.465,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+            "session_id": "benchmark-baseline",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": true
+          },
+          "response": {
+            "response": "Hallo! Dies ist ein Baseline-Test ohne externe Daten.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-baseline",
+              "processing_time": 21.36333990097046
+            }
+          },
+          "error": null,
+          "iteration": 1
+        },
+        {
+          "started_at_epoch": 1782461614.820811,
+          "duration_sec": 15.84,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+            "session_id": "benchmark-baseline",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": true
+          },
+          "response": {
+            "response": "Hallo! Dies ist ein Baseline-Test ohne externe Daten.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-baseline",
+              "processing_time": 15.796972513198853
+            }
+          },
+          "error": null,
+          "iteration": 2
+        },
+        {
+          "started_at_epoch": 1782461630.6612852,
+          "duration_sec": 8.978,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+            "session_id": "benchmark-baseline",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": true
+          },
+          "response": {
+            "response": "Hallo! Dies ist ein Baseline-Test ohne externe Daten.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-baseline",
+              "processing_time": 8.931701421737671
+            }
+          },
+          "error": null,
+          "iteration": 3
+        },
+        {
+          "started_at_epoch": 1782461639.6389918,
+          "duration_sec": 7.231,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+            "session_id": "benchmark-baseline",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": true
+          },
+          "response": {
+            "response": "Hallo! Dies ist ein Baseline-Test ohne externe Daten.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-baseline",
+              "processing_time": 7.17780065536499
+            }
+          },
+          "error": null,
+          "iteration": 4
+        },
+        {
+          "started_at_epoch": 1782461646.870385,
+          "duration_sec": 9.256,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+            "session_id": "benchmark-baseline",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": true
+          },
+          "response": {
+            "response": "Hallo! Dies ist ein Baseline-Test ohne externe Daten.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-baseline",
+              "processing_time": 9.225382328033447
+            }
+          },
+          "error": null,
+          "iteration": 5
+        }
+      ]
+    },
+    {
+      "name": "calculator_tool",
+      "description": "Low-cost tool call against the MCP server.",
+      "summary": {
+        "runs": 5,
+        "successes": 5,
+        "failures": 0,
+        "min_duration_sec": 14.509,
+        "max_duration_sec": 106.446,
+        "mean_duration_sec": 43.118,
+        "median_duration_sec": 36.421
+      },
+      "runs": [
+        {
+          "started_at_epoch": 1782461671.705806,
+          "duration_sec": 41.215,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+            "session_id": "benchmark-calculator",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Das Ergebnis ist 3381.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-calculator",
+              "processing_time": 41.128660678863525
+            }
+          },
+          "error": null,
+          "iteration": 1
+        },
+        {
+          "started_at_epoch": 1782461712.920789,
+          "duration_sec": 16.998,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+            "session_id": "benchmark-calculator",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Das Ergebnis ist 3381.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-calculator",
+              "processing_time": 16.865845203399658
+            }
+          },
+          "error": null,
+          "iteration": 2
+        },
+        {
+          "started_at_epoch": 1782461729.9185338,
+          "duration_sec": 14.509,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+            "session_id": "benchmark-calculator",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Das Ergebnis ist 3381.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-calculator",
+              "processing_time": 14.477372884750366
+            }
+          },
+          "error": null,
+          "iteration": 3
+        },
+        {
+          "started_at_epoch": 1782461744.427422,
+          "duration_sec": 36.421,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+            "session_id": "benchmark-calculator",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Ich verf\u00fcge nicht \u00fcber ein spezielles Rechner-Tool, kann die Multiplikation aber intern durchf\u00fchren: Das Ergebnis ist **3381**.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-calculator",
+              "processing_time": 36.38611340522766
+            }
+          },
+          "error": null,
+          "iteration": 4
+        },
+        {
+          "started_at_epoch": 1782461780.8487139,
+          "duration_sec": 106.446,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+            "session_id": "benchmark-calculator",
+            "purposes": [],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Das Ergebnis ist 3381.",
+            "tool_calls": [],
+            "metadata": {
+              "session_id": "benchmark-calculator",
+              "processing_time": 106.41380023956299
+            }
+          },
+          "error": null,
+          "iteration": 5
+        }
+      ]
+    },
+    {
+      "name": "rag_search",
+      "description": "Knowledge-base lookup through the RAG service.",
+      "summary": {
+        "runs": 5,
+        "successes": 4,
+        "failures": 1,
+        "min_duration_sec": 41.373,
+        "max_duration_sec": 84.856,
+        "mean_duration_sec": 66.671,
+        "median_duration_sec": 70.228
+      },
+      "runs": [
+        {
+          "started_at_epoch": 1782461964.838274,
+          "duration_sec": 76.518,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+            "session_id": "benchmark-rag",
+            "purposes": [
+              "funding_advice"
+            ],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Ich habe versucht, in der Wissensbasis nach F\u00f6rderprogrammen f\u00fcr Digitalisierung im produzierenden Mittelstand in Berlin zu suchen, konnte dies jedoch aufgrund von technischen Fehlern nicht abschlie\u00dfen. Der Zugriff auf die daf\u00fcr zust\u00e4ndige RAG-Serviceschnittstelle war nicht erfolgreich (Fehlermeldungen: \"Could not reach RAG service\", \"404 Not Found\" und \"400 Bad Request\").\n\nDaher kann ich aktuell keine Informationen aus der Wissensbasis abrufen und Ihnen auch keine Zusammenfassung der F\u00f6rderprogramme erstellen. Es liegt ein technisches Problem beim Abruf der Daten vor.",
+            "tool_calls": [
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "collection": "",
+                  "purpose": "information_retrieval",
+                  "query": "Foerderprogramme Digitalisierung produzierender Mittelstand Berlin"
+                },
+                "id": "call_grrwngm2",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Digitalisierung produzierender Mittelstand Berlin F\u00f6rderprogramm",
+                  "purpose": "information retrieval"
+                },
+                "id": "call_7rrpymcd",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "collection": "foerderprogramme_export",
+                  "purpose": "funding_research",
+                  "query": "funding programs digitalization manufacturing SME Berlin",
+                  "top_k": 5
+                },
+                "id": "call_exgh33ps",
+                "type": "tool_call"
+              }
+            ],
+            "metadata": {
+              "session_id": "benchmark-rag",
+              "processing_time": 76.47982048988342
+            }
+          },
+          "error": null,
+          "iteration": 1
+        },
+        {
+          "started_at_epoch": 1782462041.355977,
+          "duration_sec": 63.939,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+            "session_id": "benchmark-rag",
+            "purposes": [
+              "funding_advice"
+            ],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Ich versuche aktuell, in der Wissensbasis nach F\u00f6rderprogrammen f\u00fcr Digitalisierung im produzierenden Mittelstand in Berlin zu suchen. Allerdings tritt dabei ein technisches Problem auf: Der RAG-Service (Wissensdatenbank) ist nicht erreichbar oder gibt Fehlermeldungen zur\u00fcck.\n\nDie konkreten Fehler sind:\n- \"Could not reach RAG service\"\n- \"400 Client Error: Bad Request\" bei der URL `http://rag-service:30110/collections/foerderprogramme_export/query`\n\nDa dieses Problem wiederholt auftritt, scheint es ein allgemeines Problem mit dem Zugriff auf die F\u00f6rderprogramm-Datenbank zu geben. Ohne funktionierenden RAG-Service kann ich derzeit keine Informationen aus der Wissensbasis abrufen und daher auch keine Zusammenfassung der relevanten F\u00f6rderprogramme erstellen.\n\nM\u00f6gliche L\u00f6sungen:\n1. Der Dienst k\u00f6nnte vor\u00fcbergehend nicht verf\u00fcgbar sein - ein sp\u00e4terer erneuter Versuch k\u00f6nnte erfolgreich sein\n2. Es k\u00f6nnte ein Konfigurationsproblem beim RAG-Service selbst geben\n\nSoll ich nochmals versuchen, die Suche durchzuf\u00fchren, oder haben Sie andere Informationen zu diesem Thema?",
+            "tool_calls": [
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Foerderprogramme Digitalisierung produzierender Mittelstand Berlin"
+                },
+                "id": "call_0fvk3ude",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Foerderprogramme Digitalisierung produzierender Mittelstand Berlin",
+                  "purpose": "search_funding"
+                },
+                "id": "call_an5fhscy",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Digitalisierung produzierender Mittelstand Berlin Foerderprogramm",
+                  "collection": "foerderprogramme_export",
+                  "purpose": "user_inquiry_about_funding"
+                },
+                "id": "call_uqcu764x",
+                "type": "tool_call"
+              }
+            ],
+            "metadata": {
+              "session_id": "benchmark-rag",
+              "processing_time": 63.832980155944824
+            }
+          },
+          "error": null,
+          "iteration": 2
+        },
+        {
+          "started_at_epoch": 1782462105.2955048,
+          "duration_sec": 42.8,
+          "status_code": null,
+          "ok": false,
+          "payload": {
+            "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+            "session_id": "benchmark-rag",
+            "purposes": [
+              "funding_advice"
+            ],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": null,
+          "error": "Remote end closed connection without response",
+          "iteration": 3
+        },
+        {
+          "started_at_epoch": 1782462148.0955992,
+          "duration_sec": 41.373,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+            "session_id": "benchmark-rag",
+            "purposes": [
+              "funding_advice"
+            ],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Ich habe versucht, in der Wissensbasis nach passenden F\u00f6rderprogrammen f\u00fcr Digitalisierung im produzierenden Mittelstand in Berlin zu suchen. Leider ist dies aufgrund eines technischen Problems nicht gelungen: Der RAG-Dienst (Retrieval-Augmented Generation), der f\u00fcr das Speichern und Durchsuchen von Dokumenten zust\u00e4ndig ist, war nicht erreichbar.\n\nM\u00f6gliche Gr\u00fcnde k\u00f6nnten sein:\n1. Der Dienst l\u00e4uft nicht oder ist vor\u00fcbergehend nicht verf\u00fcgbar\n2. Es gab ein Problem bei der Kommunikation zwischen Ihrem System und dem Dienst\n3. Die Wissensbasis selbst wurde m\u00f6glicherweise nicht korrekt initialisiert\n\nUm Ihre Anfrage zu bearbeiten, w\u00e4re es notwendig, dass das technische Problem behoben wird. Sobald die Wissensbasis wieder verf\u00fcgbar ist, kann ich gerne erneut nach den relevanten F\u00f6rderprogrammen suchen und diese f\u00fcr Sie zusammenfassen.",
+            "tool_calls": [
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "F\u00f6rderprogramme Digitalisierung produzierender Mittelstand Berlin",
+                  "purpose": "Informationssuche zu F\u00f6rderprogrammen f\u00fcr den produzierenden Mittelstand",
+                  "top_k": 5
+                },
+                "id": "call_037cmikg",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Digitalisierung Mittelstand Berlin F\u00f6rderprogramme",
+                  "purpose": "information_retrieval"
+                },
+                "id": "call_o3thtnma",
+                "type": "tool_call"
+              }
+            ],
+            "metadata": {
+              "session_id": "benchmark-rag",
+              "processing_time": 41.25852012634277
+            }
+          },
+          "error": null,
+          "iteration": 4
+        },
+        {
+          "started_at_epoch": 1782462189.468269,
+          "duration_sec": 84.856,
+          "status_code": 200,
+          "ok": true,
+          "payload": {
+            "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+            "session_id": "benchmark-rag",
+            "purposes": [
+              "funding_advice"
+            ],
+            "model": "ise-ollama/qwen3.6:35b-a3b",
+            "no_tools": false
+          },
+          "response": {
+            "response": "Ich muss leider feststellen, dass ich keine Ergebnisse aus der Wissensbasis abrufen kann. Der RAG-Dienst (Retrieval-Augmented Generation), der f\u00fcr das Durchsuchen der Dokumentensammlung zust\u00e4ndig ist, reagiert nicht wie erwartet und gibt Fehlermeldungen zur\u00fcck.\n\nMehrere Versuche haben gezeigt, dass entweder:\n1. Der Dienst technisch nicht verf\u00fcgbar ist\n2. Die URL oder Konfiguration des RAG-Services Probleme bereitet\n3. Die Sammlung \"foerderprogramme_export\" m\u00f6glicherweise nicht korrekt konfiguriert ist\n\nDa ich die Wissensbasis nicht erreichen kann, um nach F\u00f6rderprogrammen f\u00fcr Digitalisierung im produzierenden Mittelstand in Berlin zu suchen, kann ich Ihre Anfrage leider nicht bearbeiten. Ich empfehle, das technische Problem beim RAG-Dienst zu beheben, bevor eine erneute Suche durchgef\u00fchrt werden kann.",
+            "tool_calls": [
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Foerderprogramme Digitalisierung produzierender Mittelstand Berlin"
+                },
+                "id": "call_t51n5ptp",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "Foerderprogramme Digitalisierung produzierender Mittelstand Berlin",
+                  "purpose": "Informationen zu F\u00f6rderprogrammen fuer den Benutzer sammeln"
+                },
+                "id": "call_5hwddzdc",
+                "type": "tool_call"
+              },
+              {
+                "name": "search_knowledge_base",
+                "args": {
+                  "query": "digitalization manufacturing SME Berlin funding programs",
+                  "purpose": "Researching funding opportunities for digital transformation in manufacturing sector in Berlin"
+                },
+                "id": "call_oa7pb2o5",
+                "type": "tool_call"
+              }
+            ],
+            "metadata": {
+              "session_id": "benchmark-rag",
+              "processing_time": 84.82396984100342
+            }
+          },
+          "error": null,
+          "iteration": 5
+        }
+      ]
+    }
+  ]
+}

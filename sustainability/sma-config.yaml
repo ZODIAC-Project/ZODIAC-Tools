@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sma-config
+  namespace: zodiac
+data:
+  config.yaml: |
+    sma:
+      version: 0.2.0
+      services:
+        prometheus:
+          address: http://prometheus.zodiac.svc.cluster.local:9090
+
+      observation:
+        mode: timer
+        max_duration: 5m
+        window:
+          left: 0s
+          right: 0s
+
+      report:
+        location: /output
+
+      measurements:
+        # Current Prometheus only scrapes the `agent` and `otel-collector` jobs.
+        # Once `mcp-client`, `mcp-server`, and `rag-service` are scraped, these
+        # queries should be replaced with pod- or service-level MCP metrics.
+        - agent_cpu:
+            type: aggregate
+            layer: service
+            query: rate(process_cpu_seconds_total{job="agent"}[1m])
+            step: 30
+            unit: cpu_seconds_per_second
+
+        - agent_memory:
+            type: aggregate
+            layer: service
+            query: process_resident_memory_bytes{job="agent"}
+            step: 30
+            unit: bytes

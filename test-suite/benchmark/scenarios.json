@@ -1,0 +1,63 @@
+[
+  {
+    "name": "baseline_no_tool",
+    "description": "Simple greeting that should usually avoid tool use.",
+    "payload": {
+      "message": "Sag kurz Hallo und fasse in einem Satz zusammen, dass das ein Baseline-Test ohne externe Daten ist.",
+      "session_id": "benchmark-baseline",
+      "purposes": [],
+      "model": "ise-ollama/qwen3.6:35b-a3b",
+      "no_tools": true
+    }
+  },
+  {
+    "name": "calculator_tool",
+    "description": "Low-cost tool call against the MCP server.",
+    "payload": {
+      "message": "Berechne bitte mit dem Rechner 147 mal 23 und nenne nur kurz das Ergebnis.",
+      "session_id": "benchmark-calculator",
+      "purposes": [],
+      "model": "ise-ollama/qwen3.6:35b-a3b",
+      "no_tools": false
+    }
+  },
+  {
+    "name": "rag_search",
+    "description": "Knowledge-base lookup through the RAG service.",
+    "payload": {
+      "message": "Suche in der Wissensbasis nach passenden Foerderprogrammen fuer Digitalisierung im produzierenden Mittelstand in Berlin und fasse die wichtigsten Punkte zusammen.",
+      "session_id": "benchmark-rag",
+      "purposes": [
+        "funding_advice"
+      ],
+      "model": "ise-ollama/qwen3.6:35b-a3b",
+      "no_tools": false
+    }
+  },
+  {
+    "name": "mqtt_subscribe",
+    "description": "Subscribe to a live MQTT topic through the MCP server.",
+    "payload": {
+      "message": "Abonniere das Topic sensors/temperature fuer den Zweck monitoring und bestaetige kurz die Subscription.",
+      "session_id": "benchmark-mqtt",
+      "purposes": [
+        "monitoring"
+      ],
+      "model": "ise-ollama/qwen3.6:35b-a3b",
+      "no_tools": false
+    }
+  },
+  {
+    "name": "agent_subscribe",
+    "description": "Create an event-based agent that listens on an MQTT topic.",
+    "payload": {
+      "message": "Erstelle einen Agenten, der das Topic sensors/temperature fuer monitoring verfolgt und eingehende Temperaturdaten kurz zusammenfasst.",
+      "session_id": "benchmark-agent",
+      "purposes": [
+        "monitoring"
+      ],
+      "model": "ise-ollama/qwen3.6:35b-a3b",
+      "no_tools": false
+    }
+  }
+]
