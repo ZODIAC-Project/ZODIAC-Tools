@@ -16,6 +16,7 @@ spec:
         - name: sma
           image: python:3.11-slim
           imagePullPolicy: IfNotPresent
+          workingDir: /output
           command:
             - /bin/sh
             - -lc
@@ -31,4 +32,5 @@ spec:
           configMap:
             name: sma-config
         - name: sma-output
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: sma-output-pvc

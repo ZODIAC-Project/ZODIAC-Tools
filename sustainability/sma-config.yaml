@@ -19,22 +19,65 @@ data:
           right: 0s
 
       report:
-        location: /output
+        location: reports
 
       measurements:
-        # Current Prometheus only scrapes the `agent` and `otel-collector` jobs.
-        # Once `mcp-client`, `mcp-server`, and `rag-service` are scraped, these
-        # queries should be replaced with pod- or service-level MCP metrics.
-        - agent_cpu:
+        # These measurements focus on the current MCP request path:
+        # benchmark -> mcp-client -> mcp-server.
+        # Kepler energy metrics are still unavailable in this cluster, so the
+        # configuration uses Prometheus application and process metrics instead.
+        - mcp_client_cpu:
             type: aggregate
             layer: service
-            query: rate(process_cpu_seconds_total{job="agent"}[1m])
+            query: rate(process_cpu_seconds_total{job="mcp-client"}[1m])
             step: 30
             unit: cpu_seconds_per_second
 
-        - agent_memory:
+        - mcp_client_memory:
             type: aggregate
             layer: service
-            query: process_resident_memory_bytes{job="agent"}
+            query: process_resident_memory_bytes{job="mcp-client"}
             step: 30
             unit: bytes
+
+        - mcp_server_cpu:
+            type: aggregate
+            layer: service
+            query: rate(process_cpu_seconds_total{job="mcp-server"}[1m])
+            step: 30
+            unit: cpu_seconds_per_second
+
+        - mcp_server_memory:
+            type: aggregate
+            layer: service
+            query: process_resident_memory_bytes{job="mcp-server"}
+            step: 30
+            unit: bytes
+
+        - mcp_client_chat_success_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_chat_requests_total{job="mcp-client",outcome="success"}[1m]))
+            step: 30
+            unit: requests_per_second
+
+        - mcp_client_avg_request_duration:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_chat_request_duration_seconds_sum{job="mcp-client"}[1m])) / sum(rate(zodiac_mcp_client_chat_request_duration_seconds_count{job="mcp-client"}[1m]))
+            step: 30
+            unit: seconds
+
+        - mcp_client_tool_call_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_tool_calls_total{job="mcp-client"}[1m]))
+            step: 30
+            unit: tool_calls_per_second
+
+        - mcp_server_tool_call_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_server_tool_calls_total{job="mcp-server"}[1m]))
+            step: 30
+            unit: tool_calls_per_second
