@@ -4,6 +4,7 @@ metadata:
   name: sma-output-pvc
   namespace: zodiac
 spec:
+  storageClassName: zfs
   accessModes:
     - ReadWriteOnce
   resources:

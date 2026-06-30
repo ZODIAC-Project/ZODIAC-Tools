@@ -21,8 +21,11 @@ Prometheus currently exposes only these `up` targets in the `zodiac` cluster:
 - `otel-collector.zodiac.svc.cluster.local:8889`
 - `mcp-client-service.zodiac.svc.cluster.local:9101`
 - `mcp-server-service.zodiac.svc.cluster.local:9100`
+- `elise.ise.tu-berlin.de:9100`
+- `elise.ise.tu-berlin.de:9101`
 
 That means the current setup can now measure both infrastructure-level process metrics and MCP-specific application metrics for `mcp-client` and `mcp-server`.
+It also includes the already existing `elise` exporter metrics without deploying a separate scraper in `zodiac`.
 
 ## Before the first run
 
@@ -58,10 +61,33 @@ The checked-in SMA configuration currently measures:
 - `mcp_client_memory`
 - `mcp_server_cpu`
 - `mcp_server_memory`
+- `mcp_client_virtual_memory`
+- `mcp_server_virtual_memory`
+- `mcp_client_open_fds`
+- `mcp_server_open_fds`
+- `mcp_client_fd_utilization`
+- `mcp_server_fd_utilization`
+- `mcp_client_gc_collection_rate`
+- `mcp_server_gc_collection_rate`
+- `agent_cpu`
+- `agent_memory`
+- `agent_virtual_memory`
+- `agent_open_fds`
+- `agent_fd_utilization`
+- `agent_gc_collection_rate`
+- `agent_active_count`
+- `agent_create_rate`
+- `agent_successful_job_rate`
+- `agent_failed_job_rate`
+- `agent_avg_job_duration_ms`
+- `agent_avg_mcp_request_duration_ms`
 - `mcp_client_chat_success_rate`
 - `mcp_client_avg_request_duration`
 - `mcp_client_tool_call_rate`
 - `mcp_server_tool_call_rate`
+- `elise_gpu_power_mw`
+- `elise_gpu_temperature_celsius`
+- `elise_gpu_utilization_percent`
 
 ## Files
 
@@ -97,9 +123,10 @@ kubectl apply -f sma-job.yaml
 kubectl logs -n zodiac job/sma-benchmark-run -f
 ```
 
-The checked-in config writes reports to a relative directory `reports/` while the
-container runs with `/output` as its working directory. That is necessary because
-SMA rejects absolute report locations such as `/output`.
+The checked-in config writes each run into its own relative directory under
+`reports/${startTime}_${runHash}` while the container runs with `/output` as its
+working directory. That avoids collisions between repeated runs and is necessary
+because SMA rejects absolute report locations such as `/output`.
 
 6. In parallel, run the benchmark scenarios from `ZODIAC-Tools/test-suite` so the MCP metrics actually change during the SMA observation window:
 
