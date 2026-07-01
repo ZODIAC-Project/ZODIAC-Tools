@@ -94,7 +94,7 @@ The checked-in SMA configuration currently measures:
 - `sma-config.yaml`: ConfigMap with the SMA configuration
 - `sma-job.yaml`: one-shot Job that runs SMA
 - `sma-pvc.yaml`: persistent volume claim for generated SMA reports
-- `sma-report-reader.yaml`: helper Pod to inspect or copy reports from the PVC
+- `sma-report-reader.yaml`: helper Deployment to inspect or copy reports from the PVC
 
 ## First deployment flow
 
@@ -145,18 +145,19 @@ python3 benchmark/run_benchmark.py \
 Because the Job now writes to a PVC, the generated files remain available after
 the Pod has finished. Since `kubectl cp` from a completed Job Pod is often not
 possible, the simplest reliable flow is to mount the same PVC in a small helper
-Pod:
+Deployment that stays available:
 
 ```bash
 kubectl apply -f sma-report-reader.yaml
-kubectl exec -n zodiac sma-report-reader -- ls -R /output/reports
-kubectl cp zodiac/sma-report-reader:/output/reports ./reports
+kubectl rollout status deployment/sma-report-reader -n zodiac
+kubectl exec -n zodiac deploy/sma-report-reader -- ls -R /output/reports
+kubectl cp zodiac/$(kubectl get pod -n zodiac -l app.kubernetes.io/name=sma-report-reader -o jsonpath='{.items[0].metadata.name}'):/output/reports ./reports
 ```
 
-Afterwards you can remove the helper Pod again:
+If you want to remove the helper again later:
 
 ```bash
-kubectl delete pod sma-report-reader -n zodiac --ignore-not-found
+kubectl delete deployment sma-report-reader -n zodiac --ignore-not-found
 ```
 
 If you want to rerun the benchmark cleanly, remove the old Job first:
