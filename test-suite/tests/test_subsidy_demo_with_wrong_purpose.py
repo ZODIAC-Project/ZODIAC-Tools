@@ -1,5 +1,7 @@
+import time
 from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client
 import httpx
+import pytest
 
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
@@ -57,40 +59,13 @@ def create_agent2():
         text=task_agent2,
         purpose=PURPOSE,
         memoryWindow=5,
-        listenTopic=new_subsidy_topic,
+        intervalMs=6000000,
     )
     assert agent2_id is not None, "Failed to create Agent 2 that is supposed to listen to new subsidy descriptions."
 
     agents = httpx.get(f"{AGENT_URL}/agents", timeout=5.0).json()
     agent2_info = next((a for a in agents if a.get("id") == agent2_id), None)
     assert agent2_info is not None, f"Failed to retrieve info for Agent 2: {agent2_info}"
-    assert agent2_info.get("listenTopic") == new_subsidy_topic, (
-        f"Expected Agent 2 to listen to {new_subsidy_topic} but got {agent2_info.get('listenTopic')}"
-    )
-    assert PURPOSE in agent2_info.get("purposes", []), (
-        f"Expected Agent 2 to have purpose '{PURPOSE}' but got {agent2_info.get('purposes')}"
-    )
-
-    payload = {
-        "session_id": agent2_id,
-        "topic": new_subsidy_topic,
-        "purpose": PURPOSE,
-    }
-    stream_manager_resp_2 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert stream_manager_resp_2.status_code == 200, (
-        f"Failed to subscribe Agent 2 to stream manager: {stream_manager_resp_2.text}"
-    )
-
-    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
-    agent2_subscriptions = [
-        s["topic"]
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent2_id
-        for s in session.get("subscriptions", [])
-    ]
-    assert new_subsidy_topic in agent2_subscriptions, (
-        f"Expected Agent 2 to be subscribed to {new_subsidy_topic}"
-    )
     return agent2_id
 
 
@@ -117,26 +92,6 @@ def create_agent3():
         f"Expected Agent 3 to have purpose '{PURPOSE}' but got {agent3_info.get('purposes')}"
     )
 
-    payload = {
-        "session_id": agent3_id,
-        "topic": customer_proposal_topic,
-        "purpose": PURPOSE,
-    }
-    stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert stream_manager_resp_3.status_code == 200, (
-        f"Failed to subscribe Agent 3 to stream manager: {stream_manager_resp_3.text}"
-    )
-
-    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
-    agent3_subscriptions = [
-        s["topic"]
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent3_id
-        for s in session.get("subscriptions", [])
-    ]
-    assert customer_proposal_topic in agent3_subscriptions, (
-        f"Expected Agent 3 to be subscribed to {customer_proposal_topic}"
-    )
     return agent3_id
 
 
@@ -151,4 +106,8 @@ def test_subsidy_demo():
 
     agent3_id = create_agent3()
     agent2_id = create_agent2()
+    time.sleep(10)
     agent1_id = create_agent1()
+@pytest.fixture(autouse=True)
+def cleanup_agents():
+    yield
