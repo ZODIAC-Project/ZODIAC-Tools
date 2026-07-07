@@ -19,12 +19,97 @@ data:
           right: 0s
 
       report:
-        location: /output
+        location: reports/${startTime}_${runHash}
 
       measurements:
-        # Current Prometheus only scrapes the `agent` and `otel-collector` jobs.
-        # Once `mcp-client`, `mcp-server`, and `rag-service` are scraped, these
-        # queries should be replaced with pod- or service-level MCP metrics.
+        # These measurements focus on the current MCP request path:
+        # benchmark -> mcp-client -> mcp-server.
+        # Kepler energy metrics are still unavailable in this cluster, so the
+        # configuration uses Prometheus application and process metrics instead.
+        - mcp_client_cpu:
+            type: aggregate
+            layer: service
+            query: rate(process_cpu_seconds_total{job="mcp-client"}[1m])
+            step: 30
+            unit: cpu_seconds_per_second
+
+        - mcp_client_memory:
+            type: aggregate
+            layer: service
+            query: process_resident_memory_bytes{job="mcp-client"}
+            step: 30
+            unit: bytes
+
+        - mcp_server_cpu:
+            type: aggregate
+            layer: service
+            query: rate(process_cpu_seconds_total{job="mcp-server"}[1m])
+            step: 30
+            unit: cpu_seconds_per_second
+
+        - mcp_server_memory:
+            type: aggregate
+            layer: service
+            query: process_resident_memory_bytes{job="mcp-server"}
+            step: 30
+            unit: bytes
+
+        - mcp_client_virtual_memory:
+            type: aggregate
+            layer: service
+            query: process_virtual_memory_bytes{job="mcp-client"}
+            step: 30
+            unit: bytes
+
+        - mcp_server_virtual_memory:
+            type: aggregate
+            layer: service
+            query: process_virtual_memory_bytes{job="mcp-server"}
+            step: 30
+            unit: bytes
+
+        - mcp_client_open_fds:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="mcp-client"}
+            step: 30
+            unit: file_descriptors
+
+        - mcp_server_open_fds:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="mcp-server"}
+            step: 30
+            unit: file_descriptors
+
+        - mcp_client_fd_utilization:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="mcp-client"} / process_max_fds{job="mcp-client"}
+            step: 30
+            unit: ratio
+
+        - mcp_server_fd_utilization:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="mcp-server"} / process_max_fds{job="mcp-server"}
+            step: 30
+            unit: ratio
+
+        - mcp_client_gc_collection_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(python_gc_collections_total{job="mcp-client"}[1m]))
+            step: 30
+            unit: collections_per_second
+
+        - mcp_server_gc_collection_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(python_gc_collections_total{job="mcp-server"}[1m]))
+            step: 30
+            unit: collections_per_second
+
         - agent_cpu:
             type: aggregate
             layer: service
@@ -38,3 +123,122 @@ data:
             query: process_resident_memory_bytes{job="agent"}
             step: 30
             unit: bytes
+
+        - agent_virtual_memory:
+            type: aggregate
+            layer: service
+            query: process_virtual_memory_bytes{job="agent"}
+            step: 30
+            unit: bytes
+
+        - agent_open_fds:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="agent"}
+            step: 30
+            unit: file_descriptors
+
+        - agent_fd_utilization:
+            type: aggregate
+            layer: service
+            query: process_open_fds{job="agent"} / process_max_fds{job="agent"}
+            step: 30
+            unit: ratio
+
+        - agent_gc_collection_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(python_gc_collections_total{job="agent"}[1m]))
+            step: 30
+            unit: collections_per_second
+
+        - agent_active_count:
+            type: aggregate
+            layer: service
+            query: agent_active_count{job="agent"}
+            step: 30
+            unit: agents
+
+        - agent_create_rate:
+            type: aggregate
+            layer: service
+            query: rate(agent_create_total{job="agent"}[1m])
+            step: 30
+            unit: agent_creations_per_second
+
+        - agent_successful_job_rate:
+            type: aggregate
+            layer: service
+            query: rate(agent_jobs_total{job="agent",status="success"}[1m])
+            step: 30
+            unit: jobs_per_second
+
+        - agent_failed_job_rate:
+            type: aggregate
+            layer: service
+            query: rate(agent_jobs_total{job="agent",status="failed"}[1m])
+            step: 30
+            unit: jobs_per_second
+
+        - agent_avg_job_duration_ms:
+            type: aggregate
+            layer: service
+            query: rate(agent_job_duration_ms_sum{job="agent"}[1m]) / rate(agent_job_duration_ms_count{job="agent"}[1m])
+            step: 30
+            unit: milliseconds
+
+        - agent_avg_mcp_request_duration_ms:
+            type: aggregate
+            layer: service
+            query: rate(agent_mcp_request_duration_ms_sum{job="agent"}[1m]) / rate(agent_mcp_request_duration_ms_count{job="agent"}[1m])
+            step: 30
+            unit: milliseconds
+
+        - mcp_client_chat_success_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_chat_requests_total{job="mcp-client",outcome="success"}[1m]))
+            step: 30
+            unit: requests_per_second
+
+        - mcp_client_avg_request_duration:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_chat_request_duration_seconds_sum{job="mcp-client"}[1m])) / sum(rate(zodiac_mcp_client_chat_request_duration_seconds_count{job="mcp-client"}[1m]))
+            step: 30
+            unit: seconds
+
+        - mcp_client_tool_call_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_client_tool_calls_total{job="mcp-client"}[1m]))
+            step: 30
+            unit: tool_calls_per_second
+
+        - mcp_server_tool_call_rate:
+            type: aggregate
+            layer: service
+            query: sum(rate(zodiac_mcp_server_tool_calls_total{job="mcp-server"}[1m]))
+            step: 30
+            unit: tool_calls_per_second
+
+        - elise_gpu_power_mw:
+            type: aggregate
+            layer: service
+            query: mac_gpu_power_mw{job="elise",instance="elise.ise.tu-berlin.de:9101"}
+            step: 30
+            unit: milliwatts
+
+        - elise_gpu_temperature_celsius:
+            type: aggregate
+            layer: service
+            query: mac_gpu_temperature_celsius{job="elise",instance="elise.ise.tu-berlin.de:9101"}
+            step: 30
+            unit: celsius
+
+        - elise_gpu_utilization_percent:
+            type: aggregate
+            layer: service
+            query: mac_gpu_utilisation_percent{job="elise",instance="elise.ise.tu-berlin.de:9101"}
+            step: 30
+            unit: percent

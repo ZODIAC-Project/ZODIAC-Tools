@@ -5,13 +5,13 @@ import httpx
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 
-DISCOVERY_PURPOSE = "subsidy/discovery"
+DISCOVERY_PURPOSE = "Berlin"
 ELIGIBILITY_PURPOSE = "subsidy/eligibility"
 APPLICATION_PURPOSE = "subsidy/application"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="subsidy/discovery".
+    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="Berlin".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
