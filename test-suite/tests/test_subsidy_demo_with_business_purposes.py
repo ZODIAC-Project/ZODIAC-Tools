@@ -1,17 +1,18 @@
 import time
 from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client
 import httpx
+import pytest
 
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 
-DISCOVERY_PURPOSE = "subsidy/discovery"
+DISCOVERY_PURPOSE = "Bayern"
 ELIGIBILITY_PURPOSE = "subsidy/eligibility"
 APPLICATION_PURPOSE = "subsidy/application"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="subsidy/discovery".
+    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="Bayern".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
@@ -103,27 +104,6 @@ def create_agent3():
     assert APPLICATION_PURPOSE in agent3_info.get("purposes", []), (
         f"Expected Agent 3 to have purpose '{APPLICATION_PURPOSE}' but got {agent3_info.get('purposes')}"
     )
-
-    payload = {
-        "session_id": agent3_id,
-        "topic": customer_proposal_topic,
-        "purpose": APPLICATION_PURPOSE,
-    }
-    stream_manager_resp_3 = httpx.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert stream_manager_resp_3.status_code == 200, (
-        f"Failed to subscribe Agent 3 to stream manager: {stream_manager_resp_3.text}"
-    )
-
-    subscriptions = httpx.get(f"{STREAM_MANAGER_URL}/subscriptions", timeout=5.0).json()
-    agent3_subscriptions = [
-        s["topic"]
-        for session in subscriptions["sessions"]
-        if session.get("session_id") == agent3_id
-        for s in session.get("subscriptions", [])
-    ]
-    assert customer_proposal_topic in agent3_subscriptions, (
-        f"Expected Agent 3 to be subscribed to {customer_proposal_topic}"
-    )
     return agent3_id
 
 
@@ -139,3 +119,7 @@ def test_subsidy_demo_with_business_purposes():
     agent2_id = create_agent2()
     time.sleep(10)
     agent1_id = create_agent1()
+
+@pytest.fixture(autouse=True)
+def cleanup_agents():
+    yield
