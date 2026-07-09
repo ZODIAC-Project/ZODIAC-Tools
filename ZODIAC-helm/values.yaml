@@ -29,6 +29,7 @@ orionUi:
   agentApiBase: "http://130.149.158.32:30086"
   clientUrl: "http://130.149.158.32:30084/health"
   brokerUrl: "http://mqtt-broker:1883"
+  grafanaUrl: "http://130.149.158.133:30678/public-dashboards/645b6a3d77334d1da468182462276ded"
 
 agent:
   port: 30086
