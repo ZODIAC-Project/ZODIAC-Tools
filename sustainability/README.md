@@ -167,6 +167,39 @@ kubectl delete job sma-benchmark-run -n zodiac --ignore-not-found
 kubectl apply -f sma-job.yaml
 ```
 
+## Local orchestration for subsidy demo
+
+If the benchmark test should stay local on machines that have the repository
+checked out, use:
+
+```bash
+python3 run_sma_with_subsidy_demo.py
+```
+
+The script:
+
+- deletes any previous `sma-benchmark-run` Job
+- starts a fresh SMA Job in the `zodiac` namespace
+- waits until the SMA pod is `Running`
+- waits a short settle period so observation has started
+- runs `uv run pytest tests/test_subsidy_demo.py --tb=no -vv` locally from `ZODIAC-Tools/test-suite`
+- waits for the SMA Job to finish and prints recent SMA logs
+
+Useful options:
+
+```bash
+python3 run_sma_with_subsidy_demo.py --settle-seconds 20
+python3 run_sma_with_subsidy_demo.py --test tests/test_subsidy_demo.py -- -k subsidy
+python3 run_sma_with_subsidy_demo.py --with-jupyter
+```
+
+If you pass `--with-jupyter`, the script will:
+
+- ensure `sma-report-reader` is running
+- download the newest SMA report from the PVC to `downloaded-reports/<run_id>/`
+- copy the bundled notebook `sma_report_analysis.ipynb` into that report directory
+- start `jupyter lab` on the copied notebook
+
 ## Important note
 
 The current Job installs the Python package at runtime using `pip`. That is the fastest way to test the integration, but it requires outbound network access from the cluster. If that is blocked, the next step is to build a dedicated image and replace the container image and command in `sma-job.yaml`.
