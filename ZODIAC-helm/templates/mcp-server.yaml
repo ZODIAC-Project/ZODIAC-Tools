@@ -42,8 +42,12 @@ spec:
               value: "http/protobuf"
             - name: OTEL_SERVICE_NAME
               value: "mcp-server"
-            - name: stream_manager_url
+            - name: OTEL_SERVICE_NAMESPACE
+              value: "zodiac"
+            - name: STREAM_MANAGER_URL
               value: "{{.Values.mcp.env.stream_manager_url}}"
+            - name: RAG_SERVICE_URL
+              value: "http://{{ .Values.ragService.serviceName }}:{{ .Values.ragService.port }}"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 

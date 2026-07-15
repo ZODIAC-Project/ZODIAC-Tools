@@ -40,6 +40,12 @@ spec:
               value: "{{ .Values.ragService.autoIngestLocalData }}"
             - name: RAG_AUTO_INGEST_ONLY_IF_EMPTY
               value: "{{ .Values.ragService.autoIngestOnlyIfEmpty }}"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.mcp.env.otel_exporter_endpoint }}"
+            - name: OTEL_SERVICE_NAME
+              value: "rag-service"
+            - name: OTEL_SERVICE_NAMESPACE
+              value: "zodiac"
           ports:
             - containerPort: {{.Values.ragService.port}}
           volumeMounts:

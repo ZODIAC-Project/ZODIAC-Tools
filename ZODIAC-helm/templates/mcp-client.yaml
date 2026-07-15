@@ -40,6 +40,10 @@ spec:
               value: {{.Values.mcp.env.tokenLimit|quote}}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{.Values.mcp.env.otel_exporter_endpoint}}
+            - name: OTEL_SERVICE_NAME
+              value: "mcp-client"
+            - name: OTEL_SERVICE_NAMESPACE
+              value: "zodiac"
             - name: MQTT_BROKER
               value: hivezodiac
           ports:
