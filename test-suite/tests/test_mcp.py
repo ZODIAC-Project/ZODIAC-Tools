@@ -8,7 +8,7 @@ def test_tool_recognition():
     response = send("What tools do you have access to?")
     assert all(
     tool_name in response.lower().replace("_", " ")
-    for tool_name in ["public animal", "secret animal"]), f"Response should at least mention two known tools but was: {response}"
+    for tool_name in ["public animal", "publish"]), f"Response should at least mention two known tools but was: {response}"
 
 def test_simple_tool_by_response():
     response = send("Use the public animal tool.")
@@ -29,6 +29,15 @@ def test_simple_tool_by_websocket():
     print(result["response"])
     assert received, "Expected to receive a message on the tool use websocket, but did not receive any within the timeout period. (10s)"
     assert "public_animal" in message, f"Expected 'public_animal' in tool use message but got: {message}"
+
+def test_mcp_denied_purpose_limitation_by_response():
+    response = send("Use the private animal tool.")
+    assert "turtle" not in response.lower(), f"private tool was called without the required purpose"
+    assert "cat" not in response.lower(), f"while the private animal tool was (correctly) not called, the public animal tool was called unintentionally: {response}"
+
+def test_mcp_allowed_purpose_limitation_by_response():
+    response = send("Use the private animal tool.", purposes=["sensitive"])
+    assert "turtle" in response.lower(), f"private tool was not called, but had the permission to do so. message: {response}"
 
 def test_publish_tool():
     
