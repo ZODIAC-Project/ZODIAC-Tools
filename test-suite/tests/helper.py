@@ -204,7 +204,3 @@ def delete_agent(agent_id: str):
 def remove_all_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/clear_all")
 
-@pytest.fixture(autouse=True)
-def cleanup_agents():
-    yield
-    delete_all_agents()
