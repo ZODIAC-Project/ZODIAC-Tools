@@ -8,6 +8,7 @@ from .data import WEEK_CUSTOMERS, WEEK_SUBSIDIES
 def test_week_of_usage(topic_factory, purpose_factory, run_config):
     interval = run_config.get("event_interval_seconds", 2)
     n_events = run_config.get("n_events", len(WEEK_SUBSIDIES))
+    n_subagents = run_config.get("n_subagents", len(WEEK_CUSTOMERS))
     counters = RunCounters()
 
     input_topic = topic_factory("input")
@@ -15,7 +16,7 @@ def test_week_of_usage(topic_factory, purpose_factory, run_config):
     helper.reserve_topic(input_topic, aip=[purpose])
 
     # fixed subagent count — NOT discovered dynamically from RAG
-    for customer in WEEK_CUSTOMERS:
+    for customer in WEEK_CUSTOMERS[:n_subagents]:
         helper.create_agent(
             runOnce=False,
             text=f"... vergleiche eingehende Subsidies mit: {customer['text']}",

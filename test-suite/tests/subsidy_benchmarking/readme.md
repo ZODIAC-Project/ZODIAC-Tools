@@ -118,15 +118,14 @@ Question answered: what happens under realistic, prolonged usage, and how much a
 ---
 ## Focus (isolate) tests via markers
 
-Registered in pyproject.toml (or pytest.ini):
+Registered in `tests/subsidy_benchmarking/pytest.ini`:
 
-``` toml
-[tool.pytest.ini_options]
-markers = [
-    "model_quality: agent reasoning/logic correctness",
-    "access_control: PBAC enforcement and its overhead",
-    "workload: sustained-usage energy simulation",
-]
+``` ini
+[pytest]
+markers =
+  model_quality: agent reasoning/logic correctness
+  access_control: PBAC enforcement and its overhead
+  workload: sustained-usage energy simulation
 ```
 
 Tests are tagged with `@pytest.mark.<name>`, e.g. `logic/` tests get `@pytest.mark.model_quality`, purpose_isolation/ tests get `@pytest.mark.access_control`. Run a focused subset with:
@@ -136,6 +135,8 @@ pytest -m access_control
 pytest -m model_quality
 pytest -m workload
 ```
+
+Use `--run-config` for scenario-specific parameters and matrix selection. For the matrix test, `matrix_cells` is the collection filter contract; do not use `-k` as the SMA-facing selector.
 ---
 
 ## Adding a new test scenario
@@ -187,6 +188,8 @@ pytest Subsidy_tests/purpose_routing --run-config=configs/example.yaml --junitxm
 `-s` is useful when debugging agent output, since it shows print/log
 output that pytest normally captures.
 
+When SMA drives repeated runs, it should pass a unique `--junitxml` path per invocation so one scenario does not overwrite another scenario's report.
+
 ### Run-config YAML
 
 Some values can be
@@ -195,10 +198,12 @@ supplied externally instead of hardcoded
 ```yaml
 run_id: "example-run-001"
 n_agents: 20                          # purpose_routing/test_n_agent.py
-timeout_seconds: 45
+timeout_seconds: 45                   # orchestration-only for now; not consumed by the benchmark tests
 matrix_cells: ["VBM-FFF", "VBM-TTT"]  # purpose_isolation/
+scale_pairs: 15                       # logic/test_scale.py
 n_events: 50                          # workload/test_week_simulation.py
 event_interval_seconds: 2             # workload/test_week_simulation.py
+n_subagents: 8                        # workload/test_week_simulation.py
 ```
 
 If no `--run-config` is passed, tests fall back to their local-dev
@@ -209,3 +214,7 @@ defaults, so the suite still runs standalone without any YAML file.
 ## Known open items
 
 - RAG kann nichts von den tests aus verändert werden. Momentan nicht schlimm aber evtl. nützlich 
+
+
+## Debugging - current state
+

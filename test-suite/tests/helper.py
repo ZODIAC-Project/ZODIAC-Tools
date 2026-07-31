@@ -25,7 +25,7 @@ MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
 
 paho_client = mqtt.Client(
-    callback_api_version=CallbackAPIVersion.VERSION1, 
+    callback_api_version=CallbackAPIVersion.VERSION2, 
     client_id="purpose_paho_func", 
     clean_session=True
 )

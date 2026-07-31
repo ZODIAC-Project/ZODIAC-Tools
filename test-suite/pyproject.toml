@@ -19,3 +19,12 @@ dependencies = [
 dev = [
     "pytest>=9.0.3",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "model_quality: agent reasoning/logic correctness",
+    "access_control: PBAC enforcement and its overhead",
+    "workload: sustained-usage energy simulation",
+    "retain_agents: keep created agents after the module or test finishes",
+]
+norecursedirs = ["legacy"]

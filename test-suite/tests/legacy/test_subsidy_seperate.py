@@ -1,11 +1,13 @@
 import time
 import httpx
 import pytest
-from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, client 
+from tests.helper import *
 
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 PURPOSE = "admin"
+
+pytestmark = pytest.mark.retain_agents
 
 # --- Setup logic that runs only ONCE ---
 

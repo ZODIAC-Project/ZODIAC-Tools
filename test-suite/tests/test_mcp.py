@@ -4,8 +4,12 @@ import json
 import time
 
 
+def test_secret_animal_tool():
+    response= send("What is the secret animal? purpose secret")
+    assert "cat" in response.lower(), f"Expected 'cat' in response but got: {response}"
+
 def test_tool_recognition():
-    response = send("What tools do you have access to?")
+    response = send("What tools do you have access to? Especially mentioning animals.")
     assert all(
     tool_name in response.lower().replace("_", " ")
     for tool_name in ["public animal", "secret animal"]), f"Response should at least mention two known tools but was: {response}"

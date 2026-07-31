@@ -10,6 +10,8 @@ def test_agent_matches_customers_to_subsidies(topic_factory, purpose_factory):
     input_topic = topic_factory("input")
     result_topic = topic_factory("matches")
     purpose = purpose_factory("logic")
+    
+    print(f"Input topic: {input_topic}, Result topic: {result_topic}, Purpose: {purpose}")
 
     helper.reserve_topic(input_topic, aip=[purpose])
     helper.create_agent(

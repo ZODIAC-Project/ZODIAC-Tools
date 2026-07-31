@@ -62,3 +62,11 @@ def run_config(pytestconfig):
         return {}
     data = yaml.safe_load(Path(path).read_text())
     return data or {}
+
+@pytest.fixture(scope="session", autouse=True)
+def configure_purpose_filtering():
+    """Sets the broker's purpose-filtering mode once for the whole session.
+    Matches the mode used by the known-working legacy tests."""
+    helper.client.set_purpose_setting("filter_on_subscribe", False)
+    helper.client.set_purpose_setting("filter_on_publish", True)
+    helper.client.set_purpose_setting("filter_hybrid", False)

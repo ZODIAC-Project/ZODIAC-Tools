@@ -229,14 +229,19 @@ class PurposeClient:
         else:
             self.logger.warning("received unexpected message %s in %s" % (message, topic))
 
-    def on_disconnect(self, client, userdata, rc, properties=None):
+    def on_disconnect(self, client, userdata, disconnect_flags, reason_code, properties=None):
         """
         MQTT on_disconnect callback. Accepts both legacy and MQTTv5 signatures:
         - (client, userdata, rc)
-        - (client, userdata, rc, properties)
+        - (client, userdata, disconnect_flags, reason_code, properties)
         """
         try:
-            self.logger.critical("disconnect! rc=%s properties=%s", rc, getattr(properties, "__dict__", properties))
+            self.logger.critical(
+                "disconnect! flags=%s reason_code=%s properties=%s",
+                disconnect_flags,
+                reason_code,
+                getattr(properties, "__dict__", properties),
+            )
         except Exception:
             self.logger.critical("disconnect! (failed to format properties)")
 

@@ -6,8 +6,9 @@ from ..shared.parsing import parse_match_response, matches_to_dict
 from .data import build_scale_dataset
 
 @pytest.mark.model_quality
-def test_agent_matches_at_scale(topic_factory, purpose_factory):
-    customers, subsidies, expected = build_scale_dataset(15)
+def test_agent_matches_at_scale(topic_factory, purpose_factory, run_config):
+    n_pairs = run_config.get("scale_pairs", 15)
+    customers, subsidies, expected = build_scale_dataset(n_pairs)
     input_topic = topic_factory("input")
     result_topic = topic_factory("matches")
     purpose = purpose_factory("logic")

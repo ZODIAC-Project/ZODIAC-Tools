@@ -1,12 +1,10 @@
 import pytest
 from tests import helper
-from ..shared.matrix import PBAC_MATRIX
 from ..shared.prompts import build_instruction, ADMIN
 
 RAG_DOC_ID = "isolation-test-doc"
 
 @pytest.mark.access_control
-@pytest.mark.parametrize("vector_on,broker_on,mcp_on", PBAC_MATRIX)
 def test_isolation_matrix(vector_on, broker_on, mcp_on, topic_factory, purpose_factory):
     topic = topic_factory("proposal")
     purpose_a = purpose_factory("A") if broker_on else ADMIN
