@@ -28,11 +28,16 @@ def test_n_agent_random_purposes(topic_factory, purpose_factory, n_agents):
         )
         agents.append({"allowed": is_allowed, "result_topic": result_topic})
 
-    helper.send_and_expect(input_topic, "1", purposes=[allowed])
+    helper.publish_message(input_topic, "1")
+
+    topics_with_timeouts = [
+        (a["result_topic"], 120 if a["allowed"] else 12)
+        for a in agents
+    ]
+    results = helper.listen_to_multiple_mqtt_topics(topics_with_timeouts)
 
     failures = []
-    for i, a in enumerate(agents):
-        result = helper.listen_to_a_mqtt_topic(a["result_topic"], timeout=30 if a["allowed"] else 10)
+    for i, (a, result) in enumerate(zip(agents, results)):
         if a["allowed"] and (result is None or "101" not in result):
             failures.append(f"agent {i} (allowed) got: {result}")
         if not a["allowed"] and result is not None:

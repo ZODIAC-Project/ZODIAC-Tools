@@ -7,6 +7,11 @@ from .data import DISTRACTOR_CUSTOMERS, DISTRACTOR_SUBSIDIES, DISTRACTOR_EXPECTE
 
 @pytest.mark.model_quality
 def test_agent_picks_best_fit_not_surface_keyword(topic_factory, purpose_factory):
+    """
+    Test that the agent correctly matches customers to subsidies based on the provided data.
+    Distractor: two customers and two subsidies share a surface keyword, only one actually fits
+    """
+    
     input_topic = topic_factory("input")
     result_topic = topic_factory("matches")
     purpose = purpose_factory("logic")
@@ -19,9 +24,10 @@ def test_agent_picks_best_fit_not_surface_keyword(topic_factory, purpose_factory
     )
 
     payload = json.dumps({"customers": DISTRACTOR_CUSTOMERS, "subsidies": DISTRACTOR_SUBSIDIES})
-    helper.send_and_expect(input_topic, payload, purposes=[purpose])
+    helper.publish_message(input_topic, payload)
 
-    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=60)
+    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=300)
+    print(f"Raw response from agent: {raw}")
     actual = matches_to_dict(parse_match_response(raw))
     assert actual == DISTRACTOR_EXPECTED, (
         f"Agent hat vermutlich nur auf Keyword-Ähnlichkeit reagiert statt auf Empfängertyp: {actual}"

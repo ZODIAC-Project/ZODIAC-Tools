@@ -28,6 +28,11 @@ def clean_state():
     reset()
     yield
     
+    
+def test_publishing_variants():
+    # THe purpose_client has a lot of differend cariants of publishing a message to the broker
+    pass
+
 def subscribe_and_receive(agent_id: str, topic: str, expected_payload: str, timeout: float = 5.0) -> bool:
     """subscribe to a topic and wait for the message to arrive."""
     subscribe_response = subscribe_with_purpose(topic, AIP)

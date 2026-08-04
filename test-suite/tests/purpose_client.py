@@ -55,6 +55,18 @@ class PurposeClient:
         client.on_subscribe = on_subscribe_manage_pending
 
 
+    def _ensure_connected(self, timeout=5.0):
+        """Wait briefly for reconnect if the client is currently disconnected."""
+        if self.client.is_connected():
+            return
+        self.logger.warning("Client not connected, waiting for reconnect...")
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if self.client.is_connected():
+                return
+            time.sleep(0.1)
+        raise RuntimeError(f"MQTT client not connected after waiting {timeout}s")
+
     def wait_for_subscriptions(self):
         TIMEOUT = 30
         TICK = 0.01
@@ -127,11 +139,35 @@ class PurposeClient:
     def load(self):
         self.command("RELOAD")
 
-    def send(self, topic, message, qos=None):
+    def send(self, topic, message, qos=None, retain=False, max_retries=3, retry_delay=1.0):
+        self._ensure_connected()
         if not qos:
             qos = self.qos
+
         payload_size = len(message if isinstance(message, bytes) else str(message).encode("utf-8"))
-        return self.client.publish(topic, payload=message, qos=qos, retain=False)
+
+        last_exc = None
+        for attempt in range(max_retries):
+            self._ensure_connected()
+            result = self.client.publish(topic, payload=message, qos=qos, retain=retain)
+            try:
+                result.wait_for_publish(timeout=10.0)
+                break
+            except RuntimeError as exc:
+                last_exc = exc
+                self.logger.warning(
+                    "Publish attempt %d/%d failed: %s — retrying...",
+                    attempt + 1, max_retries, exc,
+                )
+                time.sleep(retry_delay)
+        else:
+            raise last_exc
+
+        if isinstance(result, tuple):
+            _, mid = result
+        else:
+            mid = getattr(result, "mid", None)
+        return result
 
     def subscribe(self, topic, qos=1):
         # self.logger.debug("subscribing to topic %s" % topic)

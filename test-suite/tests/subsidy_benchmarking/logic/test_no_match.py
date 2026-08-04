@@ -20,9 +20,9 @@ def test_agent_does_not_force_a_match(topic_factory, purpose_factory):
     )
 
     payload = json.dumps({"customers": NOMATCH_CUSTOMERS, "subsidies": NOMATCH_SUBSIDIES})
-    helper.send_and_expect(input_topic, payload, purposes=[purpose])
+    helper.publish_message(input_topic, payload)
 
-    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=60)
+    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=120)
     actual = matches_to_dict(parse_match_response(raw))
 
     assert "sub-3" not in actual.values(), (

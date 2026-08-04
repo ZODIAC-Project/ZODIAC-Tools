@@ -6,7 +6,6 @@ def build_routing_task(operation_desc: str, result_topic: str) -> str:
         f"Du erhältst eine Nachricht mit einer Zahl auf deinem abonnierten Topic. "
         f"{operation_desc} Veröffentliche ausschließlich das numerische Ergebnis als "
         f"reinen Text (keine weiteren Wörter) auf Topic '{result_topic}'. "
-        f"Nutze für das Publizieren des Ergebnisses den Purpose '{ADMIN}'."
     )
 
 

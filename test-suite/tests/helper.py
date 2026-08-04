@@ -93,6 +93,21 @@ def listen_to_a_mqtt_topic(topic: str, timeout: float = 10.0) -> str | None:
 
     return asyncio.run(handle())
 
+async def _listen_many(topics_with_timeouts):
+    async def one(topic, timeout):
+        async with aiomqtt.Client(MQTT_BROKER, port=MQTT_PORT) as c:
+            await c.subscribe(topic)
+            try:
+                async with asyncio.timeout(timeout):
+                    async for message in c.messages:
+                        return str(message.payload.decode())
+            except TimeoutError:
+                return None
+    return await asyncio.gather(*(one(t, to) for t, to in topics_with_timeouts))
+
+def listen_to_multiple_mqtt_topics(topics_with_timeouts: list[tuple[str, float]]) -> list[str | None]:
+    return asyncio.run(_listen_many(topics_with_timeouts))
+
 def get_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/subscriptions")
     assert response.status_code == 200, f"Could not reach stream manager: {response.text}"

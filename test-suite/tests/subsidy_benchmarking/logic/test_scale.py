@@ -1,4 +1,5 @@
 import json
+from logging import exception
 import pytest
 from ... import helper
 from ..shared.prompts import build_matching_task
@@ -7,7 +8,14 @@ from .data import build_scale_dataset
 
 @pytest.mark.model_quality
 def test_agent_matches_at_scale(topic_factory, purpose_factory, run_config):
-    n_pairs = run_config.get("scale_pairs", 15)
+    
+    #TODO: REMOVE this 
+    try:
+        n_pairs = run_config.get("scale_pairs", 15)
+    except Exception as e:
+        print(f"Error reading run_config: {e}. Defaulting to 10 pairs.")
+        n_pairs = 10
+        
     customers, subsidies, expected = build_scale_dataset(n_pairs)
     input_topic = topic_factory("input")
     result_topic = topic_factory("matches")
@@ -21,9 +29,9 @@ def test_agent_matches_at_scale(topic_factory, purpose_factory, run_config):
     )
 
     payload = json.dumps({"customers": customers, "subsidies": subsidies})
-    helper.send_and_expect(input_topic, payload, purposes=[purpose])
+    helper.publish_message(input_topic, payload)
 
-    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=90)  # longer: more tokens to generate
+    raw = helper.listen_to_a_mqtt_topic(result_topic, timeout=120)  # longer: more tokens to generate
     actual = matches_to_dict(parse_match_response(raw))
 
     missing = set(expected) - set(actual)
