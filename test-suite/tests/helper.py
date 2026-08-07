@@ -34,10 +34,20 @@ client = PurposeClient(paho_client)
 client.connect(MQTT_BROKER, MQTT_PORT, 60)
 client.loop_start()
 
+<<<<<<< HEAD
 def send(msg, session_id = None, purposes = None):
     if session_id is None:
         session_id = str(uuid.uuid4())
     response = requests.post(f"{MCP_URL}/chat", json={"message": msg, "session_id": session_id, "purposes": purposes})
+=======
+def send(msg, session_id = None, model = None):
+    if session_id is None:
+        session_id = str(uuid.uuid4())
+    if model is None:
+        response = requests.post(f"{MCP_URL}/chat", json={"message": "msg: "+msg, "session_id": session_id})
+    else:
+        response = requests.post(f"{MCP_URL}/chat", json={"message": "msg: "+msg, "session_id": session_id, "model": model})
+>>>>>>> 2f26259 (feat: enhance send function to include model parameter and add manual test script)
     assert response.status_code == 200, f"Expected status code 200 but got {response.status_code} (response was: '{response.text}')"
     data = response.json()
     assert "response" in data, f"Response JSON should contain 'response' key but was: {data}"

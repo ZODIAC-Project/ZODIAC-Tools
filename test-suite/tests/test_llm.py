@@ -9,7 +9,7 @@ def test_simple_response():
     assert "lasagna" in response.lower(), f"message should contain 'lasagna' but was '{response}'"
 
 def test_random_number():
-    response = send("generate a random number between 1 and 100")
+    response = send("generate a random number between 1 and 100. Don't use any tools for this")
     # response might contain additional text, so we need to extract the number
     numbers = re.findall(r'\d+', response)
     assert numbers, f"No numbers found in response: '{response}'"
