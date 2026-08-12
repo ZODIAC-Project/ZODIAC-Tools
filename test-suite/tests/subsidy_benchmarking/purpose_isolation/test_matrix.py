@@ -1,5 +1,4 @@
-import pytest
-from tests import helper
-from ..shared.prompts import build_instruction, ADMIN
 
-#TODO
+
+def test_scenario_matrix():
+    pass

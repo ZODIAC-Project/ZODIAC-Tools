@@ -139,29 +139,6 @@ def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: in
     assert "id" in data, f"Agent creation response missing id: {data}"
     return data["id"]
 
-def register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
-    payload = {
-        "session_id": agent_id,
-        "topic": topic,
-        "purpose": purpose,
-    }
-    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
-    assert response.status_code == 200, (
-        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
-    )
-    return response.json()
-
-def raw_register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
-    payload = {
-        "session_id": agent_id,
-        "topic": topic,
-        "purpose": purpose,
-    }
-    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
-    assert response.status_code == 200, (
-        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
-    )
-    return response.json()
 
 def subscribe_with_purpose(topic: str, ap: str, qos=0, presub=False):
     response = client.subscribe_with_purpose(topic, ap, qos=qos)
