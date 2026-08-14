@@ -40,3 +40,25 @@ def build_multi_message_matching_task(result_topic: str) -> str:
         "passenden Customer zu und sende das Ergebnis als reines JSON (Liste von Objekten mit "
         f"'customer_id' und 'subsidy_id', keine weiteren Wörter, keine Markdown-Codeblöcke) an Topic '{result_topic}'."
     )
+    
+def build_tool_call_task(tool_name: str, tool_purpose: str, search_term: str) -> str:
+    return (
+        f"Du erhältst eine Nachricht mit der Aufgabe für einen Tool-Aufruf. "
+        f"Führe den Tool-Aufruf '{tool_name}' mit dem Purpose '{tool_purpose}' und den angegebenen Argumenten aus. "
+        f"Wenn das Tool ein Textfeld für die Eingabe hat, muss der Text '{search_term}' enthalten. "
+        f"Führe ausschließlich diesen einen Tool-Aufruf aus. Rufe danach keine weiteren Tools auf, "
+        f"auch nicht zur Erkundung verfügbarer Tools. Antworte anschließend nur noch mit einer kurzen "
+        f"Bestätigung in Textform, ohne weitere Aktionen."
+    )
+    
+def build_vector_query_task(tool_purpose:str,purpose: str, result_topic: str) -> str:
+    return (
+        f"Du erhältst eine Nachricht mit der Aufgabe für eine Wissensdatenbank-Abfrage. "
+        f"Führe den Tool-Aufruf 'search_knowledge_base' mit dem tool purpose '{tool_purpose}' und der Collection 'subsidies' "
+        f"und dem Purpose '{purpose}' aus. Nutze eine allgemeine Suchanfrage, die möglichst "
+        f"viele Förderprogramme zurückgibt (z.B. 'Förderprogramm'). "
+        f"Veröffentliche anschließend ausschließlich die Namen aller zurückgegebenen "
+        f"Förderprogramme, kommagetrennt und ohne weitere Worte, auf Topic '{result_topic}'. "
+        f"Führe ausschließlich diesen einen Tool-Aufruf aus. Rufe danach keine weiteren "
+        f"Tools auf. Antworte anschließend nur noch mit einer kurzen Bestätigung in Textform."
+    )
