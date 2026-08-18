@@ -51,14 +51,19 @@ def build_tool_call_task(tool_name: str, tool_purpose: str, search_term: str) ->
         f"Bestätigung in Textform, ohne weitere Aktionen."
     )
     
-def build_vector_query_task(tool_purpose:str,purpose: str, result_topic: str) -> str:
+def build_vector_query_task(query_purpose: str, result_topic: str) -> str:
     return (
-        f"Du erhältst eine Nachricht mit der Aufgabe für eine Wissensdatenbank-Abfrage. "
-        f"Führe den Tool-Aufruf 'search_knowledge_base' mit dem tool purpose '{tool_purpose}' und der Collection 'subsidies' "
-        f"und dem Purpose '{purpose}' aus. Nutze eine allgemeine Suchanfrage, die möglichst "
-        f"viele Förderprogramme zurückgibt (z.B. 'Förderprogramm'). "
-        f"Veröffentliche anschließend ausschließlich die Namen aller zurückgegebenen "
-        f"Förderprogramme, kommagetrennt und ohne weitere Worte, auf Topic '{result_topic}'. "
-        f"Führe ausschließlich diesen einen Tool-Aufruf aus. Rufe danach keine weiteren "
-        f"Tools auf. Antworte anschließend nur noch mit einer kurzen Bestätigung in Textform."
+        f"AUFGABE: Rufe genau EIN einziges Mal das Tool 'search_knowledge_base' auf, "
+        f"mit Collection 'subsidies' und Purpose '{query_purpose}'."
+        f"WICHTIG: Rufe 'search_knowledge_base' NICHT ein zweites Mal auf, auch nicht mit "
+        f"einem anderen Purpose oder einer anderen Suchanfrage. Nutze ausschließlich das "
+        f"Ergebnis dieses einen Aufrufs. "
+        f"Veröffentliche danach GENAU EIN Mal ein Ergebnis mit dem Tool 'publish' auf Topic "
+        f"'{result_topic}'. Falls der Aufruf erfolgreich war, veröffentliche die Namen aller "
+        f"zurückgegebenen Förderprogramme, kommagetrennt und ohne weitere Worte. Falls der "
+        f"Aufruf fehlschlägt oder einen Fehler zurückgibt, veröffentliche stattdessen "
+        f"ausschließlich das Wort 'ERROR'. Rufe 'publish' in jedem Fall genau einmal auf. "
+        f"Führe insgesamt nur diese zwei Tool-Aufrufe aus (einmal search_knowledge_base, "
+        f"einmal publish) und keine weiteren. Antworte danach nur noch mit einer kurzen "
+        f"Bestätigung in Textform."
     )

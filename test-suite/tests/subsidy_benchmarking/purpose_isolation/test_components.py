@@ -15,9 +15,11 @@ filtering is bypassed or absent and access is unrestricted.
 
 """
 import json
+import threading
 import pytest
 import time as time
 import requests
+import threading
 from ...helper import *
 from ..shared.prompts import *
 
@@ -271,78 +273,134 @@ def test_vector_isolation(topic_factory, purpose_factory):
     and exercise the full MCP -> RAG path the way a real user would.
 
     - Enabled case:
-      1. Subsidy documents already exist in the 'subsidies' collection,
-         each sharing the common baseline purpose 'admin' but also carrying
-         a distinct additional purpose (its state) that the other does not
-         have — e.g. one tagged 'Bayern', the other 'Berlin'.
-      2. One agent is spawned to search the knowledge base using the
-         'Bayern' purpose, and publish the returned document names.
-      3. Only Bayern-scoped documents should be present in the result;
-         Berlin-scoped documents should not appear.
+      1. Documents in the 'subsidies' collection carry the baseline purpose
+         'subsidy/discovery', not 'subsidy/eligibility' (that purpose is
+         only used by other collections, e.g. 'customers', 'state').
+      2. One agent is spawned to search 'subsidies' using the purpose
+         'subsidy/eligibility' — a purpose the subsidies documents don't
+         carry.
+      3. No subsidies documents should be returned, showing that a
+         mismatched purpose is correctly filtered out.
     - Disabled case:
-      1. An agent is spawned to search using the shared, universally
-         allowed purpose 'admin'.
-      2. Documents from both purpose groups should be present in the
-         result, showing that the common baseline purpose bypasses the
-         more specific isolation boundary.
+      1. An agent is spawned to search 'subsidies' using the shared,
+         universally allowed purpose 'admin'.
+      2. Subsidies documents should be present in the result, showing that
+         the common baseline purpose bypasses the more specific isolation
+         boundary.
     """
+
+    # A representative sample of document names known to exist in the
+    # 'subsidies' collection (confirmed via peek). Presence of any of these
+    # in a query result indicates subsidies documents were returned.
+    SUBSIDY_DOC_NAMES = {
+        "Bayerisches Handwerk Erweiterungsprogramm",
+        "Ingolstadt Gewerbeförderung Kleinstunternehmen",
+        "Bayern Gastgewerbe Modernisierungshilfe",
+        "Bundesweites Ausbildungsförderungsprogramm Handwerk",
+        "Optische Technologien & Lasertechnik BW",
+    }
+
+    def validate_search_and_get_publish(messages: list, expected_purpose: str) -> str:
+        search_calls_all = [m for m in messages if m.get("tool") == "search_knowledge_base"]
+        assert len(search_calls_all) > 0, f"No search_knowledge_base call found. Captured: {messages}"
+
+        # Group by session_id — only trust the session that made the FIRST
+        # search call chronologically, to filter out stray leftover agents.
+        first_session = min(search_calls_all, key=lambda c: c["timestamp"])["session_id"]
+        search_calls = [c for c in search_calls_all if c["session_id"] == first_session]
+        publish_calls = [m for m in messages if m.get("tool") == "publish" and m["session_id"] == first_session]
+
+        assert len(search_calls) == 1, (
+            f"Expected exactly one search_knowledge_base call from session {first_session}, "
+            f"found {len(search_calls)}: {[c['parameters'] for c in search_calls]}"
+        )
+        actual_purpose = search_calls[0].get("parameters", {}).get("purpose")
+        assert actual_purpose == expected_purpose, (
+            f"search_knowledge_base called with purpose '{actual_purpose}', expected '{expected_purpose}'"
+        )
+
+        assert len(publish_calls) > 0, f"No publish call found for session {first_session}. Captured: {messages}"
+        return " ".join(c["parameters"]["message"] for c in publish_calls)
+
 
     ############
     # Enabled case: purpose filtering is active
     ############
 
-    wildcard_purpose = "admin"  
-    enabled_purpose = "Bayern"
-    excluded_purpose = "Berlin"
+    wildcard_purpose = "admin"
+
+    enabled_purpose = "subsidy/eligibility"  # not carried by 'subsidies' documents
+
+    topic = topic_factory("input-vector-enabled")
     result_topic_enabled = topic_factory("result-vector-enabled")
 
     id_1 = create_agent(
         runOnce=False,
-        text=build_vector_query_task( wildcard_purpose, enabled_purpose, result_topic_enabled),
-        purpose=wildcard_purpose,  
+        text=build_vector_query_task(enabled_purpose, result_topic_enabled),
+        purpose=wildcard_purpose,
         memoryWindow=5,
-        listenTopic=topic_factory("input-vector-enabled"),
+        listenTopic=topic,
     )
-
-    time.sleep(2)
+    time.sleep(5)  # wait for agent to be ready
     agent1_exists = check_agent_exists(id_1)
     assert agent1_exists, f"Agent 1 with ID {id_1} does not exist."
 
-    publish_response = publish_message(topic_factory("input-vector-enabled"), json.dumps("Search"))
+    collected = {}
+    def collect_enabled():
+        collected["enabled"] = collect_tool_calls(timeout=300)
+
+    t = threading.Thread(target=collect_enabled)
+    t.start()
+    time.sleep(1)
+
+    publish_response = publish_message(topic, json.dumps("Search"))
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
 
-    result_enabled = listen_to_a_mqtt_topic(result_topic_enabled, timeout=300)
+    t.join()
+    result_enabled = validate_search_and_get_publish(collected["enabled"], expected_purpose=enabled_purpose)
     print(f"(Enabled) Result for purpose '{enabled_purpose}': {result_enabled}")
 
-    assert result_enabled is not None, f"(Enabled) No result received for purpose '{enabled_purpose}'"
-    assert excluded_purpose not in result_enabled, (
-        f"(Enabled) A '{excluded_purpose}'-scoped document leaked into a "
-        f"'{enabled_purpose}' query result: {result_enabled}"
+    found_subsidies = {name for name in SUBSIDY_DOC_NAMES if name in result_enabled}
+    assert not found_subsidies, (
+        f"(Enabled) Subsidies document(s) leaked into a '{enabled_purpose}' query "
+        f"they should not match: {found_subsidies}"
     )
-
     ############
     # Disabled case: purpose filtering is inactive (shared baseline purpose)
     ############
+    print(f"Disabled case: purpose filtering is inactive (shared baseline purpose)")
 
+    topic_diabled = topic_factory("input-vector-disabled")
     wildcard_purpose = "admin"
     result_topic_disabled = topic_factory("result-vector-disabled")
 
     id_2 = create_agent(
         runOnce=False,
-        text=build_vector_query_task(wildcard_purpose, wildcard_purpose, result_topic_disabled),
+        text=build_vector_query_task(wildcard_purpose, result_topic_disabled),
         purpose=wildcard_purpose,
         memoryWindow=5,
-        listenTopic=topic_factory("input-vector-disabled"),
+        listenTopic=topic_diabled,
     )
 
-    time.sleep(2)
+    time.sleep(5)
     agent2_exists = check_agent_exists(id_2)
     assert agent2_exists, f"Agent 2 with ID {id_2} does not exist."
 
-    publish_response = publish_message(topic_factory("input-vector-disabled"), json.dumps("Search"))
+    def collect_disabled():
+        collected["disabled"] = collect_tool_calls(timeout=300)
+
+    t2 = threading.Thread(target=collect_disabled)
+    t2.start()
+    time.sleep(1)
+
+    publish_response = publish_message(topic_diabled, json.dumps("Search"))
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
 
-    result_disabled = listen_to_a_mqtt_topic(result_topic_disabled, timeout=300)
+    t2.join()
+    result_disabled = validate_search_and_get_publish(collected["disabled"], expected_purpose=wildcard_purpose)
     print(f"(Disabled) Result for purpose '{wildcard_purpose}': {result_disabled}")
 
-    assert result_disabled is not None, f"(Disabled) No result received for purpose '{wildcard_purpose}'"
+    found_subsidies_disabled = {name for name in SUBSIDY_DOC_NAMES if name in result_disabled}
+    assert found_subsidies_disabled, (
+        f"(Disabled) Expected subsidies document(s) for purpose '{wildcard_purpose}', found none"
+    )

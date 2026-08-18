@@ -102,6 +102,38 @@ def toolcall_listen_for_multiple(word_a, word_b, timeout=300):
         return result
     return asyncio.run(handle())
 
+def collect_tool_calls(timeout: float = 300) -> list[dict]:
+    """
+    collect every message on the tool-use websocket
+    for the given window, decoded as JSON. Needed instead of toolcall_listen
+    because that stops at the first message — this needs to see everything
+    to detect duplicate/extra tool calls.
+    """
+    import json
+
+    messages = []
+
+    def on_message(msg):
+        try:
+            messages.append(json.loads(msg))
+        except json.JSONDecodeError:
+            pass
+
+    async def handle():
+        try:
+            async with websockets.connect(TOOL_USE_WS) as ws:
+                try:
+                    async with asyncio.timeout(timeout):
+                        async for msg in ws:
+                            on_message(msg)
+                except TimeoutError:
+                    pass
+        except (ConnectionRefusedError, OSError) as exc:
+            raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
+
+    asyncio.run(handle())
+    return messages
+
 
 # test the output of llms with another llm, allowing for some fuzziness in the response (e.g. different wording, additional text, etc.)
 def fuzzy_assert(test_string, rule):
