@@ -67,3 +67,22 @@ def build_vector_query_task(query_purpose: str, result_topic: str) -> str:
         f"einmal publish) und keine weiteren. Antworte danach nur noch mit einer kurzen "
         f"Bestätigung in Textform."
     )
+    
+#####################################################################################################################
+# Matrix test Prompts 
+#####################################################################################################################
+
+def Agent_1_task(midway_topic: str, allowed_purpose: str, issue_topic: str, vektor_purpose: str) -> str:
+    return (
+        f"The incomming message is a Subsidy Description. Use RAG to find a Matching Customer. Choose ONLY ONE if there are multiple matching Customers. Form a Pair of Subsidy-Customer and Publish the Result to the topic: {midway_topic}. For the RAG Call use {vektor_purpose} as Purpose. For the Publish use the Purpose: {allowed_purpose}. If the Toolcall or the RAG call fails or give back any issue/error message, send a message: \"ACCESS_DENIED_PURPOSE_ISSUE\" to the Issue topic: {issue_topic}. Dont try more then one time to call RAG."
+    )
+    
+def Agent_2_task( allowed_purpose: str, issue_topic: str ) -> str:
+    return (
+        f"The incomming message is a Customer-Subsidy Pair, Extract Only the names of the Customer and Subsidy and use the Email Tool to send an email with the content: `customer: name, subsidy: name`. For the Email Tool Call use the Purpose: {allowed_purpose}. If the Toolcall fails, send a message: \"ACCESS_DENIED_PURPOSE_ISSUE\" to the Issue topic: {issue_topic}."
+    )
+    
+def make_trigger_message(state: str) -> str:
+    return (
+        f"Hochwasserschutz Foerderprogramm {state}"
+    )

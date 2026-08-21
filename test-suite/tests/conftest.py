@@ -22,4 +22,24 @@ def pytest_addoption(parser):
         "--run-config", action="store", default=None,
         help="Path to YAML file with run-specific test parameters",
     )
+    parser.addoption(
+        "--broker-enabled", action="store_true", default=False,
+        help="Enable broker purpose filtering for workload tests",
+    )
+    parser.addoption(
+        "--mcp-enabled", action="store_true", default=False,
+        help="Enable MCP purpose filtering for workload tests",
+    )
+    parser.addoption(
+        "--vector-enabled", action="store_true", default=False,
+        help="Enable vector purpose filtering for workload tests",
+    )
+    parser.addoption(
+        "--amount-messages", action="store", type=int, default=1,
+        help="Number of messages to simulate in workload tests",
+    )
+    parser.addoption(
+        "--randomness", action="store", default="False",
+        help="Whether to inject random faults in the workload scenario. Use True/False.",
+    )
     

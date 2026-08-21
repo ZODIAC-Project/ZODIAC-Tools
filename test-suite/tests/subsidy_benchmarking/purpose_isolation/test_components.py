@@ -290,8 +290,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
     """
 
     # A representative sample of document names known to exist in the
-    # 'subsidies' collection (confirmed via peek). Presence of any of these
-    # in a query result indicates subsidies documents were returned.
+    # 'subsidies' collection.
     SUBSIDY_DOC_NAMES = {
         "Bayerisches Handwerk Erweiterungsprogramm",
         "Ingolstadt Gewerbeförderung Kleinstunternehmen",
@@ -304,8 +303,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
         search_calls_all = [m for m in messages if m.get("tool") == "search_knowledge_base"]
         assert len(search_calls_all) > 0, f"No search_knowledge_base call found. Captured: {messages}"
 
-        # Group by session_id — only trust the session that made the FIRST
-        # search call chronologically, to filter out stray leftover agents.
+        # Group by session_id 
         first_session = min(search_calls_all, key=lambda c: c["timestamp"])["session_id"]
         search_calls = [c for c in search_calls_all if c["session_id"] == first_session]
         publish_calls = [m for m in messages if m.get("tool") == "publish" and m["session_id"] == first_session]
@@ -329,7 +327,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
 
     wildcard_purpose = "admin"
 
-    enabled_purpose = "subsidy/eligibility"  # not carried by 'subsidies' documents
+    enabled_purpose = "subsidy/eligibility"  
 
     topic = topic_factory("input-vector-enabled")
     result_topic_enabled = topic_factory("result-vector-enabled")
