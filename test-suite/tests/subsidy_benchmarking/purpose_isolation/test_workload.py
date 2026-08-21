@@ -35,7 +35,7 @@ def workflow_no_fault_scenario(input_topic,
         Trigger this branch manually with the --randomness flag set to False.
         uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-enabled --mcp-enabled --vector-enabled --amount-messages=1 --randomness=False
     """
-    
+    print("")
     print("--------------------------------------------------------------")
     print(f"Test Scenario: Broker: {broker}, MCP: {mcp}, Vector: {vector}, Amount of Messages: {amount_messages}, Random Number: {Random_Number}")
     
@@ -49,7 +49,7 @@ def workflow_no_fault_scenario(input_topic,
             if vector == True:
                 agent_id_1 = create_agent(
                     runOnce=False,
-                    text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "ONLY the State of the incomming message"),
+                    text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "subsidy/eligibility"),
                     purpose="query",
                     memoryWindow=5,
                     listenTopic=input_topic,
@@ -68,7 +68,7 @@ def workflow_no_fault_scenario(input_topic,
             if vector == True:
                 agent_id_1 = create_agent(
                     runOnce=False,
-                    text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "ONLY the State of the incomming message"),
+                    text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "Subsidy/eligibility"),
                     purpose=wildcard_purpose,
                     memoryWindow=5,
                     listenTopic=input_topic,
@@ -109,7 +109,6 @@ def workflow_no_fault_scenario(input_topic,
     else:   
         print("--------------------------------------------------------------")
         print("Broker is disabled. No purpose Reservation was made.")
-    
     #create the agents once 
     agent_id_1, agent_id_2 = create_agents()
     # check they are healthy 
@@ -122,15 +121,86 @@ def workflow_no_fault_scenario(input_topic,
     agent2_existis = check_agent_exists(agent_id_2)
     assert agent2_existis, f"---> Agent 2 with ID {agent_id_2} does not exist."
     print ("---> Both Agents exist and are healthy. Continue with the test scenario.")
-
+    # Publish Message 
     print("--------------------------------------------------------------")
     print(f"Publish a message to the input topic: {input_topic}. This message will be processed by Agent 1.")
     payload = make_trigger_message(state="Bayern")
     publish_response = publish_message(input_topic, json.dumps(payload))
-
-    time.sleep(300)
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
+    
+    print("----------------------------------------------------------------------------")
+    print("---------------------- Starting the test validation. -----------------------")
+    print("-- This can take some tome since we have to wait for the turn to complete --")
+    
+    collected_tool_calls = []
+    collected_tool_calls_lock = threading.Lock()
+    stop_tool_call_collector = threading.Event()
 
+    async def collect_tool_calls_async():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            while not stop_tool_call_collector.is_set():
+                try:
+                    msg = await asyncio.wait_for(ws.recv(), timeout=0.5)
+                except asyncio.TimeoutError:
+                    continue
+
+                try:
+                    data = json.loads(msg)
+                except json.JSONDecodeError:
+                    continue
+
+                with collected_tool_calls_lock:
+                    collected_tool_calls.append(data)
+
+    def start_tool_call_collector():
+        def runner():
+            asyncio.run(collect_tool_calls_async())
+
+        thread = threading.Thread(target=runner, daemon=True)
+        thread.start()
+        return thread
+
+    tool_call_collector_thread = start_tool_call_collector()
+
+    def tool_calls_for(tool_name: str, session_id: str | None = None) -> list[dict]:
+        with collected_tool_calls_lock:
+            return [
+                m
+                for m in collected_tool_calls
+                if m.get("tool") == tool_name and (session_id is None or m.get("session_id") == session_id)
+            ]
+
+    def wait_for_tool_call(tool_name: str, timeout: float, session_id: str | None = None) -> list[dict]:
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            matches = tool_calls_for(tool_name, session_id)
+            if matches:
+                stop_tool_call_collector.set()
+                return matches
+            time.sleep(2)
+
+        stop_tool_call_collector.set()
+        return tool_calls_for(tool_name, session_id)
+
+    # Agent 1 got Message?
+    agent_history_1 = get_agent_history(agent_id_1, timeout=200)
+    assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
+    print(f"---> Agent 1 received a message. Agent History: {agent_history_1}")
+
+    # Agent 2 got a Message? Wait for 300 seconds 
+    agent_history_2 = get_agent_history(agent_id_2, timeout=300)
+    assert len(agent_history_2) > 0, f" No message was received by Agent 2. Agent History: {agent_history_2}"
+    print(f"---> Agent 2 received a message. Agent History: {agent_history_2}")
+
+    # Agent 2 called the Email Tool?
+    email_calls = wait_for_tool_call("send_email", timeout=300)
+    assert email_calls, f"Agent 2 did not call the Email Tool. Captured messages: {collected_tool_calls}. Agent_id_2: {agent_id_2}"
+    print(f"---> Agent 2 called the Email Tool. Tool Call Message(s): {email_calls}")
+
+    print("|")
+    print("-> All test validation asserts passed. The test scenario was successful.")
+    delete_agent(agent_id_1)
+    delete_agent(agent_id_2)
 
 def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_factory):
     broker_enabled = request.config.getoption("--broker-enabled")
@@ -160,24 +230,25 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
         Random_Number = randint(1, 100)
     else:
         Random_Number = 2  # Set to even number for deterministic behavior
-        workflow_no_fault_scenario(
-            input_topic=input_topic,
-            midway_topic=midway_topic,
-            issue_topic=issue_topic,
-            allowed=allowed,
-            wildcard_purpose=wildcard_purpose,
-            Random_Number=Random_Number,
-            broker=broker,
-            mcp=mcp,
-            vector=vector,
-            amount_messages=amount_messages
-        )
+        for _ in range(amount_messages):
+            workflow_no_fault_scenario(
+                input_topic=input_topic,
+                midway_topic=midway_topic,
+                issue_topic=issue_topic,
+                allowed=allowed,
+                wildcard_purpose=wildcard_purpose,
+                Random_Number=Random_Number,
+                broker=broker,
+                mcp=mcp,
+                vector=vector,
+                amount_messages=amount_messages
+            )
+    return 
+        
+    #######################################
+    # From here on is work in progress. The test scenario is not yet fully implemented. 
         
         
-        
-        
-        
-
     # If Broker on:
     #   reserve the needed topic with the purposes
     if broker == True:

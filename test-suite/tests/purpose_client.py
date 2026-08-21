@@ -2,6 +2,9 @@ import logging
 import time
 import datetime
 
+import logging
+logging.disable(logging.CRITICAL)
+
 class PurposeClient:
     """
     A Purpose-Aware MQTT Client that uses a Paho Client under the Hood.
@@ -59,7 +62,13 @@ class PurposeClient:
         """Wait briefly for reconnect if the client is currently disconnected."""
         if self.client.is_connected():
             return
-        self.logger.warning("Client not connected, waiting for reconnect...")
+        self.logger.warning("Client not connected, attempting reconnect...")
+        if hasattr(self, "connection_data"):
+            a, kw = self.connection_data
+            try:
+                self.client.connect(*a, **kw)
+            except Exception as exc:
+                self.logger.warning("Reconnect attempt failed: %s", exc)
         deadline = time.time() + timeout
         while time.time() < deadline:
             if self.client.is_connected():

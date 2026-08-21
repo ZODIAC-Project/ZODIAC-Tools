@@ -67,6 +67,22 @@ def toolcall_listen() -> tuple[bool, str | None]:
             raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
     return asyncio.run(handle())
 
+def toolcall_listen_for_tool(tool_name: str, timeout: float = 300) -> tuple[bool, str | None]:
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name:
+                            return True, msg
+            except TimeoutError:
+                return False, None
+    return asyncio.run(handle())
+
 def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float = 300):
     async def handle():
         async with websockets.connect(TOOL_USE_WS) as ws:
@@ -78,6 +94,22 @@ def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float 
                         except json.JSONDecodeError:
                             continue
                         if data.get("tool") == tool_name and word in json.dumps(data.get("parameters", {})):
+                            return True, msg
+            except TimeoutError:
+                return False, None
+    return asyncio.run(handle())
+
+def toolcall_listen_for_tool_and_session_id(tool_name: str, session_id: str, timeout: float = 300):
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name and data.get("session_id") == session_id:
                             return True, msg
             except TimeoutError:
                 return False, None
@@ -267,13 +299,21 @@ def remove_all_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/clear_all")
     
     
-def get_agent_history(agent_id: str, limit: int = 80) -> list:
-    response = requests.get(f"{AGENT_URL}/agents/{agent_id}/history", params={"limit": limit}, timeout=10.0)
-    assert response.status_code == 200, f"Failed to fetch history for agent {agent_id}: {response.text}"
-    data = response.json()
-    if isinstance(data, dict):
-        return data.get("history", [])
-    return data
+def get_agent_history(agent_id: str, limit: int = 80, timeout: float = 10.0) -> list:
+    deadline = time.time() + timeout
+    while True:
+        response = requests.get(f"{AGENT_URL}/agents/{agent_id}/history", params={"limit": limit}, timeout=10.0)
+        assert response.status_code == 200, f"Failed to fetch history for agent {agent_id}: {response.text}"
+        data = response.json()
+        if isinstance(data, dict):
+            history = data.get("history", [])
+        else:
+            history = data
+
+        if history or time.time() >= deadline:
+            return history
+
+        time.sleep(2)
 
 
 def wait_for_message_in_history(agent_id: str, expected_payload: str, timeout: float = MESSAGE_TIMEOUT) -> bool:
