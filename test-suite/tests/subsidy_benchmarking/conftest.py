@@ -71,5 +71,15 @@ def configure_purpose_filtering():
     helper.client.set_purpose_setting("filter_on_subscribe", False)
     helper.client.set_purpose_setting("filter_on_publish", True)
     helper.client.set_purpose_setting("filter_hybrid", False)
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--n-agents",
+        action="store",
+        type=int,
+        default=None,
+        help="Number of agents for purpose-routing tests",
+    )
     
     
