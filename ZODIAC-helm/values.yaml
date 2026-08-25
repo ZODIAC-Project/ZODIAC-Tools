@@ -36,7 +36,7 @@ agent:
   nodePort: 30086
   legacyNodePort: 30085
   url: "http://130.149.158.132:30086"
-  mcpRequestTimeoutSeconds: "300"
+  mcpRequestTimeoutSeconds: "600"
 
 logCollector:
   kubeNamespace: "zodiac"
