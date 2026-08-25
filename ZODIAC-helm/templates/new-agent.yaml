@@ -32,6 +32,8 @@ spec:
               value: "{{.Values.orionUi.chatApiBase}}{{.Values.orionUi.chatApiPath}}"
             - name: STREAM_MANAGER_URL
               value: "http://stream-manager:{{ .Values.streamManager.port }}"
+            - name: MCP_REQUEST_TIMEOUT_SECONDS
+              value: "{{ .Values.agent.mcpRequestTimeoutSeconds }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "{{.Values.mcp.env.otel_exporter_endpoint}}"
             - name: OTEL_SERVICE_NAME
