@@ -6,13 +6,14 @@ import pytest
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 
-DISCOVERY_PURPOSE = "Bayern"
+DISCOVERY_AGENT_PURPOSE = "query"
+DISCOVERY_RAG_PURPOSE = "Bayern"
 ELIGIBILITY_PURPOSE = "subsidy/eligibility"
 APPLICATION_PURPOSE = "subsidy/application"
 
 
 def create_agent1():
-    task_agent1 = """Use the tool search_knowledge_base with collection="subsidies" and purpose="Bayern".
+    task_agent1 = f"""Use the tool search_knowledge_base with collection="subsidies" and purpose="{DISCOVERY_RAG_PURPOSE}".
                     Retrieve subsidy entries only from the "subsidies" collection.
                     Generate subsidy descriptions from those entries and use the publish tool to post each
                     description to the topic zodiac/subsidy/new.
@@ -26,7 +27,7 @@ def create_agent1():
     agent1_id = create_agent(
         runOnce=False,
         text=task_agent1,
-        purpose=DISCOVERY_PURPOSE,
+        purpose=DISCOVERY_AGENT_PURPOSE,
         memoryWindow=5,
         intervalMs=60000,
     )
@@ -38,8 +39,9 @@ def create_agent1():
     assert agent1_info.get("intervalMs") == 60000, (
         f"Expected Agent 1 intervalMs to be 60000 but got {agent1_info.get('intervalMs')}"
     )
-    assert DISCOVERY_PURPOSE in agent1_info.get("purposes", []), (
-        f"Expected Agent 1 to have purpose '{DISCOVERY_PURPOSE}' but got {agent1_info.get('purposes')}"
+    assert agent1_info.get("purposes", []) == [DISCOVERY_AGENT_PURPOSE], (
+        f"Expected Agent 1 to have only purpose '{DISCOVERY_AGENT_PURPOSE}' "
+        f"but got {agent1_info.get('purposes')}"
     )
     return agent1_id
 
@@ -112,7 +114,7 @@ def test_subsidy_demo_with_business_purposes():
     client.set_purpose_setting("filter_on_publish", True)
     client.set_purpose_setting("filter_hybrid", False)
 
-    reserve_topic(new_subsidy_topic, aip=[DISCOVERY_PURPOSE, ELIGIBILITY_PURPOSE])
+    reserve_topic(new_subsidy_topic, aip=[DISCOVERY_AGENT_PURPOSE, ELIGIBILITY_PURPOSE])
     reserve_topic(customer_proposal_topic, aip=[ELIGIBILITY_PURPOSE, APPLICATION_PURPOSE])
 
     agent3_id = create_agent3()
