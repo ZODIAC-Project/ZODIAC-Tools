@@ -64,13 +64,12 @@ def run_config(pytestconfig):
     data = yaml.safe_load(Path(path).read_text())
     return data or {}
 
-@pytest.fixture(scope="session", autouse=True)
-def configure_purpose_filtering():
-    """Sets the broker's purpose-filtering mode once for the whole session.
-    Matches the mode used by the known-working legacy tests."""
-    helper.client.set_purpose_setting("filter_on_subscribe", False)
-    helper.client.set_purpose_setting("filter_on_publish", True)
-    helper.client.set_purpose_setting("filter_hybrid", False)
+@pytest.fixture(autouse=True)
+def configure_purpose_filtering(mqtt_client):
+    """Configure the fresh MQTT connection used by this benchmark test."""
+    mqtt_client.set_purpose_setting("filter_on_subscribe", False)
+    mqtt_client.set_purpose_setting("filter_on_publish", True)
+    mqtt_client.set_purpose_setting("filter_hybrid", False)
 
 
 def pytest_addoption(parser):
@@ -81,5 +80,4 @@ def pytest_addoption(parser):
         default=None,
         help="Number of agents for purpose-routing tests",
     )
-    
     

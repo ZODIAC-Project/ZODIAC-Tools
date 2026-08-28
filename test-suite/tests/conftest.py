@@ -1,5 +1,10 @@
 import pytest
+import uuid
+import paho.mqtt.client as mqtt
+from paho.mqtt.enums import CallbackAPIVersion
+
 from . import helper
+from .purpose_client import PurposeClient
 
 def _retain_agents(request):
     return request.node.get_closest_marker("retain_agents") is not None
@@ -16,6 +21,41 @@ def cleanup_agents(request):
     except Exception:
         # don't fail tests because cleanup failed
         pass
+
+
+@pytest.fixture
+def mqtt_client():
+    """Provide every test with an isolated, fully connected MQTT client."""
+    raw_client = mqtt.Client(
+        callback_api_version=CallbackAPIVersion.VERSION2,
+        client_id=f"purpose-test-{uuid.uuid4().hex}",
+        clean_session=True,
+    )
+    raw_client.reconnect_delay_set(min_delay=1, max_delay=5)
+    current_client = PurposeClient(raw_client)
+
+    current_client.connect(helper.MQTT_BROKER, helper.MQTT_PORT, 60)
+    current_client.loop_start()
+    try:
+        current_client._ensure_connected(timeout=10)
+    except Exception:
+        current_client.loop_stop()
+        raise
+
+    yield current_client
+
+    try:
+        current_client.client.disconnect()
+    finally:
+        current_client.loop_stop()
+
+
+@pytest.fixture(autouse=True)
+def isolated_mqtt_client(mqtt_client):
+    """Make the per-test client available through the existing helper API."""
+    helper.client.set_current(mqtt_client)
+    yield
+    helper.client.clear_current()
     
 def pytest_addoption(parser):
     parser.addoption(

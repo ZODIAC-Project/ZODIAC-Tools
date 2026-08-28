@@ -1,4 +1,3 @@
-import pytest
 import os
 import json
 import requests
@@ -11,11 +10,6 @@ from typing import Optional
 import time
 
 import aiomqtt 
-import paho.mqtt.client as mqtt
-from .purpose_client import PurposeClient
-from paho.mqtt.enums import CallbackAPIVersion
-
-
 load_dotenv()
 
 MCP_URL = os.getenv("MCP_URL", "http://130.149.158.32:30084")
@@ -26,15 +20,27 @@ MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
 MESSAGE_TIMEOUT = 30
 
-paho_client = mqtt.Client(
-    callback_api_version=CallbackAPIVersion.VERSION2, 
-    client_id="purpose_paho_func", 
-    clean_session=True
-)
+class PurposeClientProxy:
+    """Keep imports stable while pytest swaps in a fresh client per test."""
 
-client = PurposeClient(paho_client)
-client.connect(MQTT_BROKER, MQTT_PORT, 60)
-client.loop_start()
+    def __init__(self):
+        self._current = None
+
+    def set_current(self, current):
+        self._current = current
+
+    def clear_current(self):
+        self._current = None
+
+    def __getattr__(self, name):
+        if self._current is None:
+            raise RuntimeError("The MQTT test client is not active for this test.")
+        return getattr(self._current, name)
+
+
+# Tests import this name directly. The proxy ensures those imports always use
+# the function-scoped client installed by the pytest fixture.
+client = PurposeClientProxy()
 
 def send(msg, session_id = None):
     if session_id is None:
@@ -338,4 +344,3 @@ def check_agent_exists(agent_id):
     if agent_info is None:
         return False
     return True
-
