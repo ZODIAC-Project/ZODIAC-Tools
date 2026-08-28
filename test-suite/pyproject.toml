@@ -11,10 +11,21 @@ dependencies = [
     "websockets>=16.0",
     "aiomqtt>=2.0.0",
     "httpx>=0.28.1",
+    "pyyaml>=6.0",
     
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
+    "pytest-repeat>=0.9.4",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "model_quality: agent reasoning/logic correctness",
+    "access_control: PBAC enforcement and its overhead",
+    "workload: sustained-usage energy simulation",
+    "retain_agents: keep created agents after the module or test finishes",
+]
+norecursedirs = ["legacy"]

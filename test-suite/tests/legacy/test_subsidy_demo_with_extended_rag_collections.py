@@ -5,6 +5,8 @@ import pytest
 
 from .helper import AGENT_URL, create_agent, reserve_topic, client
 
+pytestmark = pytest.mark.retain_agents
+
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 

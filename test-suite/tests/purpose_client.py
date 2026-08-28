@@ -2,6 +2,9 @@ import logging
 import time
 import datetime
 
+import logging
+logging.disable(logging.CRITICAL)
+
 class PurposeClient:
     """
     A Purpose-Aware MQTT Client that uses a Paho Client under the Hood.
@@ -54,6 +57,24 @@ class PurposeClient:
 
         client.on_subscribe = on_subscribe_manage_pending
 
+
+    def _ensure_connected(self, timeout=5.0):
+        """Wait briefly for reconnect if the client is currently disconnected."""
+        if self.client.is_connected():
+            return
+        self.logger.warning("Client not connected, attempting reconnect...")
+        if hasattr(self, "connection_data"):
+            a, kw = self.connection_data
+            try:
+                self.client.connect(*a, **kw)
+            except Exception as exc:
+                self.logger.warning("Reconnect attempt failed: %s", exc)
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if self.client.is_connected():
+                return
+            time.sleep(0.1)
+        raise RuntimeError(f"MQTT client not connected after waiting {timeout}s")
 
     def wait_for_subscriptions(self):
         TIMEOUT = 30
@@ -110,8 +131,7 @@ class PurposeClient:
     def set_purpose_setting(self, setting: str, value: bool):
         value_string = "true" if value else "false"
         # self.send("PSYS/settings/%s/set" % setting, value_string)
-        mi = self.send(self.SETTING + "/SET/%s" % setting, value_string, qos=1)
-        mi.wait_for_publish()
+        self.send(self.SETTING + "/SET/%s" % setting, value_string, qos=1)
 
     def command(self, command: str):
         mi = self.send(self.SETTING + "/" + command, b"")
@@ -127,14 +147,39 @@ class PurposeClient:
     def load(self):
         self.command("RELOAD")
 
-    def send(self, topic, message, qos=None):
+    def send(self, topic, message, qos=None, retain=False, max_retries=3, retry_delay=1.0):
+        self._ensure_connected()
         if not qos:
             qos = self.qos
+
         payload_size = len(message if isinstance(message, bytes) else str(message).encode("utf-8"))
-        return self.client.publish(topic, payload=message, qos=qos, retain=False)
+
+        last_exc = None
+        for attempt in range(max_retries):
+            self._ensure_connected()
+            result = self.client.publish(topic, payload=message, qos=qos, retain=retain)
+            try:
+                result.wait_for_publish(timeout=10.0)
+                break
+            except RuntimeError as exc:
+                last_exc = exc
+                self.logger.warning(
+                    "Publish attempt %d/%d failed: %s — retrying...",
+                    attempt + 1, max_retries, exc,
+                )
+                time.sleep(retry_delay)
+        else:
+            raise last_exc
+
+        if isinstance(result, tuple):
+            _, mid = result
+        else:
+            mid = getattr(result, "mid", None)
+        return result
 
     def subscribe(self, topic, qos=1):
         # self.logger.debug("subscribing to topic %s" % topic)
+        self._ensure_connected()
         result, mid = self.client.subscribe(topic, qos=qos)
         self.logger.debug("subscribed with mid {}, result: {}".format(mid, result))
         if qos > 0:
@@ -162,6 +207,7 @@ class PurposeClient:
 
     def reserve(self, topic, aip: list = [], pip: list = [], dontwait=False):
         # self.logger.debug(aip)
+        self._ensure_connected()
         topic = self.escape_topic(topic)
         purpose_topic = (self.RESERVE + "/%s{%s|%s}" % (topic, ",".join(aip), ",".join(pip)))
         # self.logger.debug(purpose_topic)
@@ -175,12 +221,13 @@ class PurposeClient:
         self.send(self.SETTING + "/RESET", "", qos=1)
 
     def reset_connection(self):
-        self.loop_stop()
         self.client.disconnect()
+        self.loop_stop()
         time.sleep(2)
         (a, kw) = self.connection_data
         self.client.connect(*a, **kw)
         self.loop_start()
+        self._ensure_connected(timeout=10)
 
     @staticmethod
     def pack_purpose_topic(topic: str, purposes) -> str:
@@ -229,14 +276,19 @@ class PurposeClient:
         else:
             self.logger.warning("received unexpected message %s in %s" % (message, topic))
 
-    def on_disconnect(self, client, userdata, rc, properties=None):
+    def on_disconnect(self, client, userdata, disconnect_flags, reason_code, properties=None):
         """
         MQTT on_disconnect callback. Accepts both legacy and MQTTv5 signatures:
         - (client, userdata, rc)
-        - (client, userdata, rc, properties)
+        - (client, userdata, disconnect_flags, reason_code, properties)
         """
         try:
-            self.logger.critical("disconnect! rc=%s properties=%s", rc, getattr(properties, "__dict__", properties))
+            self.logger.critical(
+                "disconnect! flags=%s reason_code=%s properties=%s",
+                disconnect_flags,
+                reason_code,
+                getattr(properties, "__dict__", properties),
+            )
         except Exception:
             self.logger.critical("disconnect! (failed to format properties)")
 

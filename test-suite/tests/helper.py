@@ -1,5 +1,5 @@
-import pytest
 import os
+import json
 import requests
 import websockets
 import asyncio
@@ -10,11 +10,6 @@ from typing import Optional
 import time
 
 import aiomqtt 
-import paho.mqtt.client as mqtt
-from .purpose_client import PurposeClient
-from paho.mqtt.enums import CallbackAPIVersion
-
-
 load_dotenv()
 
 MCP_URL = os.getenv("MCP_URL", "http://130.149.158.32:30084")
@@ -23,16 +18,29 @@ TOOL_USE_WS = os.getenv("TOOL_USE_WS", "ws://130.149.158.133:30084/tool-use")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
 MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
+MESSAGE_TIMEOUT = 30
 
-paho_client = mqtt.Client(
-    callback_api_version=CallbackAPIVersion.VERSION1, 
-    client_id="purpose_paho_func", 
-    clean_session=True
-)
+class PurposeClientProxy:
+    """Keep imports stable while pytest swaps in a fresh client per test."""
 
-client = PurposeClient(paho_client)
-client.connect(MQTT_BROKER, MQTT_PORT, 60)
-client.loop_start()
+    def __init__(self):
+        self._current = None
+
+    def set_current(self, current):
+        self._current = current
+
+    def clear_current(self):
+        self._current = None
+
+    def __getattr__(self, name):
+        if self._current is None:
+            raise RuntimeError("The MQTT test client is not active for this test.")
+        return getattr(self._current, name)
+
+
+# Tests import this name directly. The proxy ensures those imports always use
+# the function-scoped client installed by the pytest fixture.
+client = PurposeClientProxy()
 
 def send(msg, session_id = None, model = None):
     if session_id is None:
@@ -68,6 +76,106 @@ def toolcall_listen() -> tuple[bool, str | None]:
             raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
     return asyncio.run(handle())
 
+def toolcall_listen_for_tool(tool_name: str, timeout: float = 300) -> tuple[bool, str | None]:
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name:
+                            return True, msg
+            except TimeoutError:
+                return False, None
+    return asyncio.run(handle())
+
+def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float = 300):
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name and word in json.dumps(data.get("parameters", {})):
+                            return True, msg
+            except TimeoutError:
+                return False, None
+    return asyncio.run(handle())
+
+def toolcall_listen_for_tool_and_session_id(tool_name: str, session_id: str, timeout: float = 300):
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name and data.get("session_id") == session_id:
+                            return True, msg
+            except TimeoutError:
+                return False, None
+    return asyncio.run(handle())
+
+def toolcall_listen_for_multiple(word_a, word_b, timeout=300):
+    async def handle():
+        result = {word_a: (False, None), word_b: (False, None)}
+        remaining = {word_a, word_b}
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        for w in list(remaining):
+                            if w in msg:
+                                result[w] = (True, msg)
+                                remaining.discard(w)
+                        if not remaining:
+                            break
+            except TimeoutError:
+                pass
+        return result
+    return asyncio.run(handle())
+
+def collect_tool_calls(timeout: float = 300) -> list[dict]:
+    """
+    collect every message on the tool-use websocket
+    for the given window, decoded as JSON. Needed instead of toolcall_listen
+    because that stops at the first message — this needs to see everything
+    to detect duplicate/extra tool calls.
+    """
+    import json
+
+    messages = []
+
+    def on_message(msg):
+        try:
+            messages.append(json.loads(msg))
+        except json.JSONDecodeError:
+            pass
+
+    async def handle():
+        try:
+            async with websockets.connect(TOOL_USE_WS) as ws:
+                try:
+                    async with asyncio.timeout(timeout):
+                        async for msg in ws:
+                            on_message(msg)
+                except TimeoutError:
+                    pass
+        except (ConnectionRefusedError, OSError) as exc:
+            raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
+
+    asyncio.run(handle())
+    return messages
+
+
 # test the output of llms with another llm, allowing for some fuzziness in the response (e.g. different wording, additional text, etc.)
 def fuzzy_assert(test_string, rule):
     out_prompt = (
@@ -95,6 +203,21 @@ def listen_to_a_mqtt_topic(topic: str, timeout: float = 10.0) -> str | None:
                 return None  # kein Timeout-Exception nach außen
 
     return asyncio.run(handle())
+
+async def _listen_many(topics_with_timeouts):
+    async def one(topic, timeout):
+        async with aiomqtt.Client(MQTT_BROKER, port=MQTT_PORT) as c:
+            await c.subscribe(topic)
+            try:
+                async with asyncio.timeout(timeout):
+                    async for message in c.messages:
+                        return str(message.payload.decode())
+            except TimeoutError:
+                return None
+    return await asyncio.gather(*(one(t, to) for t, to in topics_with_timeouts))
+
+def listen_to_multiple_mqtt_topics(topics_with_timeouts: list[tuple[str, float]]) -> list[str | None]:
+    return asyncio.run(_listen_many(topics_with_timeouts))
 
 def get_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/subscriptions")
@@ -127,29 +250,6 @@ def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: in
     assert "id" in data, f"Agent creation response missing id: {data}"
     return data["id"]
 
-def register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
-    payload = {
-        "session_id": agent_id,
-        "topic": topic,
-        "purpose": purpose,
-    }
-    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
-    assert response.status_code == 200, (
-        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
-    )
-    return response.json()
-
-def raw_register_subscription_of_agent_in_stream_manager(agent_id: str, topic: str, purpose: str):
-    payload = {
-        "session_id": agent_id,
-        "topic": topic,
-        "purpose": purpose,
-    }
-    response = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload)
-    assert response.status_code == 200, (
-        f"Failed to register subscription in stream manager: status {response.status_code}, response {response.text}"
-    )
-    return response.json()
 
 def subscribe_with_purpose(topic: str, ap: str, qos=0, presub=False):
     response = client.subscribe_with_purpose(topic, ap, qos=qos)
@@ -206,8 +306,44 @@ def delete_agent(agent_id: str):
     
 def remove_all_subscriptions():
     response = requests.get(f"{STREAM_MANAGER_URL}/clear_all")
+    
+    
+def get_agent_history(agent_id: str, limit: int = 80, timeout: float = 10.0) -> list:
+    deadline = time.time() + timeout
+    while True:
+        response = requests.get(f"{AGENT_URL}/agents/{agent_id}/history", params={"limit": limit}, timeout=10.0)
+        assert response.status_code == 200, f"Failed to fetch history for agent {agent_id}: {response.text}"
+        data = response.json()
+        if isinstance(data, dict):
+            history = data.get("history", [])
+        else:
+            history = data
 
-@pytest.fixture(autouse=True)
-def cleanup_agents():
-    yield
-    delete_all_agents()
+        if history or time.time() >= deadline:
+            return history
+
+        time.sleep(2)
+
+
+def wait_for_message_in_history(agent_id: str, expected_payload: str, timeout: float = MESSAGE_TIMEOUT) -> bool:
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        history = get_agent_history(agent_id)
+        for entry in history:
+            content = entry.get("content", "") or entry.get("message", "") or entry.get("text", "") or str(entry)
+            if expected_payload in content:
+                return True
+        time.sleep(0.5)
+    return False
+
+def check_agent_exists(agent_id):
+    try:
+      agents_response = requests.get(f"{AGENT_URL}/agents", timeout=30)
+    except requests.RequestException as e:
+        print(f"Error occurred while checking agent existence: {e}")
+        return False
+    agents = agents_response.json()
+    agent_info = next((a for a in agents if a.get("id") == agent_id), None)
+    if agent_info is None:
+        return False
+    return True

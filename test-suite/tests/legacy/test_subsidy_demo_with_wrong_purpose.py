@@ -3,6 +3,8 @@ from .helper import STREAM_MANAGER_URL, AGENT_URL, create_agent, reserve_topic, 
 import httpx
 import pytest
 
+pytestmark = pytest.mark.retain_agents
+
 new_subsidy_topic = "zodiac/subsidy/new"
 customer_proposal_topic = "zodiac/subsidy/customer/+/proposal"
 PURPOSE = "wrong-purpose"

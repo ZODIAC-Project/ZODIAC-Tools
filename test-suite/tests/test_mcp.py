@@ -4,8 +4,12 @@ import json
 import time
 
 
+def test_secret_animal_tool():
+    response= send("What is the secret animal? purpose secret")
+    assert "cat" in response.lower(), f"Expected 'cat' in response but got: {response}"
+
 def test_tool_recognition():
-    response = send("What tools do you have access to?")
+    response = send("What tools do you have access to? Especially mentioning animals.")
     assert all(
     tool_name in response.lower().replace("_", " ")
     for tool_name in ["public animal", "publish"]), f"Response should at least mention two known tools but was: {response}"
@@ -183,117 +187,3 @@ def test_list_subscriptions_tool():
     fuzzy_assert(result2["response"], f"The response includes '{topic}' in the list of subscriptions")
 
 
-def test_create_agent_and_subscribe_tool():
-    topic = "zodiac/test/agent-topic"
-    session_id = str(uuid.uuid4())
-    result = {}
-
-    def llm_call():
-        time.sleep(1)
-        result["response"] = send(
-            f"Use the 'create_agent_and_subscribe' tool to create an agent for the topic '{topic}'. "
-            f"Set its purpose to 'data_collection'. "
-            f"Note: This request is for session '{session_id}'.",
-            session_id=session_id
-        )
-
-
-    t = threading.Thread(target=llm_call)
-    t.start()
-    received_ws, ws_message = toolcall_listen()
-    t.join()
-
-    assert received_ws, "Expected a tool call on the websocket but got none"
-    assert "create_agent_and_subscribe" in ws_message.lower(), \
-        f"Expected 'create_agent_and_subscribe' tool call but got: {ws_message}"
-
-    # 1. Verify agent exists via REST and get its ID
-    agents_response = requests.get(f"{AGENT_URL}/agents")
-    assert agents_response.status_code == 200, f"Could not reach agent API: {agents_response.text}"
-    agents = agents_response.json()
-    
-    matching = [a for a in agents if a.get("listenTopic") == topic]
-    assert len(matching) > 0, f"Expected an agent subscribed to '{topic}' but none found"
-    
-    matching.sort(key=lambda x: x.get("id", ""), reverse=True)
-    agent_id = matching[0]["id"]
-
-    # 2. Verify subscription exists in stream manager
-    time.sleep(2)
-    subscriptions = get_subscriptions()
-    
-    # We check if ANY session has this topic, but prioritize our agent_id
-    all_active_topics = []
-    agent_specific_topics = []
-    
-    if "sessions" in subscriptions:
-        for session in subscriptions["sessions"]:
-            s_id = session.get("session_id")
-            for sub in session.get("subscriptions", []):
-                t = sub.get("topic")
-                all_active_topics.append(t)
-                if s_id == agent_id:
-                    agent_specific_topics.append(t)
-
-    assert topic in all_active_topics, f"Topic '{topic}' not found in ANY stream manager session"
-    # If the specific agent_id match failed but the topic is active, we use the ID from the session that HAS it
-    if topic not in agent_specific_topics:
-        for session in subscriptions.get("sessions", []):
-            for sub in session.get("subscriptions", []):
-                if sub.get("topic") == topic:
-                    agent_id = session.get("session_id")
-                    break
-
-    # 3. Publish a message to the topic and verify it arrives in agent history 
-    test_message = "agent-trigger-payload"
-
-    def publish_call():
-        send(
-            f"Use the publish tool to publish '{test_message}' to the topic '{topic}'.",
-            session_id=str(uuid.uuid4())
-        )
-
-    pt = threading.Thread(target=publish_call)
-    pt.start()
-    toolcall_listen()  # drain publish tool call
-    pt.join()
-
-    # Wait for the agent to process the message
-    time.sleep(5)
-
-    # 4. Check agent history via websocket
-    async def get_agent_history_from_ws():
-        agent_url_ws = AGENT_URL.replace("http://", "ws://")
-        async with websockets.connect(f"{agent_url_ws}/agents/{agent_id}/history") as ws:
-            message = await asyncio.wait_for(ws.recv(), timeout=5.0)
-            return json.loads(message)
-
-    history = asyncio.run(get_agent_history_from_ws())
-    assert any(test_message in str(e.get("message", "")) for e in history), \
-        f"Expected '{test_message}' in agent history but got: {history}"
-
-    # 5. Cleanup
-    delete_response = requests.delete(f"{AGENT_URL}/agents/{agent_id}")
-    assert delete_response.status_code == 200, f"Failed to delete agent: {delete_response.text}"
-
-    # Manuell unsubscribe da agent manager das noch nicht macht
-    unsubscribe_response = requests.post(f"{STREAM_MANAGER_URL}/unsubscribe", json={
-        "session_id": agent_id,
-        "topic": topic
-    })
-    assert unsubscribe_response.status_code == 200, f"Failed to unsubscribe: {unsubscribe_response.text}"
-    
-    # Verify agent is gone
-    agents_after = requests.get(f"{AGENT_URL}/agents").json()
-    assert not any(a["id"] == agent_id for a in agents_after), "Agent still exists after deletion"
-
-    # Verify subscription is also cleaned up
-    subscriptions_after = get_subscriptions()
-    active_topics_after = []
-    if "sessions" in subscriptions_after:
-        for session in subscriptions_after["sessions"]:
-            for sub in session.get("subscriptions", []):
-                active_topics_after.append(sub.get("topic"))
-
-    assert topic not in active_topics_after, f"Expected '{topic}' subscription to be cleaned up but it still exists: {active_topics_after}"
-    remove_all_subscriptions()

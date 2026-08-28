@@ -1,13 +1,12 @@
-import sys
 import time
 import uuid
 import requests
-import pytest
 
 from .helper import (
     STREAM_MANAGER_URL,
     AGENT_URL,
     create_agent,
+    reset,
     reserve_topic,
     publish_message,
     client,
@@ -16,12 +15,11 @@ from .helper import (
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-TEST_TOPIC         = "zodiac/test/stream-manager"
+TEST_TOPIC         = f"zodiac/test/debug/{int(time.time()*1000)}"
 PURPOSE_ALLOWED    = "stream-manager-test-allowed"
 PURPOSE_NOT_ALLOWED = "stream-manager-test-denied"
 
-SUBSCRIBE_TIMEOUT  = 3.0   # seconds to wait for broker subscription to be active
-MESSAGE_TIMEOUT    = 5.0   # seconds to wait for message to appear in agent history
+MESSAGE_TIMEOUT    = 10.0   # seconds to wait for message to appear in agent history
 
 
 # ---------------------------------------------------------------------------
@@ -36,15 +34,6 @@ def get_agent_history(agent_id: str, limit: int = 80) -> list:
     if isinstance(data, dict):
         return data.get("history", [])
     return data
-
-
-def subscribe_agent_to_stream_manager(agent_id: str, topic: str, purpose: str):
-    payload = {"session_id": agent_id, "topic": topic, "purpose": purpose}
-    resp = requests.post(f"{STREAM_MANAGER_URL}/subscribe", json=payload, timeout=5.0)
-    assert resp.status_code == 200, (
-        f"Stream manager subscribe failed: {resp.text}"
-    )
-
 
 def cleanup_session(agent_id: str):
     requests.post(f"{STREAM_MANAGER_URL}/cleanup/{agent_id}", timeout=5.0)
@@ -67,16 +56,10 @@ def wait_for_message_in_history(agent_id: str, expected_payload: str, timeout: f
 # Tests
 # ---------------------------------------------------------------------------
 class TestStreamManagerForwarding:
-    
-    def test_small_test(self):
-        agent_id = "3d1c63c9-5b88-4e7a-bb64-bd8884d6174d"  # from the failed test
-        history = requests.get(f"{AGENT_URL}/agents/{agent_id}/history", params={"limit": 80})
-        history_json = history.json()
-        print(history_json, file=sys.stderr, flush=True)
-        assert False, f"Agent history: {history_json}"
 
     def setup_method(self):
         """Reset broker purpose settings and reserve test topic before each test."""
+        reset()
         client.set_purpose_setting("filter_on_subscribe", True)
         client.set_purpose_setting("filter_on_publish", False)
         client.set_purpose_setting("filter_hybrid", False)
@@ -86,8 +69,10 @@ class TestStreamManagerForwarding:
     def teardown_method(self):
         pass  # broker reset happens in setup_method of the next test
 
-    def test_message_is_forwarded_to_agent(self):
-        """A message published to a topic reaches the subscribed agent via the stream manager."""
+#----------------------------------------------------------------------------
+
+    def test_allowed_purpose_receives_messages(self):
+        """An agent subscribed with an allowed purpose receives published messages."""
         agent_id = create_agent(
             runOnce=False,
             text="You are a passive listener. Do not do anything, just receive messages.",
@@ -95,25 +80,26 @@ class TestStreamManagerForwarding:
             memoryWindow=20,
             listenTopic=TEST_TOPIC,
         )
-
-        subscribe_agent_to_stream_manager(agent_id, TEST_TOPIC, PURPOSE_ALLOWED)
-        time.sleep(SUBSCRIBE_TIMEOUT)
-
-        # manually post what the stream manager would post
-        test_payload = f"forwarding-test-{uuid.uuid4().hex[:8]}"
-        manual_forward = requests.post(
-            f"{AGENT_URL}/agents/{agent_id}",
-            json={"datapoint": test_payload, "topic": TEST_TOPIC, "timestamp": "2026-01-01T00:00:00"}
-        )
-        time.sleep(2)
         
+        time.sleep(MESSAGE_TIMEOUT)
+    
+        response = requests.get(f"{STREAM_MANAGER_URL}/subscriptions/{agent_id}", timeout=5.0)
+        print(f"Subscriptions for agent {agent_id}: {response.json()}")
+        assert response.status_code == 200, (
+            f"Failed to fetch subscriptions for agent {agent_id}: {response.text}"
+        )   
+
+        test_payload = f"This is a test message with allowed purpose: {uuid.uuid4().hex[:8]}. Dont do anything with it."
+        # expects (topic: str, payload: str, qos=0, retain=False)
+        response = publish_message(TEST_TOPIC, test_payload)
+
         assert wait_for_message_in_history(agent_id, test_payload), (
-            f"Expected payload '{test_payload}' to appear in agent {agent_id} history "
-            f"within {MESSAGE_TIMEOUT}s, but it did not."
+            f"Agent with allowed purpose '{PURPOSE_ALLOWED}' should have received "
+            f"'{test_payload}' but it did not appear in history."
         )
 
         cleanup_session(agent_id)
-
+    
     def test_multiple_messages_are_forwarded_to_agent(self):
         """Multiple messages published in sequence all reach the subscribed agent."""
         agent_id = create_agent(
@@ -123,9 +109,6 @@ class TestStreamManagerForwarding:
             memoryWindow=20,
             listenTopic=TEST_TOPIC,
         )
-
-        subscribe_agent_to_stream_manager(agent_id, TEST_TOPIC, PURPOSE_ALLOWED)
-        time.sleep(SUBSCRIBE_TIMEOUT)
 
         payloads = [f"msg-{uuid.uuid4().hex[:8]}" for _ in range(3)]
         for payload in payloads:
@@ -140,29 +123,6 @@ class TestStreamManagerForwarding:
 
         cleanup_session(agent_id)
 
-    def test_allowed_purpose_receives_messages(self):
-        """An agent subscribed with an allowed purpose receives published messages."""
-        agent_id = create_agent(
-            runOnce=False,
-            text="You are a passive listener. Do not do anything, just receive messages.",
-            purpose=PURPOSE_ALLOWED,
-            memoryWindow=20,
-            listenTopic=TEST_TOPIC,
-        )
-
-        subscribe_agent_to_stream_manager(agent_id, TEST_TOPIC, PURPOSE_ALLOWED)
-        time.sleep(SUBSCRIBE_TIMEOUT)
-
-        test_payload = f"allowed-purpose-{uuid.uuid4().hex[:8]}"
-        publish_message(TEST_TOPIC, test_payload)
-
-        assert wait_for_message_in_history(agent_id, test_payload), (
-            f"Agent with allowed purpose '{PURPOSE_ALLOWED}' should have received "
-            f"'{test_payload}' but it did not appear in history."
-        )
-
-        cleanup_session(agent_id)
-
     def test_denied_purpose_does_not_receive_messages(self):
         """An agent subscribed with a denied purpose does not receive published messages."""
         agent_id = create_agent(
@@ -172,9 +132,6 @@ class TestStreamManagerForwarding:
             memoryWindow=20,
             listenTopic=TEST_TOPIC,
         )
-
-        subscribe_agent_to_stream_manager(agent_id, TEST_TOPIC, PURPOSE_NOT_ALLOWED)
-        time.sleep(SUBSCRIBE_TIMEOUT)
 
         test_payload = f"denied-purpose-{uuid.uuid4().hex[:8]}"
         publish_message(TEST_TOPIC, test_payload)
@@ -204,10 +161,6 @@ class TestStreamManagerForwarding:
             memoryWindow=20,
             listenTopic=TEST_TOPIC,
         )
-
-        subscribe_agent_to_stream_manager(agent_allowed, TEST_TOPIC, PURPOSE_ALLOWED)
-        subscribe_agent_to_stream_manager(agent_denied, TEST_TOPIC, PURPOSE_NOT_ALLOWED)
-        time.sleep(SUBSCRIBE_TIMEOUT)
 
         test_payload = f"filter-test-{uuid.uuid4().hex[:8]}"
         publish_message(TEST_TOPIC, test_payload)
