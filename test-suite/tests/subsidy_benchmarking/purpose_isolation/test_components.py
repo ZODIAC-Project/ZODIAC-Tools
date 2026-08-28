@@ -245,7 +245,7 @@ def test_mcp_isolation(topic_factory, purpose_factory):
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
 
     t_before_listen = time.monotonic()
-    results = toolcall_listen_for_multiple("Agent1", "Agent2", timeout=300)
+    results = toolcall_listen_for_multiple("Agent1", "Agent2")
     t_after_listen = time.monotonic()
     
     print(f"gap publish->listen_start: {t_before_listen - t_before_publish:.2f}s")
@@ -324,6 +324,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
     ############
     # Enabled case: purpose filtering is active
     ############
+    print(f"Enabled case: purpose filtering is active")
 
     wildcard_purpose = "admin"
 
@@ -345,16 +346,19 @@ def test_vector_isolation(topic_factory, purpose_factory):
 
     collected = {}
     def collect_enabled():
-        collected["enabled"] = collect_tool_calls(timeout=300)
+        collected["enabled"] = collect_tool_calls()
 
     t = threading.Thread(target=collect_enabled)
     t.start()
     time.sleep(1)
 
+    print(f"Publishing to topic '{topic}' to trigger search for purpose '{enabled_purpose}'")
+
     publish_response = publish_message(topic, json.dumps("Search"))
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
 
     t.join()
+    print(f"Collected messages for purpose '{enabled_purpose}': {collected['enabled']}")
     result_enabled = validate_search_and_get_publish(collected["enabled"], expected_purpose=enabled_purpose)
     print(f"(Enabled) Result for purpose '{enabled_purpose}': {result_enabled}")
 
@@ -385,7 +389,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
     assert agent2_exists, f"Agent 2 with ID {id_2} does not exist."
 
     def collect_disabled():
-        collected["disabled"] = collect_tool_calls(timeout=300)
+        collected["disabled"] = collect_tool_calls()
 
     t2 = threading.Thread(target=collect_disabled)
     t2.start()

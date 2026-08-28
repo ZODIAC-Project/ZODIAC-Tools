@@ -78,7 +78,7 @@ def toolcall_listen() -> tuple[bool, str | None]:
             raise ConnectionError(f"Could not connect to {TOOL_USE_WS!r}: {exc}") from exc
     return asyncio.run(handle())
 
-def toolcall_listen_for_tool(tool_name: str, timeout: float = 300) -> tuple[bool, str | None]:
+def toolcall_listen_for_tool(tool_name: str, timeout: float = MESSAGE_TIMEOUT) -> tuple[bool, str | None]:
     async def handle():
         async with websockets.connect(TOOL_USE_WS) as ws:
             try:
@@ -94,12 +94,13 @@ def toolcall_listen_for_tool(tool_name: str, timeout: float = 300) -> tuple[bool
                 return False, None
     return asyncio.run(handle())
 
-def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float = 300):
+def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float = MESSAGE_TIMEOUT):
     async def handle():
         async with websockets.connect(TOOL_USE_WS) as ws:
             try:
                 async with asyncio.timeout(timeout):
                     async for msg in ws:
+                        print("Received message:", msg)
                         try:
                             data = json.loads(msg)
                         except json.JSONDecodeError:
@@ -110,7 +111,7 @@ def toolcall_listen_for_tool_and_word(tool_name: str, word: str, timeout: float 
                 return False, None
     return asyncio.run(handle())
 
-def toolcall_listen_for_tool_and_session_id(tool_name: str, session_id: str, timeout: float = 300):
+def toolcall_listen_for_tool_and_session_id(tool_name: str, session_id: str, timeout: float = MESSAGE_TIMEOUT):
     async def handle():
         async with websockets.connect(TOOL_USE_WS) as ws:
             try:
@@ -126,7 +127,7 @@ def toolcall_listen_for_tool_and_session_id(tool_name: str, session_id: str, tim
                 return False, None
     return asyncio.run(handle())
 
-def toolcall_listen_for_multiple(word_a, word_b, timeout=300):
+def toolcall_listen_for_multiple(word_a, word_b, timeout=MESSAGE_TIMEOUT):
     async def handle():
         result = {word_a: (False, None), word_b: (False, None)}
         remaining = {word_a, word_b}
@@ -145,7 +146,7 @@ def toolcall_listen_for_multiple(word_a, word_b, timeout=300):
         return result
     return asyncio.run(handle())
 
-def collect_tool_calls(timeout: float = 300) -> list[dict]:
+def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
     """
     collect every message on the tool-use websocket
     for the given window, decoded as JSON. Needed instead of toolcall_listen

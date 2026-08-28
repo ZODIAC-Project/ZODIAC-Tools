@@ -183,17 +183,17 @@ def workflow_no_fault_scenario(input_topic,
         return tool_calls_for(tool_name, session_id)
 
     # Agent 1 got Message?
-    agent_history_1 = get_agent_history(agent_id_1, timeout=200)
+    agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
     assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
     print(f"---> Agent 1 received a message. Agent History: {agent_history_1}")
 
-    # Agent 2 got a Message? Wait for 300 seconds 
-    agent_history_2 = get_agent_history(agent_id_2, timeout=300)
+    # Agent 2 got a Message? Wait for MESSAGE_TIMEOUT seconds 
+    agent_history_2 = get_agent_history(agent_id_2, timeout=MESSAGE_TIMEOUT)
     assert len(agent_history_2) > 0, f" No message was received by Agent 2. Agent History: {agent_history_2}"
     print(f"---> Agent 2 received a message. Agent History: {agent_history_2}")
 
     # Agent 2 called the Email Tool?
-    email_calls = wait_for_tool_call("send_email", timeout=300)
+    email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
     assert email_calls, f"Agent 2 did not call the Email Tool. Captured messages: {collected_tool_calls}. Agent_id_2: {agent_id_2}"
     print(f"---> Agent 2 called the Email Tool. Tool Call Message(s): {email_calls}")
 
