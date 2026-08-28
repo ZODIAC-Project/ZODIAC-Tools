@@ -42,13 +42,15 @@ class PurposeClientProxy:
 # the function-scoped client installed by the pytest fixture.
 client = PurposeClientProxy()
 
-def send(msg, session_id = None, model = None):
+def send(msg, session_id=None, model=None, purposes=None):
     if session_id is None:
         session_id = str(uuid.uuid4())
-    if model is None:
-        response = requests.post(f"{MCP_URL}/chat", json={"message": "msg: "+msg, "session_id": session_id})
-    else:
-        response = requests.post(f"{MCP_URL}/chat", json={"message": "msg: "+msg, "session_id": session_id, "model": model})
+    payload = {"message": "msg: " + msg, "session_id": session_id}
+    if model is not None:
+        payload["model"] = model
+    if purposes is not None:
+        payload["purposes"] = purposes
+    response = requests.post(f"{MCP_URL}/chat", json=payload)
     assert response.status_code == 200, f"Expected status code 200 but got {response.status_code} (response was: '{response.text}')"
     data = response.json()
     assert "response" in data, f"Response JSON should contain 'response' key but was: {data}"
@@ -302,6 +304,8 @@ def delete_all_agents():
 
 def delete_agent(agent_id: str):
     response = requests.delete(f"{AGENT_URL}/agents/{agent_id}")
+    if response.status_code == 404:
+        return
     assert response.status_code == 200, f"Failed to delete agent {agent_id}: {response.text}"
     
 def remove_all_subscriptions():
