@@ -179,6 +179,29 @@ def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
     return messages
 
 
+def wait_for_tool_call(tool_name: str, timeout: float = MESSAGE_TIMEOUT, session_id: str | None = None) -> list[dict]:
+    """
+    Wait for tool-use websocket messages for the given timeout and return the
+    tool calls that match the requested tool name, optionally filtered by
+    session id.
+    """
+    async def handle():
+        async with websockets.connect(TOOL_USE_WS) as ws:
+            try:
+                async with asyncio.timeout(timeout):
+                    async for msg in ws:
+                        try:
+                            data = json.loads(msg)
+                        except json.JSONDecodeError:
+                            continue
+                        if data.get("tool") == tool_name and (session_id is None or data.get("session_id") == session_id):
+                            return [data]
+            except TimeoutError:
+                return []
+
+    return asyncio.run(handle())
+
+
 # test the output of llms with another llm, allowing for some fuzziness in the response (e.g. different wording, additional text, etc.)
 def fuzzy_assert(test_string, rule):
     out_prompt = (

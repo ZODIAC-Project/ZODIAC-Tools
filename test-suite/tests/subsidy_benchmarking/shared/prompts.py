@@ -82,7 +82,7 @@ def Agent_2_task( allowed_purpose: str, issue_topic: str ) -> str:
         f"The incomming message is a Customer-Subsidy Pair, Extract Only the names of the Customer and Subsidy and use the Email Tool to send an email with the content: `customer: name, subsidy: name`. For the Email Tool Call use the Purpose: {allowed_purpose}. If the Toolcall fails, send a retained message: \"ACCESS_DENIED_PURPOSE_ISSUE\" to the Issue topic: {issue_topic}."
     )
     
-def make_trigger_message(state: str) -> str:
+def make_trigger_message() -> str:
     return (
-        f"Hochwasserschutz Foerderprogramm {state}"
+        f"Hochwasserschutz Foerderprogramm für Unternehmen mit weniger als 200 mitarbeitern."
     )
