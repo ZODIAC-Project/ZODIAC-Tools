@@ -1,13 +1,13 @@
 ## Test Notes
 Use this test to verify every workload branch once on its own and then repeat the same branch a few times to catch cleanup or isolation issues.
 
-If you start the test with more then one message (--amout-messages > 1), the test will run with the same PBAC "branch" that was selected for the first message. If you want to run the test with differend branches, just start the test multiple times with --amount-messages=1.
+If you start the test with more then one message (`--amount-messages > 1`), the test will run with the same PBAC configuration that was selected for the first message. If you want to run the test with differend branches or a differend PBAC configuration, just start the test multiple times with `--amount-messages=1`.
 
 ## Branch Selection
 `test_workload_purpose_isolation_scenario` now behaves like this:
 
 - `--randomness=False` -> always run the no-fault path.
-- `--randomness=True` and no BPAC branch flag set -> pick one branch at random.
+- `--randomness=True` and no BPAC branch flag set -> pick one branch at random, including the no-fault PBAC-variation branch.
 - `--randomness=True` and one branch flag set -> use that branch and ignore the others.
 
 Set at most one of these flags when you want a specific branch:
@@ -18,10 +18,14 @@ Set at most one of these flags when you want a specific branch:
 
 If none of those are set and `--randomness=True`, the test randomly chooses between:
 
+- no-fault PBAC-variation branch
 - broker fault branch
 - MCP fault branch
 - vector fault branch
 - passthrough branch
+
+## TODOs
+The no-fault path now randomizes PBAC activation/deactivation once per run when `--randomness=True` and no explicit fault branch is selected.
 
 ## Commands
 

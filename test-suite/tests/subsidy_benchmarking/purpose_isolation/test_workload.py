@@ -7,6 +7,7 @@
 """
 
 import json
+from random import randint
 from random import choice
 import pytest
 import time
@@ -24,7 +25,7 @@ def _log(branch: str, message: str) -> None:
     print(f"[{branch}] {message}")
 
 
-def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, issue_topic: str, allowed: str, wildcard_purpose: str, agent_purpose_1: str = "query", agent_purpose_2: str = "advertisement") -> tuple[str, str]:
+def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, issue_topic: str, allowed: str, wildcard_purpose: str, agent_purpose_1: str = "query", agent_purpose_2: str = "advertisement", vector_purpose: str = "subsidy/eligibility") -> tuple[str, str]:
     # (RAG tool has purpose: ![query, knowledge, search, admin])
     # Do we want to use real purposes for the mcp tool calls?
     # Yes we want 
@@ -34,7 +35,7 @@ def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, 
         if vector == True:
             agent_id_1 = create_agent(
                 runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "subsidy/eligibility"),
+                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
                 purpose=agent_purpose_1,
                 memoryWindow=5,
                 listenTopic=input_topic,
@@ -53,7 +54,7 @@ def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, 
         if vector == True:
             agent_id_1 = create_agent(
                 runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "Leipzig"),
+                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
                 purpose=wildcard_purpose,
                 memoryWindow=5,
                 listenTopic=input_topic,
@@ -99,7 +100,16 @@ def _cleanup_agents(branch: str, agent_id_1: str | None, agent_id_2: str | None)
         _log(branch, f"Deleted agent 2: {agent_id_2}")
 
 
-def _select_workload_branch(broker: bool, mcp: bool, vector: bool, randomness: bool) -> str:
+def _select_workload_branch(broker: bool, mcp: bool, vector: bool, randomness: bool) -> tuple[str, bool, bool, bool]:
+    """Return the branch to run AND the broker/mcp/vector flags that branch
+    needs in order for create_agents() to actually apply its fault-injection
+    purposes. Picking a branch name alone is not enough: create_agents()
+    only honors agent_purpose_1 for Agent 1 when mcp=True, and only honors
+    vector_purpose when vector=True. If those don't line up with the chosen
+    branch, the fault never gets applied and the branch's assertions either
+    fail (message arrives when it shouldn't) or hang until MESSAGE_TIMEOUT
+    (expected denial never happens).
+    """
     explicit_branches = [
         branch_name
         for branch_name, enabled in (
@@ -110,10 +120,35 @@ def _select_workload_branch(broker: bool, mcp: bool, vector: bool, randomness: b
         if enabled
     ]
     if explicit_branches:
-        return explicit_branches[0]
-    if randomness:
-        return choice(["broker", "mcp", "vector", "passthrough"])
-    return "passthrough"
+        branch_name = explicit_branches[0]
+    elif randomness:
+        branch_name = choice(["no-fault", "broker", "mcp", "vector", "passthrough"])
+    else:
+        branch_name = "passthrough"
+
+    # Flags required for each branch's fault injection to actually take effect.
+    required_flags = {
+        "broker": (True, True, vector),        # needs mcp=True so agent_purpose_1 ("wrong_purpose") is honored
+        "mcp": (False, True, vector),           # workflow_mcp_fault_scenario forces mcp=True itself either way
+        "vector": (False, mcp, True),           # needs vector=True so vector_purpose ("Leipzig") is honored
+        "passthrough": (False, False, False),   # needs all PBAC layers off
+        "no-fault": (broker, mcp, vector),      # actual flags picked separately by _select_no_fault_pbac_layers
+    }
+    resolved_broker, resolved_mcp, resolved_vector = required_flags[branch_name]
+    return branch_name, resolved_broker, resolved_mcp, resolved_vector
+
+
+def _select_no_fault_pbac_layers() -> tuple[bool, bool, bool]:
+    return choice([
+        (False, False, False),
+        (True, False, False),
+        (False, True, False),
+        (False, False, True),
+        (True, True, False),
+        (True, False, True),
+        (False, True, True),
+        (True, True, True),
+    ])
 
 
 def workflow_no_fault_scenario(input_topic,
@@ -321,6 +356,7 @@ def workflow_vector_fault_scenario(input_topic, midway_topic, issue_topic, allow
             wildcard_purpose = wildcard_purpose,
             agent_purpose_1=wildcard_purpose,
             agent_purpose_2=wildcard_purpose,
+            vector_purpose="Leipzig",
         )
         _log(branch, f"Agents created: agent_id_1={agent_id_1}, agent_id_2={agent_id_2}")
 
@@ -457,8 +493,29 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
             )
         return # Exit the test after running the no-fault scenario
 
-    selected_branch = _select_workload_branch(broker, mcp, vector, randomness)
-    _log(branch, f"Randomness enabled. Selected branch: {selected_branch}")
+    selected_branch, broker, mcp, vector = _select_workload_branch(broker, mcp, vector, randomness)
+    _log(branch, f"Randomness enabled. Selected branch: {selected_branch} (Broker={broker}, MCP={mcp}, Vector={vector})")
+
+    if selected_branch == "no-fault":
+        broker, mcp, vector = _select_no_fault_pbac_layers()
+        _log(branch, f"Selected NO-FAULT branch with PBAC config: Broker={broker}, MCP={mcp}, Vector={vector}")
+
+        for i in range(amount_messages):
+            workflow_no_fault_scenario(
+                input_topic=input_topic,
+                midway_topic=midway_topic,
+                issue_topic=issue_topic,
+                allowed=allowed,
+                wildcard_purpose=wildcard_purpose,
+                Random_Number=randint(1, 100),
+                broker=broker,
+                mcp=mcp,
+                vector=vector,
+                amount_messages=amount_messages,
+                iteration=i + 1,
+                total_iterations=amount_messages,
+            )
+        return
         
     #######################################
     # states with fault injection from here on. 
