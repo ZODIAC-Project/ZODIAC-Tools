@@ -56,7 +56,11 @@ def isolated_mqtt_client(mqtt_client):
     helper.client.set_current(mqtt_client)
     yield
     helper.client.clear_current()
-    
+
+def pytest_configure(config):
+    """Use the CLI model override for all shared helper calls in this test suite."""
+    helper.DEFAULT_LLM_MODEL = config.getoption("model") or helper.DEFAULT_LLM_MODEL
+
 def pytest_addoption(parser):
     parser.addoption(
         "--run-config", action="store", default=None,
@@ -81,5 +85,9 @@ def pytest_addoption(parser):
     parser.addoption(
         "--randomness", action="store", default="False",
         help="Whether to inject random faults in the workload scenario. Use True/False.",
+    )
+    parser.addoption(
+        "--model", action="store", default=None,
+        help="LLM model to use for tests",
     )
     
