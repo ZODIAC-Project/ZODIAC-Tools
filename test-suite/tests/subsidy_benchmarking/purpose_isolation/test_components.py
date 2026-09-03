@@ -299,17 +299,22 @@ def test_vector_isolation(topic_factory, purpose_factory):
         "Optische Technologien & Lasertechnik BW",
     }
 
-    def validate_search_and_get_publish(messages: list, expected_purpose: str) -> str:
-        search_calls_all = [m for m in messages if m.get("tool") == "search_knowledge_base"]
-        assert len(search_calls_all) > 0, f"No search_knowledge_base call found. Captured: {messages}"
-
-        # Group by session_id 
-        first_session = min(search_calls_all, key=lambda c: c["timestamp"])["session_id"]
-        search_calls = [c for c in search_calls_all if c["session_id"] == first_session]
-        publish_calls = [m for m in messages if m.get("tool") == "publish" and m["session_id"] == first_session]
+    def validate_search_and_get_publish(
+        messages: list,
+        session_id: str,
+        expected_purpose: str,
+        result_topic: str,
+    ) -> str:
+        search_calls = [m for m in messages if m.get("tool") == "search_knowledge_base"]
+        assert search_calls, f"No search_knowledge_base call found for {session_id}. Captured: {messages}"
+        publish_calls = [
+            m for m in messages
+            if m.get("tool") == "publish"
+            and m.get("parameters", {}).get("topic") == result_topic
+        ]
 
         assert len(search_calls) == 1, (
-            f"Expected exactly one search_knowledge_base call from session {first_session}, "
+            f"Expected exactly one search_knowledge_base call from session {session_id}, "
             f"found {len(search_calls)}: {[c['parameters'] for c in search_calls]}"
         )
         actual_purpose = search_calls[0].get("parameters", {}).get("purpose")
@@ -317,7 +322,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
             f"search_knowledge_base called with purpose '{actual_purpose}', expected '{expected_purpose}'"
         )
 
-        assert len(publish_calls) > 0, f"No publish call found for session {first_session}. Captured: {messages}"
+        assert publish_calls, f"No publish call found for {result_topic}. Captured: {messages}"
         return " ".join(c["parameters"]["message"] for c in publish_calls)
 
 
@@ -346,7 +351,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
 
     collected = {}
     def collect_enabled():
-        collected["enabled"] = collect_tool_calls()
+        collected["enabled"] = collect_tool_calls(session_id=id_1)
 
     t = threading.Thread(target=collect_enabled)
     t.start()
@@ -359,7 +364,12 @@ def test_vector_isolation(topic_factory, purpose_factory):
 
     t.join()
     print(f"Collected messages for purpose '{enabled_purpose}': {collected['enabled']}")
-    result_enabled = validate_search_and_get_publish(collected["enabled"], expected_purpose=enabled_purpose)
+    result_enabled = validate_search_and_get_publish(
+        collected["enabled"],
+        session_id=id_1,
+        expected_purpose=enabled_purpose,
+        result_topic=result_topic_enabled,
+    )
     print(f"(Enabled) Result for purpose '{enabled_purpose}': {result_enabled}")
 
     found_subsidies = {name for name in SUBSIDY_DOC_NAMES if name in result_enabled}
@@ -389,7 +399,7 @@ def test_vector_isolation(topic_factory, purpose_factory):
     assert agent2_exists, f"Agent 2 with ID {id_2} does not exist."
 
     def collect_disabled():
-        collected["disabled"] = collect_tool_calls()
+        collected["disabled"] = collect_tool_calls(session_id=id_2)
 
     t2 = threading.Thread(target=collect_disabled)
     t2.start()
@@ -399,7 +409,12 @@ def test_vector_isolation(topic_factory, purpose_factory):
     assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
 
     t2.join()
-    result_disabled = validate_search_and_get_publish(collected["disabled"], expected_purpose=wildcard_purpose)
+    result_disabled = validate_search_and_get_publish(
+        collected["disabled"],
+        session_id=id_2,
+        expected_purpose=wildcard_purpose,
+        result_topic=result_topic_disabled,
+    )
     print(f"(Disabled) Result for purpose '{wildcard_purpose}': {result_disabled}")
 
     found_subsidies_disabled = {name for name in SUBSIDY_DOC_NAMES if name in result_disabled}

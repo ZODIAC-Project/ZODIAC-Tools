@@ -146,12 +146,15 @@ def toolcall_listen_for_multiple(word_a, word_b, timeout=MESSAGE_TIMEOUT):
         return result
     return asyncio.run(handle())
 
-def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
+def collect_tool_calls(
+    timeout: float = MESSAGE_TIMEOUT,
+    session_id: str | None = None,
+) -> list[dict]:
     """
     collect every message on the tool-use websocket
-    for the given window, decoded as JSON. Needed instead of toolcall_listen
-    because that stops at the first message — this needs to see everything
-    to detect duplicate/extra tool calls.
+    for the given window, decoded as JSON. When session_id is provided, only
+    retain events for that agent to prevent concurrent test runs from leaking
+    into the result.
     """
     import json
 
@@ -159,7 +162,9 @@ def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
 
     def on_message(msg):
         try:
-            messages.append(json.loads(msg))
+            event = json.loads(msg)
+            if session_id is None or event.get("session_id") == session_id:
+                messages.append(event)
         except json.JSONDecodeError:
             pass
 
