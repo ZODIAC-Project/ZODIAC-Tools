@@ -6,11 +6,9 @@ from ... import helper
 from ..shared.prompts import build_routing_task
 
 @pytest.fixture
-def n_agents(pytestconfig, run_config):
+def n_agents(pytestconfig):
     n_agents_from_cli = pytestconfig.getoption("n_agents")
-    if n_agents_from_cli is not None:
-        return n_agents_from_cli
-    return run_config.get("n_agents", 8)   # 8 = local-dev default
+    return 8 if n_agents_from_cli is None else n_agents_from_cli  # 8 = local-dev default
 
 @pytest.mark.access_control
 def test_n_agent(topic_factory, purpose_factory, n_agents):
