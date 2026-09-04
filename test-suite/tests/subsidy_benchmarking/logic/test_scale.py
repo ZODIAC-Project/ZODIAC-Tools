@@ -1,5 +1,4 @@
 import json
-from logging import exception
 import pytest
 from ... import helper
 from ..shared.prompts import build_matching_task
@@ -7,15 +6,9 @@ from ..shared.parsing import parse_match_response, matches_to_dict
 from .data import build_scale_dataset
 
 @pytest.mark.model_quality
-def test_agent_matches_at_scale(topic_factory, purpose_factory, run_config):
-    
-    #TODO: REMOVE this 
-    try:
-        n_pairs = run_config.get("scale_pairs", 15)
-    except Exception as e:
-        print(f"Error reading run_config: {e}. Defaulting to 10 pairs.")
-        n_pairs = 10
-        
+def test_agent_matches_at_scale(topic_factory, purpose_factory, scale_pairs):
+    n_pairs = scale_pairs
+
     customers, subsidies, expected = build_scale_dataset(n_pairs)
     input_topic = topic_factory("input")
     result_topic = topic_factory("matches")

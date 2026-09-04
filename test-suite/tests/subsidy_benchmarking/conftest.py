@@ -64,6 +64,12 @@ def run_config(pytestconfig):
     data = yaml.safe_load(Path(path).read_text())
     return data or {}
 
+
+@pytest.fixture(scope="session")
+def scale_pairs(pytestconfig):
+    """Number of customer/subsidy pairs for the scale benchmark test."""
+    return pytestconfig.getoption("scale_pairs")
+
 @pytest.fixture(autouse=True)
 def configure_purpose_filtering(mqtt_client):
     """Configure the fresh MQTT connection used by this benchmark test."""
@@ -79,5 +85,12 @@ def pytest_addoption(parser):
         type=int,
         default=None,
         help="Number of agents for purpose-routing tests",
+    )
+    parser.addoption(
+        "--scale-pairs",
+        action="store",
+        type=int,
+        default=15,
+        help="Number of customer/subsidy pairs for the scale benchmark test",
     )
     
