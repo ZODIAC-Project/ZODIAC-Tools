@@ -60,3 +60,15 @@ ragService:
   defaultTopK: "5"
   autoIngestLocalData: "true"
   autoIngestOnlyIfEmpty: "true"
+
+# A separate Chroma-backed RAG that does not write or enforce PBAC purposes.
+unrestrictedRagService:
+  enabled: true
+  serviceName: "rag-service-unrestricted"
+  port: 30111
+  chromaDataDir: "/data/chroma-unrestricted"
+  collectionPrefix: "zodiac-unrestricted"
+  useDefaultEmbeddings: "true"
+  defaultTopK: "5"
+  autoIngestLocalData: "true"
+  autoIngestOnlyIfEmpty: "true"

@@ -1,0 +1,76 @@
+{{- if .Values.unrestrictedRagService.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zodiac
+  name: rag-service-unrestricted
+  labels:
+    app: rag-service-unrestricted
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-service-unrestricted
+  template:
+    metadata:
+      labels:
+        app: rag-service-unrestricted
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: rag-service-unrestricted
+          image: "{{ .Values.meta.imageUrl }}/rag-service:0.2.0-cicd"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RAG_SERVICE_PORT
+              value: "{{ .Values.unrestrictedRagService.port }}"
+            - name: CHROMA_DATA_DIR
+              value: "{{ .Values.unrestrictedRagService.chromaDataDir }}"
+            - name: CHROMA_COLLECTION_PREFIX
+              value: "{{ .Values.unrestrictedRagService.collectionPrefix }}"
+            - name: CHROMA_USE_DEFAULT_EMBEDDINGS
+              value: "{{ .Values.unrestrictedRagService.useDefaultEmbeddings }}"
+            - name: RAG_DEFAULT_TOP_K
+              value: "{{ .Values.unrestrictedRagService.defaultTopK }}"
+            - name: RAG_AUTO_INGEST_LOCAL_DATA
+              value: "{{ .Values.unrestrictedRagService.autoIngestLocalData }}"
+            - name: RAG_AUTO_INGEST_ONLY_IF_EMPTY
+              value: "{{ .Values.unrestrictedRagService.autoIngestOnlyIfEmpty }}"
+            - name: RAG_ENABLE_PBAC
+              value: "false"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.mcp.env.otel_exporter_endpoint }}"
+            - name: OTEL_SERVICE_NAME
+              value: "rag-service-unrestricted"
+            - name: OTEL_SERVICE_NAMESPACE
+              value: "zodiac"
+          ports:
+            - containerPort: {{ .Values.unrestrictedRagService.port }}
+          volumeMounts:
+            - name: rag-data
+              mountPath: {{ .Values.unrestrictedRagService.chromaDataDir }}
+      volumes:
+        - name: rag-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zodiac
+  name: {{ .Values.unrestrictedRagService.serviceName }}
+  labels:
+    app: rag-service-unrestricted
+spec:
+  type: ClusterIP
+  selector:
+    app: rag-service-unrestricted
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.unrestrictedRagService.port }}
+      targetPort: {{ .Values.unrestrictedRagService.port }}
+{{- end }}
