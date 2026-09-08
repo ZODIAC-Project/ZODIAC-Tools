@@ -33,13 +33,31 @@ def _measure_full_pipeline(knowledgebase: str) -> float:
     )
     assert selection.status_code == 200, selection.text
     started = time.perf_counter()
-    response = helper.send(
-        PROMPT,
-        session_id=session_id,
-        purposes=["admin"],
+    payload = {
+        "message": f"msg: {PROMPT}",
+        "session_id": session_id,
+        "purposes": ["admin"],
+    }
+    if helper.DEFAULT_LLM_MODEL is not None:
+        payload["model"] = helper.DEFAULT_LLM_MODEL
+    response = requests.post(
+        f"{helper.MCP_URL}/chat",
+        json=payload,
+        timeout=120,
     )
     duration_ms = (time.perf_counter() - started) * 1_000
-    assert response.strip(), "The chat pipeline returned an empty response."
+    assert response.status_code == 200, response.text
+    result = response.json()
+    assert result.get("response", "").strip(), "The chat pipeline returned an empty response."
+    search_calls = [
+        tool_call
+        for tool_call in result.get("tool_calls", [])
+        if tool_call.get("name") == "search_knowledge_base"
+    ]
+    assert len(search_calls) == 1, (
+        "Expected exactly one search_knowledge_base call, got "
+        f"{result.get('tool_calls', [])}"
+    )
     return duration_ms
 
 
