@@ -90,4 +90,8 @@ def pytest_addoption(parser):
         "--model", action="store", default=None,
         help="LLM model to use for tests",
     )
+    parser.addoption(
+        "--rag-latency-repeats", action="store", type=int, default=3,
+        help="Number of full-pipeline measurements per knowledge base.",
+    )
     

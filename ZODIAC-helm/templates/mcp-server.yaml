@@ -48,6 +48,8 @@ spec:
               value: "{{.Values.mcp.env.stream_manager_url}}"
             - name: RAG_SERVICE_URL
               value: "http://{{ .Values.ragService.serviceName }}:{{ .Values.ragService.port }}"
+            - name: UNRESTRICTED_KNOWLEDGEBASE_URL
+              value: "http://{{ .Values.unrestrictedRagService.serviceName }}:{{ .Values.unrestrictedRagService.port }}"
           ports:
             - containerPort: {{.Values.mcp.serverPort}}
 

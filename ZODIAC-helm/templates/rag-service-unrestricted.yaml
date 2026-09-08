@@ -26,6 +26,8 @@ spec:
           image: "{{ .Values.meta.imageUrl }}/rag-service:0.2.0-cicd"
           imagePullPolicy: IfNotPresent
           env:
+            - name: RAG_KNOWLEDGEBASE_NAME
+              value: "{{ .Values.unrestrictedRagService.knowledgebaseName }}"
             - name: RAG_SERVICE_PORT
               value: "{{ .Values.unrestrictedRagService.port }}"
             - name: CHROMA_DATA_DIR
