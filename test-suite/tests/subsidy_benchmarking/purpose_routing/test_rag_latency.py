@@ -44,18 +44,17 @@ def _measure_full_pipeline(knowledgebase: str) -> float:
 
 
 @pytest.mark.rag_latency
-@pytest.mark.parametrize(
-    "knowledgebase",
-    ["restricted_knowledgebase", "unrestricted_knowledgebase"],
-)
-def test_rag_latency_through_llm_and_mcp(pytestconfig, knowledgebase: str) -> None:
-    """Measure complete chat-to-RAG latency for one knowledge base."""
+def test_rag_latency_through_llm_and_mcp(pytestconfig) -> None:
+    """Measure both knowledge bases sequentially through the complete pipeline."""
     repeats = pytestconfig.getoption("rag_latency_repeats")
-    durations = [_measure_full_pipeline(knowledgebase) for _ in range(repeats)]
-
-    print(
-        f"{knowledgebase}: runs={repeats}, "
-        f"mean={statistics.mean(durations):.1f}ms, "
-        f"median={statistics.median(durations):.1f}ms, "
-        f"samples_ms={[round(duration, 1) for duration in durations]}"
-    )
+    for knowledgebase in (
+        "restricted_knowledgebase",
+        "unrestricted_knowledgebase",
+    ):
+        durations = [_measure_full_pipeline(knowledgebase) for _ in range(repeats)]
+        print(
+            f"{knowledgebase}: runs={repeats}, "
+            f"mean={statistics.mean(durations):.1f}ms, "
+            f"median={statistics.median(durations):.1f}ms, "
+            f"samples_ms={[round(duration, 1) for duration in durations]}"
+        )
