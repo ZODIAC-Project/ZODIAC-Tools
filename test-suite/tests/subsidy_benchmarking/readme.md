@@ -40,4 +40,18 @@ uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv 
 **purpose isolation tests - test_components.py:**
 ```
 uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_components.py -vv -s 
+
+## RAG-Latenz über die vollständige Pipeline
+
+Der folgende Test misst vom `/chat`-Request bis zur Antwort und enthält damit LLM,
+MCP-Tool-Call und RAG-Abfrage. Er vergleicht `restricted_knowledgebase` mit
+`unrestricted_knowledgebase`:
+
+Die Auswahl erfolgt zuvor pro Session über
+`PUT /sessions/{session_id}/knowledgebase`. Sie ist kein MCP-Tool-Parameter und
+kann deshalb nicht durch das LLM geändert werden.
+
+```bash
+uv run pytest tests/subsidy_benchmarking/purpose_routing/test_rag_latency.py -vv -s --rag-latency-repeats=3
+```
 ```

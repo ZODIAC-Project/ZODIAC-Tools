@@ -26,6 +26,7 @@ markers = [
     "model_quality: agent reasoning/logic correctness",
     "access_control: PBAC enforcement and its overhead",
     "workload: sustained-usage energy simulation",
+    "rag_latency: end-to-end LLM, MCP, and RAG latency comparison",
     "retain_agents: keep created agents after the module or test finishes",
 ]
 norecursedirs = ["legacy"]

@@ -1,3 +1,4 @@
+from logging import config
 import os
 import json
 import requests
@@ -19,6 +20,8 @@ MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
 MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
 MESSAGE_TIMEOUT = 100
+
+DEFAULT_LLM_MODEL = os.getenv("DEFAULT_LLM_MODEL", None)
 
 class PurposeClientProxy:
     """Keep imports stable while pytest swaps in a fresh client per test."""
@@ -46,6 +49,8 @@ def send(msg, session_id=None, model=None, purposes=None):
     if session_id is None:
         session_id = str(uuid.uuid4())
     payload = {"message": "msg: " + msg, "session_id": session_id}
+    if DEFAULT_LLM_MODEL is not None:
+        payload["model"] = DEFAULT_LLM_MODEL
     if model is not None:
         payload["model"] = model
     if purposes is not None:
@@ -164,12 +169,15 @@ def toolcall_listen_for_multiple(word_a, word_b, timeout=MESSAGE_TIMEOUT):
         return result
     return asyncio.run(handle())
 
-def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
+def collect_tool_calls(
+    timeout: float = MESSAGE_TIMEOUT,
+    session_id: str | None = None,
+) -> list[dict]:
     """
     collect every message on the tool-use websocket
-    for the given window, decoded as JSON. Needed instead of toolcall_listen
-    because that stops at the first message — this needs to see everything
-    to detect duplicate/extra tool calls.
+    for the given window, decoded as JSON. When session_id is provided, only
+    retain events for that agent to prevent concurrent test runs from leaking
+    into the result.
     """
     import json
 
@@ -177,7 +185,9 @@ def collect_tool_calls(timeout: float = MESSAGE_TIMEOUT) -> list[dict]:
 
     def on_message(msg):
         try:
-            messages.append(json.loads(msg))
+            event = json.loads(msg)
+            if session_id is None or event.get("session_id") == session_id:
+                messages.append(event)
         except json.JSONDecodeError:
             pass
 
@@ -281,6 +291,8 @@ def create_agent(runOnce: bool, text: str, purpose: str | None, memoryWindow: in
         "purposes": purposes,
         "memoryWindow": memoryWindow,
     }
+    if DEFAULT_LLM_MODEL is not None:
+        payload["llmModel"] = DEFAULT_LLM_MODEL
     if intervalMs:
         payload["intervalMs"] = intervalMs
     if listenTopic:
