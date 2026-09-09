@@ -36,6 +36,12 @@ spec:
               value: "{{ .Values.streamManager.maxTopicsPerSession }}"
             - name: PORT
               value: "{{ .Values.streamManager.port }}"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.mcp.env.otel_exporter_endpoint }}"
+            - name: OTEL_SERVICE_NAME
+              value: "stream-manager"
+            - name: OTEL_SERVICE_NAMESPACE
+              value: "zodiac"
           ports:
             - containerPort: 8002
 ---
