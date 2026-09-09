@@ -56,6 +56,24 @@ def send(msg, session_id=None, model=None, purposes=None):
     assert "response" in data, f"Response JSON should contain 'response' key but was: {data}"
     return data["response"]
 
+
+def set_knowledgebase_access(session_id: str, unrestricted: bool = False) -> requests.Response:
+    """Switch a session between restricted and unrestricted knowledge-base access.
+    Usage: set_knowledgebase_access(session_id, unrestricted=True) to allow unrestricted access.
+    """
+    knowledgebase = "unrestricted_knowledgebase" if unrestricted else "restricted_knowledgebase"
+    response = requests.put(
+        f"{MCP_URL}/sessions/{session_id}/knowledgebase",
+        headers={"Content-Type": "application/json"},
+        json={"knowledgebase": knowledgebase},
+        timeout=5.0,
+    )
+    assert response.status_code == 200, (
+        f"Failed to set knowledge base for session {session_id}: {response.text}"
+    )
+    return response
+
+
 def tools_listen(on_message):
     async def handle():
         async with websockets.connect(TOOL_USE_WS) as ws:

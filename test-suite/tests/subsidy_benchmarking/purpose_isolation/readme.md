@@ -24,6 +24,57 @@ If none of those are set and `--randomness=True`, the test randomly chooses betw
 - vector fault branch
 - passthrough branch
 
+## Workload flow diagram
+
+```mermaid
+flowchart TD
+    classDef ok fill:#d9f7e8,stroke:#2e7d32,stroke-width:2px,color:#1b3b2f;
+    classDef fail fill:#fde7e9,stroke:#c62828,stroke-width:2px,color:#4b1d1d;
+    classDef neutral fill:#eef3ff,stroke:#4863a0,stroke-width:2px,color:#21314d;
+
+    A[Start workload test] --> B{randomness enabled?}
+
+    B -- No --> N[Deterministic path
+full flow must succeed]:::ok
+    B -- Yes --> C{Explicit fault flag set?}
+
+    C -- Yes --> D{Which flag?}
+    D -- broker --> B1[Broker fault]:::fail
+    D -- mcp --> M1[MCP fault]:::fail
+    D -- vector --> V1[Vector fault]:::fail
+
+    C -- No --> R[Random branch selection
+no-fault / broker / mcp / vector / passthrough]:::neutral
+
+    B1 --> B2[Wrong broker purpose
+message blocked before agent 1]:::fail
+    M1 --> M2[Wrong MCP purpose
+send_email is denied]:::fail
+    V1 --> V3[Wrong vector purpose
+ACCESS_DENIED_PURPOSE_ISSUE]:::fail
+
+    R --> N2[No-fault]:::ok
+    R --> B3[Broker fault]:::fail
+    R --> M3[MCP fault]:::fail
+    R --> V3b[Vector fault]:::fail
+    R --> P[Passthrough]:::ok
+
+    N2 --> N3[Full PBAC flow succeeds]:::ok
+    B3 --> B4[Message never reaches Agent 1]:::fail
+    M3 --> M4[Agent 1 receives msg, but no email call]:::fail
+    V3b --> V4[Issue topic receives denial]:::fail
+    P --> P2[All PBAC layers off
+full flow succeeds]:::ok
+```
+
+### Branch summary
+
+- No-fault: everything is allowed; full flow should succeed.
+- Broker fault: agent subscribes with a wrong purpose so the message is blocked before reaching it.
+- MCP fault: agent is allowed to receive the message but uses a forbidden purpose for the tool call, so `send_email` must not be invoked.
+- Vector fault: vector search is denied due to a mismatched state/purpose and raises an issue on the issue topic.
+- Passthrough: all PBAC layers are disabled; the full workload runs as a plain success path.
+
 ## TODOs
 The no-fault path now randomizes PBAC activation/deactivation once per run when `--randomness=True` and no explicit fault branch is selected.
 

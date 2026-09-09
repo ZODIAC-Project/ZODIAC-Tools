@@ -4,6 +4,41 @@ import json
 import time
 
 
+def test_agent_publishes_known_session_id_to_topic():
+    topic = "zodiac/test/session-id-probe"
+    topic_incomming = f"{topic}/incoming"
+
+    # This should not work
+    agent_id = create_agent(
+        runOnce=False,
+        text=(
+            "Use the knowledge base and get all information you can get. "
+        ),
+        purpose="admin",
+        memoryWindow=5,
+        listenTopic=topic_incomming,
+    )
+    time.sleep(3)
+    
+    # send message to topic_incomming to trigger the agent
+    publish_message(topic_incomming, "Do your thing.")
+    
+    time.sleep(30)
+    
+    set_knowledgebase_access(agent_id, unrestricted=True)
+
+    time.sleep(3)
+    
+    publish_message(topic_incomming, "Do your thing again.")
+
+    time.sleep(30)
+    # No real assert -  check the litellm logs to validate 
+    history = get_agent_history(agent_id, timeout=100)
+    print(f"Agent history after 100 seconds: {history}")
+    assert isinstance(history, list)
+    assert len(history) > 0, f"Expected the agent to produce history after 100 seconds, but got: {history}"
+
+
 def test_secret_animal_tool():
     response= send("What is the secret animal? purpose secret")
     assert "cat" in response.lower(), f"Expected 'cat' in response but got: {response}"

@@ -27,50 +27,26 @@ def _log(branch: str, message: str) -> None:
 
 def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, issue_topic: str, allowed: str, wildcard_purpose: str, agent_purpose_1: str = "query", agent_purpose_2: str = "advertisement", vector_purpose: str = "subsidy/eligibility") -> tuple[str, str]:
     # (RAG tool has purpose: ![query, knowledge, search, admin])
-    # Do we want to use real purposes for the mcp tool calls?
-    # Yes we want 
     if mcp == True:
-        # Do we want to use the state of the incomming message as purpose for the RAG Tool Call?
-        # Yes we want
-        if vector == True:
-            agent_id_1 = create_agent(
-                runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
-                purpose=agent_purpose_1,
-                memoryWindow=5,
-                listenTopic=input_topic,
-            )
-        # No we dont 
-        else:
-            agent_id_1 = create_agent(
-                runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "admin"),
-                purpose=agent_purpose_1,
-                memoryWindow=5,
-                listenTopic=input_topic,
-            )
-    # No we dont 
+        agent_id_1 = create_agent(
+            runOnce=False,
+            text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
+            purpose=agent_purpose_1,
+            memoryWindow=5,
+            listenTopic=input_topic,
+        )
     else:
-        if vector == True:
-            agent_id_1 = create_agent(
-                runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
-                purpose=wildcard_purpose,
-                memoryWindow=5,
-                listenTopic=input_topic,
-            )
-        else:
-            agent_id_1 = create_agent(
-                runOnce=False,
-                text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose= "admin"),
-                purpose=wildcard_purpose,
-                memoryWindow=5,
-                listenTopic=input_topic,
-            )
+        agent_id_1 = create_agent(
+            runOnce=False,
+            text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
+            purpose=wildcard_purpose,
+            memoryWindow=5,
+            listenTopic=input_topic,
+        )
+
+    set_knowledgebase_access(agent_id_1, unrestricted=not vector)
 
     # (Email tool has purpose: ![advertisement, external, admin])
-    # Do we want to use real purposes for the mcp tool calls?
-    # Yes we want
     if mcp == True:
         agent_id_2 = create_agent(
             runOnce=False,
@@ -86,7 +62,7 @@ def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, 
             purpose=wildcard_purpose,
             memoryWindow=5,
             listenTopic=midway_topic,
-        ) 
+        )
     return agent_id_1, agent_id_2
 
 
