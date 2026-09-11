@@ -29,6 +29,15 @@ BASE_FIELD_LABELS = (
 )
 
 
+def _has_field(response: str, field: str) -> bool:
+    """Accept the two record formats the MCP chat response may use.
+
+    The RAG tool formats records as ``field: value``.  The LLM can preserve
+    that text or render the same record as JSON (``"field": "value"``).
+    """
+    return f"{field}:" in response or f'"{field}":' in response
+
+
 def _query_customers(purpose: str) -> str:
     """Query customers through MCP, using the restricted knowledge base."""
     session_id = f"customer-field-pbac-{uuid.uuid4()}"
@@ -74,9 +83,9 @@ def test_existing_customer_purposes_return_only_base_fields(purpose: str) -> Non
     response = _query_customers(purpose)
 
     for field in BASE_FIELD_LABELS:
-        assert f"{field}:" in response
-    assert "jahresUmsatz:" not in response
-    assert "personalAnzahl:" not in response
+        assert _has_field(response, field)
+    assert not _has_field(response, "jahresUmsatz")
+    assert not _has_field(response, "personalAnzahl")
 
 
 @pytest.mark.access_control
@@ -93,5 +102,5 @@ def test_customer_sensitive_fields_are_scoped_to_their_purpose(
     """Each new purpose returns precisely its one additional customer field."""
     response = _query_customers(purpose)
 
-    assert f"{allowed_field}:" in response
-    assert f"{blocked_field}:" not in response
+    assert _has_field(response, allowed_field)
+    assert not _has_field(response, blocked_field)
