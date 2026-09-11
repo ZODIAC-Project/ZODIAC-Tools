@@ -1,20 +1,19 @@
-"""Integration tests for purpose-specific customer-field projection.
+"""End-to-end tests for purpose-specific customer-field projection.
 
-Run against the restricted RAG service.  When the service is not exposed on
-localhost, set RAG_SERVICE_URL to its reachable URL (for example via
-``kubectl port-forward service/rag-service 30110:30110 -n zodiac``).
+The test uses the same MCP chat path as the other RAG tests.  Each session is
+explicitly pinned to ``restricted_knowledgebase`` before it requests customer
+data.
 """
 
 from __future__ import annotations
 
-import os
-from typing import Any
+import uuid
 
 import pytest
 import requests
 
+from . import helper
 
-RAG_SERVICE_URL = os.getenv("RAG_SERVICE_URL", "http://127.0.0.1:30110").rstrip("/")
 QUERY = "Unternehmen Förderung"
 BASE_FIELD_LABELS = (
     "id",
@@ -30,36 +29,54 @@ BASE_FIELD_LABELS = (
 )
 
 
-def _query_customers(purpose: str) -> dict[str, Any]:
+def _query_customers(purpose: str) -> str:
+    """Query customers through MCP, using the restricted knowledge base."""
+    session_id = f"customer-field-pbac-{uuid.uuid4()}"
+    helper.set_knowledgebase_access(session_id, unrestricted=False)
+
     response = requests.post(
-        f"{RAG_SERVICE_URL}/collections/customers/query",
+        f"{helper.MCP_URL}/chat",
         json={
-            "query_texts": [QUERY],
-            "n_results": 3,
-            "purpose": purpose,
-            "include": ["documents", "metadatas"],
+            "message": (
+                "Rufe genau einmal das Tool search_knowledge_base mit "
+                f"query='{QUERY}', collection='customers', top_k=1 und "
+                f"purpose='{purpose}' auf. Rufe kein weiteres Tool auf. "
+                "Gib anschließend den vollständigen Inhalt des einen "
+                "zurückgegebenen Kundendatensatzes unverändert wieder."
+            ),
+            "session_id": session_id,
+            # ``search_knowledge_base`` is an MCP tool available to the
+            # administrative test client.  The purpose under test is passed
+            # to the tool itself above, where RAG applies field projection.
+            "purposes": ["admin"],
         },
-        timeout=15,
+        timeout=120,
     )
     assert response.status_code == 200, response.text
     payload = response.json()
-    assert payload["documents"] and payload["documents"][0], payload
-    return payload
+    search_calls = [
+        call for call in payload.get("tool_calls", [])
+        if call.get("name") == "search_knowledge_base"
+    ]
+    assert len(search_calls) == 1, payload.get("tool_calls", [])
+    arguments = search_calls[0].get("args", {})
+    assert arguments.get("collection") == "customers"
+    assert arguments.get("purpose") == purpose
+    assert arguments.get("query") == QUERY
+    assert payload.get("response", "").strip(), payload
+    return payload["response"]
 
 
 @pytest.mark.access_control
 @pytest.mark.parametrize("purpose", ["admin", "subsidy", "subsidy/eligibility"])
 def test_existing_customer_purposes_return_only_base_fields(purpose: str) -> None:
     """Existing purposes keep customer retrieval but never expose sensitive fields."""
-    payload = _query_customers(purpose)
+    response = _query_customers(purpose)
 
-    for document, metadata in zip(payload["documents"][0], payload["metadatas"][0]):
-        for field in BASE_FIELD_LABELS:
-            assert f"{field}:" in document
-        assert "jahresUmsatz:" not in document
-        assert "personalAnzahl:" not in document
-        assert "jahresUmsatz" not in metadata
-        assert "personalAnzahl" not in metadata
+    for field in BASE_FIELD_LABELS:
+        assert f"{field}:" in response
+    assert "jahresUmsatz:" not in response
+    assert "personalAnzahl:" not in response
 
 
 @pytest.mark.access_control
@@ -74,10 +91,7 @@ def test_customer_sensitive_fields_are_scoped_to_their_purpose(
     purpose: str, allowed_field: str, blocked_field: str
 ) -> None:
     """Each new purpose returns precisely its one additional customer field."""
-    payload = _query_customers(purpose)
+    response = _query_customers(purpose)
 
-    for document, metadata in zip(payload["documents"][0], payload["metadatas"][0]):
-        assert f"{allowed_field}:" in document
-        assert f"{blocked_field}:" not in document
-        assert allowed_field in metadata
-        assert blocked_field not in metadata
+    assert f"{allowed_field}:" in response
+    assert f"{blocked_field}:" not in response
