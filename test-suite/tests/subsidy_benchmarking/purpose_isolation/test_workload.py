@@ -25,7 +25,16 @@ def _log(branch: str, message: str) -> None:
     print(f"[{branch}] {message}")
 
 
-def create_agents(mcp: bool, vector: bool, input_topic: str, midway_topic: str, issue_topic: str, allowed: str, wildcard_purpose: str, agent_purpose_1: str = "query", agent_purpose_2: str = "advertisement", vector_purpose: str = "subsidy/eligibility") -> tuple[str, str]:
+def create_agents(mcp: bool, 
+                vector: bool, 
+                input_topic: str, 
+                midway_topic: str, 
+                issue_topic: str, 
+                allowed: str, 
+                wildcard_purpose: str, 
+                agent_purpose_1: str = "query", 
+                agent_purpose_2: str = "advertisement", 
+                vector_purpose: str = "subsidy") -> tuple[str, str]:
     # (RAG tool has purpose: ![query, knowledge, search, admin])
     if mcp == True:
         agent_id_1 = create_agent(
@@ -137,6 +146,7 @@ def workflow_no_fault_scenario(input_topic,
                                mcp, 
                                vector,
                                amount_messages,
+                               customer: dict,
                                iteration=1,
                                total_iterations=1):
     """This Branch is used when the random number is even.
@@ -173,7 +183,7 @@ def workflow_no_fault_scenario(input_topic,
         _log(branch, "Both agents exist and are healthy. Continue with the test scenario.")
         # Publish Message 
         _log(branch, f"Publishing message to input topic: {input_topic}. This message will be processed by Agent 1.")
-        payload = make_trigger_message()
+        payload = make_trigger_message(customer)
         publish_response = publish_message(input_topic, json.dumps(payload))
         assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
         _log(branch, f"Message published successfully: {publish_response}")
@@ -199,14 +209,28 @@ def workflow_no_fault_scenario(input_topic,
             f"Agent 2 did not call the Email Tool in its own session. "
             f"Captured messages: {email_calls}. Agent_id_2: {agent_id_2}"
         )
+        assert "[Name]" not in str(email_calls), (
+            f"Email enthält Platzhalter statt echter Kundendaten — "
+            f"kein Match unter Top-10 RAG-Ergebnissen: {email_calls}"
+        )
+        assert customer["fundingPlan"].split()[0] in str(email_calls)  # z.B. "Erneuerbare"
+        
         _log(branch, f"Agent 2 called the Email Tool in session {agent_id_2}. Tool Call Message(s): {email_calls}")
-
-        _log(branch, f"All test validation asserts passed. Iteration {iteration}/{total_iterations} was successful.")
+        _log(branch, f"Iteration {iteration}/{total_iterations} passed. All expected messages and tool calls were observed.")
     finally:
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
 
-def workflow_broker_fault_scenario(input_topic, midway_topic, issue_topic, allowed, wildcard_purpose, mcp, vector, iteration=1, total_iterations=1):
+def workflow_broker_fault_scenario(input_topic, 
+                                   midway_topic, 
+                                   issue_topic, 
+                                   customer,
+                                   allowed, 
+                                   wildcard_purpose, 
+                                   mcp, 
+                                   vector, 
+                                   iteration=1, 
+                                   total_iterations=1):
     """Fault injection on the broker level: agent 1 subscribes with the wrong purpose,
     so the published message should never arrive at it.
     Trigger this branch with the command:
@@ -245,7 +269,7 @@ def workflow_broker_fault_scenario(input_topic, midway_topic, issue_topic, allow
         _log(branch, "Both agents exist and are healthy.")
 
         _log(branch, f"Publishing message to input topic: {input_topic}")
-        payload = make_trigger_message()
+        payload = make_trigger_message(customer)
         publish_message(input_topic, json.dumps(payload))
         _log(branch, "Message published.")
 
@@ -258,7 +282,15 @@ def workflow_broker_fault_scenario(input_topic, midway_topic, issue_topic, allow
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
 
-def workflow_mcp_fault_scenario(input_topic, midway_topic, issue_topic, allowed, wildcard_purpose, vector, iteration=1, total_iterations=1):
+def workflow_mcp_fault_scenario(input_topic, 
+                                midway_topic, 
+                                issue_topic, 
+                                allowed, 
+                                wildcard_purpose, 
+                                vector, 
+                                customer: dict,
+                                iteration=1, 
+                                total_iterations=1):
     """Fault injection on the MCP level: agent 1 is created with purposes that are not
     allowed for the send_email tool call, so the tool call should not be made.
     Trigger this with the command:
@@ -293,7 +325,7 @@ def workflow_mcp_fault_scenario(input_topic, midway_topic, issue_topic, allowed,
         _log(branch, "Both agents exist and are healthy.")
 
         _log(branch, f"Publishing message to input topic: {input_topic}")
-        payload = make_trigger_message()
+        payload = make_trigger_message(customer)
         publish_response = publish_message(input_topic, json.dumps(payload))
         _log(branch, f"Message published: {publish_response}")
 
@@ -311,7 +343,16 @@ def workflow_mcp_fault_scenario(input_topic, midway_topic, issue_topic, allowed,
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
 
-def workflow_vector_fault_scenario(input_topic, midway_topic, issue_topic, allowed, wildcard_purpose, mcp, vector, iteration=1, total_iterations=1):
+def workflow_vector_fault_scenario(input_topic, 
+                                   midway_topic, 
+                                   issue_topic, 
+                                   allowed, 
+                                   wildcard_purpose, 
+                                   mcp, 
+                                   vector, 
+                                   customer: dict,
+                                   iteration=1, 
+                                   total_iterations=1):
     branch = "VECTOR-FAULT"
     print("")
     print("--------------------------------------------------------------")
@@ -342,7 +383,7 @@ def workflow_vector_fault_scenario(input_topic, midway_topic, issue_topic, allow
         _log(branch, "Both agents exist and are healthy.")
 
         _log(branch, f"Publishing message to input topic: {input_topic} (state=Leipzig, no matching knowledge expected)")
-        payload = make_trigger_message()
+        payload = make_trigger_message(customer)
         publish_response = publish_message(input_topic, json.dumps(payload))
         _log(branch, f"Message published: {publish_response}")
 
@@ -368,7 +409,16 @@ def workflow_vector_fault_scenario(input_topic, midway_topic, issue_topic, allow
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
 
-def workflow_passthrough_scenario(input_topic, midway_topic, issue_topic, allowed, wildcard_purpose, mcp, vector, iteration=1, total_iterations=1):
+def workflow_passthrough_scenario(input_topic, 
+                                  midway_topic, 
+                                  issue_topic, 
+                                  customer: dict, 
+                                  allowed, 
+                                  wildcard_purpose, 
+                                  mcp, 
+                                  vector, 
+                                  iteration=1, 
+                                  total_iterations=1):
     branch = "PASSTHROUGH"
     print("")
     print("--------------------------------------------------------------")
@@ -398,7 +448,7 @@ def workflow_passthrough_scenario(input_topic, midway_topic, issue_topic, allowe
         _log(branch, "Both agents exist and are healthy.")
 
         _log(branch, f"Publishing message to input topic: {input_topic} (state=admin, wildcard purpose)")
-        payload = make_trigger_message()
+        payload = make_trigger_message(customer)
         publish_response = publish_message(input_topic, json.dumps(payload))
         _log(branch, f"Message published: {publish_response}")
 
@@ -410,6 +460,11 @@ def workflow_passthrough_scenario(input_topic, midway_topic, issue_topic, allowe
         _log(branch, "Checking that send_email was called...")
         toolcall_exists, toolcall_message = toolcall_listen_for_tool("send_email")
         assert toolcall_exists, f"Expected send_email to be called. Tool Call Message: {toolcall_message}"
+        assert "[Name]" not in str(toolcall_message), (
+            f"Email enthält Platzhalter statt echter Kundendaten — "
+            f"kein Match unter Top-10 RAG-Ergebnissen: {toolcall_message}"
+        )
+        assert customer["fundingPlan"].split()[0] in str(toolcall_message)  # z.B. "Erneuerbare"
         _log(branch, f"send_email was called as expected. Tool Call Message: {toolcall_message}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
     finally:
@@ -417,7 +472,9 @@ def workflow_passthrough_scenario(input_topic, midway_topic, issue_topic, allowe
 
 
 
-def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_factory):
+def test_workload_purpose_isolation_scenario(request, 
+                                             topic_factory, 
+                                             purpose_factory):
     branch = "SETUP"
     broker_enabled = request.config.getoption("--broker-enabled")
     mcp_enabled = request.config.getoption("--mcp-enabled")
@@ -438,6 +495,8 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
     # purposes for broker
     allowed = purpose_factory("allowed")
     wildcard_purpose = "admin"
+    
+    customer = load_customers()
 
     print("")
     print("================================================================")
@@ -453,8 +512,11 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
         _log(branch, f"Entering NO-FAULT branch for {amount_messages} iteration(s).")
 
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_no_fault_scenario(
                 input_topic=input_topic,
+                customer=expected_customer,
                 midway_topic=midway_topic,
                 issue_topic=issue_topic,
                 allowed=allowed,
@@ -466,6 +528,7 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 amount_messages=amount_messages,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+
             )
         return # Exit the test after running the no-fault scenario
 
@@ -477,6 +540,8 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
         _log(branch, f"Selected NO-FAULT branch with PBAC config: Broker={broker}, MCP={mcp}, Vector={vector}")
 
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_no_fault_scenario(
                 input_topic=input_topic,
                 midway_topic=midway_topic,
@@ -490,6 +555,7 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 amount_messages=amount_messages,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+                customer=expected_customer
             )
         return
         
@@ -515,6 +581,8 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
     if selected_branch == "broker":
         _log(branch, f"Selected BROKER-FAULT branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_broker_fault_scenario(
                 input_topic=input_topic,
                 midway_topic=midway_topic,
@@ -525,10 +593,13 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 vector=vector,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+                customer=expected_customer
             )
     elif selected_branch == "mcp":
         _log(branch, f"Selected MCP-FAULT branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_mcp_fault_scenario(
                 input_topic=input_topic,
                 midway_topic=midway_topic,
@@ -538,10 +609,13 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 vector=vector,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+                customer=expected_customer
             )
     elif selected_branch == "vector":
         _log(branch, f"Selected VECTOR-FAULT branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_vector_fault_scenario(
                 input_topic=input_topic,
                 midway_topic=midway_topic,
@@ -552,10 +626,13 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 vector=vector,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+                customer=expected_customer
             )
     else:
         _log(branch, f"Selected PASSTHROUGH branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            
             workflow_passthrough_scenario(
                 input_topic=input_topic,
                 midway_topic=midway_topic,
@@ -566,4 +643,5 @@ def test_workload_purpose_isolation_scenario(request, topic_factory, purpose_fac
                 vector=vector,
                 iteration=i + 1,
                 total_iterations=amount_messages,
+                customer=expected_customer
             )
