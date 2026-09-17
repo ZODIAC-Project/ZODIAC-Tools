@@ -1,0 +1,5612 @@
+{
+  "level_1_minimal": [
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 7,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.23076923076923078,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.16666666666666666,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    }
+  ],
+  "level_2_zwei_felder": [
+    {
+      "query": "state: Schleswig-Holstein, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.3076923076923077,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen-Anhalt, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.25,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 10,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 10,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Rheinland-Pfalz, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hessen, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Schleswig-Holstein, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    }
+  ],
+  "level_3_voll": [
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.3076923076923077,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.25,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 8,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 7,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Weiterbildung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Tourismus",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 8,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Energieeffizienz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    }
+  ],
+  "level_4_erweitert": [
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.23076923076923078,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.16666666666666666,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 7,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 8,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, businessSector: Abschnitt Q - Gesundheits- und Sozialwesen",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.23076923076923078,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 8,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.25,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 10,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.16666666666666666,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, businessSector: Abschnitt M - Freiberufliche, wissenschaftliche und technische Dienstleistungen",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.25,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 4,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Weiterbildung, businessSector: Abschnitt P - Erziehung und Unterricht",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 5,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, businessSector: Abschnitt E - Wasserversorgung und Abfallentsorgung",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Tourismus, businessSector: Abschnitt I - Gastgewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, businessSector: Abschnitt H - Verkehr und Lagerei",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 6,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 10,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 6,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, businessSector: Abschnitt J - Information und Kommunikation",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Energieeffizienz, businessSector: Abschnitt C - Verarbeitendes Gewerbe",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    }
+  ],
+  "level_4b_kontrolle": [
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Flensburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Brandenburg an der Havel",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.3076923076923077,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Brandenburg an der Havel",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.38461538461538464,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Bremerhaven",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 8,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Braunschweig",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Nürnberg",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 7,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Köln",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Gera",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Berlin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Trier",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Stuttgart",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Chemnitz",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.08333333333333333,
+      "first_hit_rank": 9,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Rostock",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Frankfurt am Main",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Stuttgart",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Freier Beruf, fundingPlan: Gesundheitsinnovation, district: Kassel",
+      "hit_at_1": true,
+      "hit_at_k": true,
+      "recall_at_k": 0.46153846153846156,
+      "first_hit_rank": 1,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Freier Beruf",
+        "Gesundheitsinnovation"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Tourismus, district: Brandenburg an der Havel",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Rostock",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Tourismus, district: Dortmund",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Dessau-Roßlau",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Hamburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Brandenburg an der Havel",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 6,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Brandenburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: München",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Bremerhaven",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Stuttgart",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Baden-Württemberg",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Saarbrücken",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Chemnitz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Bremerhaven",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Tourismus, district: Augsburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Berlin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Mainz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Berlin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hessen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Wiesbaden",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Neunkirchen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Jena",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Braunschweig",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Forschung und Entwicklung, district: Halle (Saale)",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Forschung und Entwicklung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Tourismus, district: Jena",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bayern, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: München",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Hannover",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Brandenburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Brandenburg an der Havel",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.25,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Brandenburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Mainz",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.07692307692307693,
+      "first_hit_rank": 6,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Tourismus, district: Schwerin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Hannover",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Niedersachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Freiburg im Breisgau",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Flensburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Trier",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Niedersachsen, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Braunschweig",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Niedersachsen",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Tourismus, district: Neunkirchen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen, legalEntity: GmbH, fundingPlan: Weiterbildung, district: Dresden",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "GmbH",
+        "Weiterbildung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Tourismus, district: Dessau-Roßlau",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Kiel",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Hamburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Rheinland-Pfalz, legalEntity: GmbH, fundingPlan: Kreislaufwirtschaft, district: Mainz",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Rheinland-Pfalz",
+        "GmbH",
+        "Kreislaufwirtschaft"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Kassel",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hessen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Dresden",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Baden-Württemberg, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Freiburg im Breisgau",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.15384615384615385,
+      "first_hit_rank": 3,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Baden-Württemberg",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Tourismus, district: Hamburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Tourismus"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Nachhaltige Mobilität, district: Köln",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Nachhaltige Mobilität"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Greifswald",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Düsseldorf",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Sachsen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Dresden",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Saarland, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Neunkirchen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Saarland",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bayern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Nürnberg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bayern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Thüringen, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Erfurt",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Thüringen",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hessen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Frankfurt am Main",
+      "hit_at_1": false,
+      "hit_at_k": true,
+      "recall_at_k": 0.23076923076923078,
+      "first_hit_rank": 2,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hessen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Magdeburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Sachsen-Anhalt",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Kiel",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Schleswig-Holstein",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Bremen, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Bremen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Bremen",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Schleswig-Holstein, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Kiel",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Schleswig-Holstein",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Mecklenburg-Vorpommern, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Rostock",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Mecklenburg-Vorpommern",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Thüringen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Gera",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Thüringen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Bremen, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Bremerhaven",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Bremen",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Berlin, legalEntity: Handwerksbetrieb, fundingPlan: Erweiterung, district: Berlin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Berlin",
+        "Handwerksbetrieb",
+        "Erweiterung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Berlin, legalEntity: Industriebetrieb, fundingPlan: Erneuerbare Energien, district: Berlin",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Berlin",
+        "Industriebetrieb",
+        "Erneuerbare Energien"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Nordrhein-Westfalen, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Dortmund",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Nordrhein-Westfalen",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Hamburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.1231759259137748,
+      "combination": [
+        "Hamburg",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 13
+    },
+    {
+      "query": "state: Sachsen-Anhalt, legalEntity: Dienstleistungsunternehmen, fundingPlan: Digitalisierung, district: Magdeburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Sachsen-Anhalt",
+        "Dienstleistungsunternehmen",
+        "Digitalisierung"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Hamburg, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Hamburg",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Hamburg",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    },
+    {
+      "query": "state: Saarland, legalEntity: GmbH, fundingPlan: Energieeffizienz, district: Neunkirchen",
+      "hit_at_1": false,
+      "hit_at_k": false,
+      "recall_at_k": 0.0,
+      "first_hit_rank": null,
+      "random_baseline_hit_at_k": 0.11421044458364982,
+      "combination": [
+        "Saarland",
+        "GmbH",
+        "Energieeffizienz"
+      ],
+      "correct_count": 12
+    }
+  ]
+}

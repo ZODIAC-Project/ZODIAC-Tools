@@ -273,31 +273,19 @@ def test_vector_isolation(topic_factory, purpose_factory):
     and exercise the full MCP -> RAG path the way a real user would.
 
     - Enabled case:
-      1. Documents in the 'subsidies' collection carry the baseline purpose
-         'subsidy/discovery', not 'subsidy/eligibility' (that purpose is
-         only used by other collections, e.g. 'customers', 'state').
-      2. One agent is spawned to search 'subsidies' using the purpose
-         'subsidy/eligibility' — a purpose the subsidies documents don't
-         carry.
-      3. No subsidies documents should be returned, showing that a
-         mismatched purpose is correctly filtered out.
+        1. Customer records now expose field-level intended purposes via
+            attributeIntendedPurposes.
+        2. One agent is spawned to search 'customers' using the purpose
+            'subsidy/eligibility'.
+        3. The result should exclude fields that do not allow that purpose,
+            such as 'clientRole'.
     - Disabled case:
-      1. An agent is spawned to search 'subsidies' using the shared,
-         universally allowed purpose 'admin'.
-      2. Subsidies documents should be present in the result, showing that
-         the common baseline purpose bypasses the more specific isolation
-         boundary.
+        1. An agent is spawned to search 'customers' using the shared,
+            universally allowed purpose 'admin'.
+        2. The unrestricted result should include fields such as
+            'clientRole', showing that the common baseline purpose bypasses
+            the more specific isolation boundary.
     """
-
-    # A representative sample of document names known to exist in the
-    # 'subsidies' collection.
-    SUBSIDY_DOC_NAMES = {
-        "Bayerisches Handwerk Erweiterungsprogramm",
-        "Ingolstadt Gewerbeförderung Kleinstunternehmen",
-        "Bayern Gastgewerbe Modernisierungshilfe",
-        "Bundesweites Ausbildungsförderungsprogramm Handwerk",
-        "Optische Technologien & Lasertechnik BW",
-    }
 
     def validate_search_and_get_publish(
         messages: list,
@@ -330,8 +318,6 @@ def test_vector_isolation(topic_factory, purpose_factory):
     # Enabled case: purpose filtering is active
     ############
     print(f"Enabled case: purpose filtering is active")
-
-    wildcard_purpose = "admin"
 
     enabled_purpose = "subsidy/eligibility"  
 
@@ -372,10 +358,11 @@ def test_vector_isolation(topic_factory, purpose_factory):
     )
     print(f"(Enabled) Result for purpose '{enabled_purpose}': {result_enabled}")
 
-    found_subsidies = {name for name in SUBSIDY_DOC_NAMES if name in result_enabled}
-    assert not found_subsidies, (
-        f"(Enabled) Subsidies document(s) leaked into a '{enabled_purpose}' query "
-        f"they should not match: {found_subsidies}"
+    assert "attributeIntendedPurposes" in result_enabled, (
+        f"(Enabled) Expected the raw customer JSON to contain field purpose tags, got: {result_enabled}"
+    )
+    assert "clientRole" not in result_enabled, (
+        f"(Enabled) clientRole should be filtered out for '{enabled_purpose}', got: {result_enabled}"
     )
     ############
     # Disabled case: purpose filtering is inactive (shared baseline purpose)
@@ -417,7 +404,9 @@ def test_vector_isolation(topic_factory, purpose_factory):
     )
     print(f"(Disabled) Result for purpose '{wildcard_purpose}': {result_disabled}")
 
-    found_subsidies_disabled = {name for name in SUBSIDY_DOC_NAMES if name in result_disabled}
-    assert found_subsidies_disabled, (
-        f"(Disabled) Expected subsidies document(s) for purpose '{wildcard_purpose}', found none"
+    assert "attributeIntendedPurposes" in result_disabled, (
+        f"(Disabled) Expected the raw customer JSON to contain field purpose tags, got: {result_disabled}"
+    )
+    assert "clientRole" in result_disabled, (
+        f"(Disabled) clientRole should be present for '{wildcard_purpose}', got: {result_disabled}"
     )

@@ -1,6 +1,7 @@
 from logging import config
 import os
 import json
+from secrets import choice
 import requests
 import websockets
 import asyncio
@@ -19,6 +20,7 @@ TOOL_USE_WS = os.getenv("TOOL_USE_WS", "ws://130.149.158.133:30084/tool-use")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
 MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
+RAG_URL_UNRESTRICTED = os.getenv("RAG_URL", "http://localhost:30111")
 MESSAGE_TIMEOUT = 100
 
 DEFAULT_LLM_MODEL = os.getenv("DEFAULT_LLM_MODEL", None)
@@ -405,3 +407,34 @@ def check_agent_exists(agent_id):
     if agent_info is None:
         return False
     return True
+
+
+def pick_distinctive_customer(customers: list[dict]) -> dict:
+    from collections import Counter
+    key = lambda c: (c["fundingPlan"], c["personalAnzahl"])
+    combo_counts = Counter(key(c) for c in customers)
+    unique = [c for c in customers if combo_counts[key(c)] == 1]
+    if not unique:
+        raise ValueError(
+            "Kein Kunde mit eindeutiger (fundingPlan, personalAnzahl)-Kombination gefunden — "
+            "Trigger-Message müsste auf ein zusätzliches, distinktiveres Feld erweitert werden."
+        )
+    return choice(unique)
+
+def load_customers(n_results: int = 1000) -> list[dict]:
+    """Lädt alle Kunden über den RAG-Query-Endpoint. purpose='financial_audit' 
+    wird hier nur für den Fixture-Aufbau/Ground-Truth genutzt (liefert laut 
+    deinem curl-Test alle Felder unrestricted), nicht als Purpose für den 
+    eigentlichen Testablauf in workflow_*_scenario."""
+    response = requests.post(
+        f"{RAG_URL_UNRESTRICTED}/collections/customers/query",
+        json={
+            "query_texts": ["Kundendaten"],
+            "n_results": n_results,
+            "purpose": "financial_audit",
+            "include": ["documents"],
+        },
+    )
+    response.raise_for_status()
+    documents = response.json()["documents"][0]
+    return [json.loads(doc) for doc in documents]
