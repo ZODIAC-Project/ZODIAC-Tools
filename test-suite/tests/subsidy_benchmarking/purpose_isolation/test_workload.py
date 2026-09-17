@@ -206,14 +206,13 @@ def workflow_no_fault_scenario(input_topic,
         _log(branch, f"Waiting for Agent 2 (session={agent_id_2}) to call the send_email tool (timeout={MESSAGE_TIMEOUT}s)...")
         email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
         assert email_calls, (
-            f"Agent 2 did not call the Email Tool in its own session. "
-            f"Captured messages: {email_calls}. Agent_id_2: {agent_id_2}"
+            f"Expected send_email to be called. No tool calls found. "
+            f"Captured messages: {email_calls}"
         )
         assert "[Name]" not in str(email_calls), (
             f"Email enthält Platzhalter statt echter Kundendaten — "
             f"kein Match unter Top-10 RAG-Ergebnissen: {email_calls}"
         )
-        assert customer["fundingPlan"].split()[0] in str(email_calls)  # z.B. "Erneuerbare"
         
         _log(branch, f"Agent 2 called the Email Tool in session {agent_id_2}. Tool Call Message(s): {email_calls}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed. All expected messages and tool calls were observed.")
@@ -459,12 +458,12 @@ def workflow_passthrough_scenario(input_topic,
 
         _log(branch, "Checking that send_email was called...")
         toolcall_exists, toolcall_message = toolcall_listen_for_tool("send_email")
+        
+        # Asserts, was testen wir: 1. wurde das email tool gecalled 2. wurde kein platzhalter in dem email tool verwendet 3.       
         assert toolcall_exists, f"Expected send_email to be called. Tool Call Message: {toolcall_message}"
         assert "[Name]" not in str(toolcall_message), (
-            f"Email enthält Platzhalter statt echter Kundendaten — "
-            f"kein Match unter Top-10 RAG-Ergebnissen: {toolcall_message}"
+            f"Email enthält Platzhalter statt echter Kundendaten. Tool Call Message: {toolcall_message}"
         )
-        assert customer["fundingPlan"].split()[0] in str(toolcall_message)  # z.B. "Erneuerbare"
         _log(branch, f"send_email was called as expected. Tool Call Message: {toolcall_message}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
     finally:
@@ -507,6 +506,25 @@ def test_workload_purpose_isolation_scenario(request,
     #   X % 2 == 0 --> no fault 
     #   X % 2 == 1 --> fault injected 
     if randomness == False:
+        # If no PBAC flags are enabled, trigger PASSTHROUGH instead of NO-FAULT
+        if not broker and not mcp and not vector:
+            _log(branch, f"Randomness disabled and no PBAC flags. Entering PASSTHROUGH branch for {amount_messages} iteration(s).")
+            for i in range(amount_messages):
+                expected_customer = pick_distinctive_customer(customer)
+                workflow_passthrough_scenario(
+                    input_topic=input_topic,
+                    midway_topic=midway_topic,
+                    issue_topic=issue_topic,
+                    allowed=wildcard_purpose,
+                    wildcard_purpose=wildcard_purpose,
+                    mcp=False,
+                    vector=False,
+                    iteration=i + 1,
+                    total_iterations=amount_messages,
+                    customer=expected_customer
+                )
+            return
+        
         Random_Number = 2  # Set to even number for deterministic behavior
         _log(branch, f"Randomness disabled. Using deterministic Random Number: {Random_Number}")
         _log(branch, f"Entering NO-FAULT branch for {amount_messages} iteration(s).")

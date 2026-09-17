@@ -76,7 +76,6 @@ full flow succeeds]:::ok
 - Passthrough: all PBAC layers are disabled; the full workload runs as a plain success path.
 
 ## TODOs
-The no-fault path now randomizes PBAC activation/deactivation once per run when `--randomness=True` and no explicit fault branch is selected.
 
 ## Commands
 
@@ -110,6 +109,13 @@ Vector fault branch, repeated 1 time:
 uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
   --vector-enabled \
   --amount-messages=1 --randomness=True
+```
+
+Passthrough branch (all PBAC layers disabled), repeated 1 time:
+
+```sh
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
+  --amount-messages=1 --randomness=False
 ```
 
 Random branch selection, repeated 1 time:
