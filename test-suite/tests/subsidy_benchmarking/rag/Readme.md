@@ -35,8 +35,8 @@ uv run python test_rag.py
 - `companySize` (0 % homogen), `clientRole` (1,2 %), `district` (12,5 %) — variieren innerhalb der 80 Gruppen zu stark; eine Query mit einem beliebigen Gruppenwert würde andere, eigentlich korrekte Kandidaten aktiv aus der Suche heraushebeln.
 
 ## Zufalls-Baseline
-Da die 80 Gruppen unterschiedlich viele korrekte IDs enthalten (1 bis 13 von
-1000 Kunden), ist eine rohe Hit@10-Zahl allein nicht interpretierbar — eine
+Da die 80 Gruppen unterschiedlich viele korrekte IDs enthalten (von
+1000 Kunden), ist eine rohe Hit@10-Zahl allein nicht genug — eine
 Gruppe mit 13 Kandidaten hat allein durch Zufall eine Trefferchance von
 ~11–12 % bei `top_k=10`. Das Skript berechnet diese hypergeometrische
 Baseline pro Gruppe und zeigt zusätzlich **Delta = Hit@10 − Baseline** in der
