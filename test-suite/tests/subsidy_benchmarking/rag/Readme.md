@@ -62,4 +62,3 @@ level_4b_kontrolle         2.5%    13.8%       2.7%    0.055      11.9%    +1.9%
 - **Recall@10**: Anteil der korrekten IDs, die in den Top-10-Ergebnissen gefunden werden (für Gruppen mit mehreren korrekten IDs).
 - **MRR**: Mean Reciprocal Rank — der Durchschnitt der Kehrwerte der Ränge der korrekten IDs in den Top-10-Ergebnissen (für Gruppen mit mehreren korrekten IDs).(Kurz: je höher, desto besser; 1.0 = immer an erster Stelle, 0.5 = im Durchschnitt an zweiter Stelle, 0.1 = im Durchschnitt an zehnter Stelle).
 - **Baseline**: Erwartete Trefferquote bei rein zufälliger Auswahl von 10 IDs aus 1000 Kunden (hypergeometrische Verteilung, abhängig von der Anzahl korrekter IDs pro Gruppe). 
-- **Delta**: Hit@10 minus Baseline — zeigt, wie viel besser RAG im Vergleich zu reinem Raten abschneidet.
