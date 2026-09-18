@@ -88,16 +88,9 @@ def _cleanup_agents(branch: str, agent_id_1: str | None, agent_id_2: str | None)
         _log(branch, f"Deleted agent 2: {agent_id_2}")
 
 
-def _select_workload_branch(broker, broker_success, mcp, mcp_success, vector, vector_success, randomness):
-    explicit_branches = [
-        name for name, enabled in (
-            ("broker", broker), ("broker-success", broker_success),
-            ("mcp", mcp), ("mcp-success", mcp_success),
-            ("vector", vector), ("vector-success", vector_success),
-        ) if enabled
-    ]
-    if explicit_branches:
-        branch_name = explicit_branches[0]
+def _select_workload_branch(forced_branch: str | None, randomness: bool) -> tuple[str, bool, bool, bool]:
+    if forced_branch:
+        branch_name = forced_branch
     elif randomness:
         branch_name = choice([
             "no-fault", "passthrough",
@@ -108,6 +101,8 @@ def _select_workload_branch(broker, broker_success, mcp, mcp_success, vector, ve
     else:
         branch_name = "passthrough"
 
+    # no-fault picks its own random PBAC layer combo separately (see
+    # _select_no_fault_pbac_layers); broker/mcp/vector here are placeholders.
     required_flags = {
         "broker": (True, False, False),
         "broker-success": (True, False, False),
@@ -116,11 +111,10 @@ def _select_workload_branch(broker, broker_success, mcp, mcp_success, vector, ve
         "vector": (False, False, True),
         "vector-success": (False, False, True),
         "passthrough": (False, False, False),
-        "no-fault": (broker, mcp, vector),
+        "no-fault": (False, False, False),
     }
     resolved_broker, resolved_mcp, resolved_vector = required_flags[branch_name]
     return branch_name, resolved_broker, resolved_mcp, resolved_vector
-
 
 def _select_no_fault_pbac_layers() -> tuple[bool, bool, bool]:
     return choice([
@@ -683,240 +677,99 @@ def test_workload_purpose_isolation_scenario(request,
                                              topic_factory, 
                                              purpose_factory):
     branch = "SETUP"
-    broker_enabled = request.config.getoption("--broker-enabled")
-    broker_success_enabled = request.config.getoption("--broker-success-enabled")
-    mcp_enabled = request.config.getoption("--mcp-enabled")
-    mcp_success_enabled = request.config.getoption("--mcp-success-enabled")
-    vector_enabled = request.config.getoption("--vector-enabled")
-    vector_success_enabled = request.config.getoption("--vector-success-enabled")
+    forced_branch = request.config.getoption("--branch")
     amount_messages = request.config.getoption("--amount-messages")
     randomness = request.config.getoption("--randomness").lower() == "true"
 
-    # Broker on/of, MCP on/off, Vector on/off
-    broker = broker_enabled
-    mcp = mcp_enabled
-    vector = vector_enabled
-
-    amount_messages = amount_messages
-    
     input_topic = topic_factory("input")
     midway_topic = topic_factory("midway")
     issue_topic = topic_factory("issue")
     allowed = purpose_factory("allowed")
     wildcard_purpose = "admin"
-    
+
     customer = load_customers()
 
     print("")
     print("================================================================")
-    _log(branch, f"Broker={broker}, MCP={mcp}, Vector={vector}, Amount of Messages={amount_messages}, Randomness={randomness}")
+    _log(branch, f"Forced Branch={forced_branch}, Amount of Messages={amount_messages}, Randomness={randomness}")
     _log(branch, f"Topics: input={input_topic}, midway={midway_topic}, issue={issue_topic}")
 
-    # Generate Random number X per message.
-    #   X % 2 == 0 --> no fault 
-    #   X % 2 == 1 --> fault injected 
-    if randomness == False:
-        # If no PBAC flags are enabled, trigger PASSTHROUGH instead of NO-FAULT
-        if not broker and not mcp and not vector:
-            _log(branch, f"Randomness disabled and no PBAC flags. Entering PASSTHROUGH branch for {amount_messages} iteration(s).")
-            for i in range(amount_messages):
-                expected_customer = pick_distinctive_customer(customer)
-                workflow_passthrough_scenario(
-                    input_topic=input_topic,
-                    midway_topic=midway_topic,
-                    issue_topic=issue_topic,
-                    allowed=wildcard_purpose,
-                    wildcard_purpose=wildcard_purpose,
-                    mcp=False,
-                    vector=False,
-                    iteration=i + 1,
-                    total_iterations=amount_messages,
-                    customer=expected_customer
-                )
-            return
-        
-        Random_Number = 2  # Set to even number for deterministic behavior
-        _log(branch, f"Randomness disabled. Using deterministic Random Number: {Random_Number}")
-        _log(branch, f"Entering NO-FAULT branch for {amount_messages} iteration(s).")
-
-        for i in range(amount_messages):
-            # TODO: This is not controlled/asserted for at the moment 
-            expected_customer = pick_distinctive_customer(customer)
-            
-            workflow_no_fault_scenario(
-                input_topic=input_topic,
-                customer=expected_customer,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                Random_Number=Random_Number,
-                broker=broker,
-                mcp=mcp,
-                vector=vector,
-                amount_messages=amount_messages,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-
-            )
-        return 
-
-    selected_branch, broker, mcp, vector = _select_workload_branch( broker, broker_success_enabled, mcp, mcp_success_enabled, vector, vector_success_enabled, randomness
-    )
-    _log(branch, f"Randomness enabled. Selected branch: {selected_branch} (Broker={broker}, MCP={mcp}, Vector={vector})")
+    selected_branch, broker, mcp, vector = _select_workload_branch(forced_branch, randomness)
+    _log(branch, f"Selected branch: {selected_branch} (Broker={broker}, MCP={mcp}, Vector={vector})")
 
     if selected_branch == "no-fault":
         broker, mcp, vector = _select_no_fault_pbac_layers()
         _log(branch, f"Selected NO-FAULT branch with PBAC config: Broker={broker}, MCP={mcp}, Vector={vector}")
-
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
-            
             workflow_no_fault_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                Random_Number=randint(1, 100),
-                broker=broker,
-                mcp=mcp,
-                vector=vector,
-                amount_messages=amount_messages,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, Random_Number=randint(1, 100),
+                broker=broker, mcp=mcp, vector=vector, amount_messages=amount_messages,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
         return
-        
-    #######################################
-    # states with fault injection from here on. 
-    # If the broker is on we are going to fail when the braker is used the first time, since the messages are not goingin to arrive at the agents that are supposed to receive them.
-    #       we test this by listening to the agent history of the agent that is suppose to get the message.
-    # If MCP is on we are going to fail when a tool is supposed to be used but is not used in the periode of a timeout. 
-    #       We test this by listening to the tool call websocket 
-    # If RAG is on we are going to fail when the search knowlege base tool is called. Ther still no clear way of determining if the RAG call failed withput looking at the response manually.
-    #       In the case of filtration, RAG gives back a empty list. In our test case, we could just let the RAG tool throw an error if the result is empty since we know what should come back. This would be an issue in the real usecase, since we could not distinguish between there beeing no result and RAG using the wrong purpose. on the other hand, it does not really matter at the moment. 
-    # 
-    # 
 
-    # If Broker on:
-    #   reserve the needed topic with the purposes
-    #   THIS MEANS FAULT INNJECTION ON THE BROKER LEVEL
-    #   CHANGE THE SUBSCRIPTION PURPOSE TO A WRONG ONE ON PURPOSE 
-    #   TODO: Switch to purpose on publish and then publish here with a differend purpose than the one the agent is subscribed to. This will be a more realistic test case. 
-    #
-    #   Trigger this branch with the command: 
-    #   uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-enabled --mcp-enabled --vector-enabled --amount-messages=1 --randomness=True
     if selected_branch == "broker":
         _log(branch, f"Selected BROKER-FAULT branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
-            
             workflow_broker_fault_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                mcp=mcp,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
-            )
-    elif selected_branch == "mcp":
-        _log(branch, f"Selected MCP-FAULT branch for {amount_messages} iteration(s).")
-        for i in range(amount_messages):
-            expected_customer = pick_distinctive_customer(customer)
-            
-            workflow_mcp_fault_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
-            )
-    elif selected_branch == "vector":
-        _log(branch, f"Selected VECTOR-FAULT branch for {amount_messages} iteration(s).")
-        for i in range(amount_messages):
-            expected_customer = pick_distinctive_customer(customer)
-            
-            workflow_vector_fault_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                mcp=mcp,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, mcp=mcp, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
     elif selected_branch == "broker-success":
         _log(branch, f"Selected BROKER-SUCCESS branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
             workflow_broker_success_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
+            )
+    elif selected_branch == "mcp":
+        _log(branch, f"Selected MCP-FAULT branch for {amount_messages} iteration(s).")
+        for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            workflow_mcp_fault_scenario(
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
     elif selected_branch == "mcp-success":
         _log(branch, f"Selected MCP-SUCCESS branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
             workflow_mcp_success_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
+            )
+    elif selected_branch == "vector":
+        _log(branch, f"Selected VECTOR-FAULT branch for {amount_messages} iteration(s).")
+        for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            workflow_vector_fault_scenario(
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, mcp=mcp, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
     elif selected_branch == "vector-success":
         _log(branch, f"Selected VECTOR-SUCCESS branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
             workflow_vector_success_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=allowed,
-                wildcard_purpose=wildcard_purpose,
-                mcp=mcp,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=allowed, wildcard_purpose=wildcard_purpose, mcp=mcp,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
     else:
         _log(branch, f"Selected PASSTHROUGH branch for {amount_messages} iteration(s).")
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
-            
             workflow_passthrough_scenario(
-                input_topic=input_topic,
-                midway_topic=midway_topic,
-                issue_topic=issue_topic,
-                allowed=wildcard_purpose,
-                wildcard_purpose=wildcard_purpose,
-                mcp=mcp,
-                vector=vector,
-                iteration=i + 1,
-                total_iterations=amount_messages,
-                customer=expected_customer
+                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                allowed=wildcard_purpose, wildcard_purpose=wildcard_purpose, mcp=mcp, vector=vector,
+                iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )

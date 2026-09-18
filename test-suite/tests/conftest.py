@@ -67,18 +67,6 @@ def pytest_addoption(parser):
         help="Path to YAML file with run-specific test parameters",
     )
     parser.addoption(
-        "--broker-enabled", action="store_true", default=False,
-        help="Enable broker purpose filtering for workload tests",
-    )
-    parser.addoption(
-        "--mcp-enabled", action="store_true", default=False,
-        help="Enable MCP purpose filtering for workload tests",
-    )
-    parser.addoption(
-        "--vector-enabled", action="store_true", default=False,
-        help="Enable vector purpose filtering for workload tests",
-    )
-    parser.addoption(
         "--amount-messages", action="store", type=int, default=1,
         help="Number of messages to simulate in workload tests",
     )
@@ -95,15 +83,13 @@ def pytest_addoption(parser):
         help="Number of full-pipeline measurements per knowledge base.",
     )
     parser.addoption(
-        "--broker-success-enabled", action="store_true", default=False,
-        help="Force the broker purpose-filter SUCCESS branch (correct subscription purpose) for workload tests",
-    )
-    parser.addoption(
-        "--mcp-success-enabled", action="store_true", default=False,
-        help="Force the MCP purpose-filter SUCCESS branch (correct tool-call purpose) for workload tests",
-    )
-    parser.addoption(
-        "--vector-success-enabled", action="store_true", default=False,
-        help="Force the vector purpose-filter SUCCESS branch (correct RAG purpose) for workload tests",
+        "--branch", action="store", default=None,
+        choices=[
+            "no-fault", "passthrough",
+            "broker", "broker-success",
+            "mcp", "mcp-success",
+            "vector", "vector-success",
+        ],
+        help="Force a specific workload branch. If unset: random branch when --randomness=True, else passthrough.",
     )
     
