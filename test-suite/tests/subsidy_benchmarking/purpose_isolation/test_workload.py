@@ -327,9 +327,9 @@ def workflow_mcp_fault_scenario(input_topic,
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
 
         _log(branch, "Checking that send_email was NOT called by Agent1...")
-        toolcall_exists, toolcall_message = toolcall_listen_for_tool_and_word("send_email", "Agent1")
-        assert not toolcall_exists, f"Tool call was made with wrong purpose. This is unexpected. Tool Call Message: {toolcall_message}"
-        _log(branch, f"send_email was correctly not called. This is expected. Tool Call Message: {toolcall_message}")
+        email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
+        assert not email_calls, f"Tool call was made with wrong purpose. This is unexpected. Tool Call Message: {email_calls}"
+        _log(branch, f"send_email was correctly not called. This is expected. Tool Call Message: {email_calls}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
     finally:
         _cleanup_agents(branch, agent_id_1, agent_id_2)
@@ -385,9 +385,9 @@ def workflow_vector_fault_scenario(input_topic,
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
 
         _log(branch, "Checking that search_knowledge_base was called...")
-        toolcall_exists, toolcall_message = toolcall_listen_for_tool("search_knowledge_base")
-        assert toolcall_exists, f"Expected search_knowledge_base to be called. Tool Call Message: {toolcall_message}"
-        _log(branch, f"search_knowledge_base was called. Tool Call Message: {toolcall_message}")
+        rag_calls = wait_for_tool_call("search_knowledge_base", timeout=MESSAGE_TIMEOUT)
+        assert rag_calls, f"Expected search_knowledge_base to be called. Tool Call Message: {rag_calls}"
+        _log(branch, f"search_knowledge_base was called. Tool Call Message: {rag_calls}")
 
         _log(branch, f"Waiting for ACCESS_DENIED_PURPOSE_ISSUE on issue topic: {issue_topic} (timeout={MESSAGE_TIMEOUT}s)...")
         issue_message = listen_to_a_mqtt_topic(issue_topic, timeout=MESSAGE_TIMEOUT)
@@ -531,9 +531,9 @@ def workflow_mcp_success_scenario(input_topic,
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
 
         _log(branch, "Checking that send_email WAS called by Agent2...")
-        toolcall_exists, toolcall_message = toolcall_listen_for_tool_and_word("send_email", "Agent1")
-        assert toolcall_exists, f"Expected send_email to be called with correct purpose. Tool Call Message: {toolcall_message}"
-        _log(branch, f"send_email was correctly called. This is expected. Tool Call Message: {toolcall_message}")
+        email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
+        assert email_calls, f"Expected send_email to be called with correct purpose. Tool Call Message: {email_calls}"
+        _log(branch, f"send_email was correctly called. This is expected. Tool Call Message: {email_calls}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
     finally:
         _cleanup_agents(branch, agent_id_1, agent_id_2)
@@ -594,9 +594,9 @@ def workflow_vector_success_scenario(input_topic,
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
 
         _log(branch, "Checking that search_knowledge_base was called...")
-        toolcall_exists, toolcall_message = toolcall_listen_for_tool("search_knowledge_base")
-        assert toolcall_exists, f"Expected search_knowledge_base to be called. Tool Call Message: {toolcall_message}"
-        _log(branch, f"search_knowledge_base was called. Tool Call Message: {toolcall_message}")
+        rag_calls = wait_for_tool_call("search_knowledge_base", timeout=MESSAGE_TIMEOUT)
+        assert rag_calls, f"Expected search_knowledge_base to be called. Tool Call Message: {rag_calls}"
+        _log(branch, f"search_knowledge_base was called. Tool Call Message: {rag_calls}")
 
         _log(branch, "Checking that send_email was called with real customer data (no ACCESS_DENIED)...")
         email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
@@ -659,14 +659,12 @@ def workflow_passthrough_scenario(input_topic,
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
 
         _log(branch, "Checking that send_email was called...")
-        toolcall_exists, toolcall_message = toolcall_listen_for_tool("send_email")
-        
-        # Asserts, was testen wir: 1. wurde das email tool gecalled 2. wurde kein platzhalter in dem email tool verwendet 3.       
-        assert toolcall_exists, f"Expected send_email to be called. Tool Call Message: {toolcall_message}"
-        assert "[Name]" not in str(toolcall_message), (
-            f"Email enthält Platzhalter statt echter Kundendaten. Tool Call Message: {toolcall_message}"
+        email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
+        assert email_calls, f"Expected send_email to be called. Tool Call Message: {email_calls}"
+        assert "[Name]" not in str(email_calls), (
+            f"Email enthält Platzhalter statt echter Kundendaten. Tool Call Message: {email_calls}"
         )
-        _log(branch, f"send_email was called as expected. Tool Call Message: {toolcall_message}")
+        _log(branch, f"send_email was called as expected. Tool Call Message: {email_calls}")
         _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
     finally:
         _cleanup_agents(branch, agent_id_1, agent_id_2)
