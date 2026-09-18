@@ -94,4 +94,16 @@ def pytest_addoption(parser):
         "--rag-latency-repeats", action="store", type=int, default=3,
         help="Number of full-pipeline measurements per knowledge base.",
     )
+    parser.addoption(
+        "--broker-success-enabled", action="store_true", default=False,
+        help="Force the broker purpose-filter SUCCESS branch (correct subscription purpose) for workload tests",
+    )
+    parser.addoption(
+        "--mcp-success-enabled", action="store_true", default=False,
+        help="Force the MCP purpose-filter SUCCESS branch (correct tool-call purpose) for workload tests",
+    )
+    parser.addoption(
+        "--vector-success-enabled", action="store_true", default=False,
+        help="Force the vector purpose-filter SUCCESS branch (correct RAG purpose) for workload tests",
+    )
     

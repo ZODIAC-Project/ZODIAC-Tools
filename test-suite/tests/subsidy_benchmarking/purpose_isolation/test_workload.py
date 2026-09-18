@@ -24,6 +24,20 @@ def _log(branch: str, message: str) -> None:
     which branch/scenario it came from."""
     print(f"[{branch}] {message}")
 
+def disable_purpose_awareness(agent_id: str) -> None:
+    """Turn of purpose awareness in the mcp-client by calling its corresponding endpoint for a session. """
+    try: 
+        response = requests.post(
+            f"{MCP_URL}/disable-purpose",
+            json={"session_id": agent_id},
+        )
+        response.raise_for_status()
+        result = response.json()
+        assert result.get("status") == "success", (
+            f"Failed to disable purpose awareness for agent {agent_id}: {result}"
+        )
+    except requests.RequestException as e:
+        print(f"Error occurred while disabling purpose awareness for agent {agent_id}: {e}")
 
 def create_agents(mcp: bool, 
                 vector: bool, 
@@ -36,44 +50,33 @@ def create_agents(mcp: bool,
                 agent_purpose_2: str = "advertisement", 
                 vector_purpose: str = "subsidy") -> tuple[str, str]:
     # (RAG tool has purpose: ![query, knowledge, search, admin])
-    if mcp == True:
-        agent_id_1 = create_agent(
-            runOnce=False,
-            text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
-            purpose=agent_purpose_1,
-            memoryWindow=5,
-            listenTopic=input_topic,
-        )
-    else:
-        agent_id_1 = create_agent(
-            runOnce=False,
-            text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
-            purpose=wildcard_purpose,
-            memoryWindow=5,
-            listenTopic=input_topic,
-        )
-
+    # Agents always get their real (correct or intentionally wrong) purpose.
+    # When mcp=False, purpose-awareness is explicitly disabled afterwards via
+    # disable_purpose_awareness()
+    agent_id_1 = create_agent(
+        runOnce=False,
+        text=Agent_1_task(midway_topic=midway_topic, allowed_purpose=allowed, issue_topic=issue_topic, vektor_purpose=vector_purpose),
+        purpose=agent_purpose_1,
+        memoryWindow=5,
+        listenTopic=input_topic,
+    )
+    if not mcp:
+        disable_purpose_awareness(agent_id_1)
+        
     set_knowledgebase_access(agent_id_1, unrestricted=not vector)
 
     # (Email tool has purpose: ![advertisement, external, admin])
-    if mcp == True:
-        agent_id_2 = create_agent(
-            runOnce=False,
-            text=Agent_2_task(allowed_purpose=allowed, issue_topic=issue_topic),
-            purpose=agent_purpose_2,
-            memoryWindow=5,
-            listenTopic=midway_topic,
-        )
-    else:
-        agent_id_2 = create_agent(
-            runOnce=False,
-            text=Agent_2_task(allowed_purpose=allowed, issue_topic=issue_topic),
-            purpose=wildcard_purpose,
-            memoryWindow=5,
-            listenTopic=midway_topic,
-        )
+    agent_id_2 = create_agent(
+        runOnce=False,
+        text=Agent_2_task(allowed_purpose=allowed, issue_topic=issue_topic),
+        purpose=agent_purpose_2,
+        memoryWindow=5,
+        listenTopic=midway_topic,
+    )
+    if not mcp:
+        disable_purpose_awareness(agent_id_2)
+        
     return agent_id_1, agent_id_2
-
 
 def _cleanup_agents(branch: str, agent_id_1: str | None, agent_id_2: str | None) -> None:
     _log(branch, f"Cleaning up agents (agent_id_1={agent_id_1}, agent_id_2={agent_id_2})...")
@@ -85,39 +88,35 @@ def _cleanup_agents(branch: str, agent_id_1: str | None, agent_id_2: str | None)
         _log(branch, f"Deleted agent 2: {agent_id_2}")
 
 
-def _select_workload_branch(broker: bool, mcp: bool, vector: bool, randomness: bool) -> tuple[str, bool, bool, bool]:
-    """Return the branch to run AND the broker/mcp/vector flags that branch
-    needs in order for create_agents() to actually apply its fault-injection
-    purposes. Picking a branch name alone is not enough: create_agents()
-    only honors agent_purpose_1 for Agent 1 when mcp=True, and only honors
-    vector_purpose when vector=True. If those don't line up with the chosen
-    branch, the fault never gets applied and the branch's assertions either
-    fail (message arrives when it shouldn't) or hang until MESSAGE_TIMEOUT
-    (expected denial never happens).
-    """
+def _select_workload_branch(broker, broker_success, mcp, mcp_success, vector, vector_success, randomness):
     explicit_branches = [
-        branch_name
-        for branch_name, enabled in (
-            ("broker", broker),
-            ("mcp", mcp),
-            ("vector", vector),
-        )
-        if enabled
+        name for name, enabled in (
+            ("broker", broker), ("broker-success", broker_success),
+            ("mcp", mcp), ("mcp-success", mcp_success),
+            ("vector", vector), ("vector-success", vector_success),
+        ) if enabled
     ]
     if explicit_branches:
         branch_name = explicit_branches[0]
     elif randomness:
-        branch_name = choice(["no-fault", "broker", "mcp", "vector", "passthrough"])
+        branch_name = choice([
+            "no-fault", "passthrough",
+            "broker", "broker-success",
+            "mcp", "mcp-success",
+            "vector", "vector-success",
+        ])
     else:
         branch_name = "passthrough"
 
-    # Flags required for each branch's fault injection to actually take effect.
     required_flags = {
-        "broker": (True, True, vector),        # needs mcp=True so agent_purpose_1 ("wrong_purpose") is honored
-        "mcp": (False, True, vector),           # workflow_mcp_fault_scenario forces mcp=True itself either way
-        "vector": (False, mcp, True),           # needs vector=True so vector_purpose ("Leipzig") is honored
-        "passthrough": (False, False, False),   # needs all PBAC layers off
-        "no-fault": (broker, mcp, vector),      # actual flags picked separately by _select_no_fault_pbac_layers
+        "broker": (True, False, False),
+        "broker-success": (True, False, False),
+        "mcp": (False, True, False),
+        "mcp-success": (False, True, False),
+        "vector": (False, False, True),
+        "vector-success": (False, False, True),
+        "passthrough": (False, False, False),
+        "no-fault": (broker, mcp, vector),
     }
     resolved_broker, resolved_mcp, resolved_vector = required_flags[branch_name]
     return branch_name, resolved_broker, resolved_mcp, resolved_vector
@@ -407,6 +406,215 @@ def workflow_vector_fault_scenario(input_topic,
     finally:
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
+### Success scenarios
+def workflow_broker_success_scenario(input_topic,
+                                     midway_topic,
+                                     issue_topic,
+                                     customer,
+                                     allowed,
+                                     wildcard_purpose,
+                                     vector,
+                                     iteration=1,
+                                     total_iterations=1):
+    """Gegenstück zu workflow_broker_fault_scenario: Agent 1 subscribt mit
+    einem im aip enthaltenen (korrekten) Purpose -> die Nachricht soll
+    ankommen und der volle Flow bis send_email durchlaufen.
+    Trigger manuell mit:
+    uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-success-enabled --amount-messages=1 --randomness=True
+    """
+    branch = "BROKER-SUCCESS"
+    print("")
+    print("--------------------------------------------------------------")
+    _log(branch, f"Starting iteration {iteration}/{total_iterations}")
+    _log(branch, f"Config: Vector={vector}. Expecting Agent 1 to RECEIVE the message (correct subscription purpose).")
+
+    agent_id_1: str | None = None
+    agent_id_2: str | None = None
+    try:
+        _log(branch, f"Reserving input topic: {input_topic}")
+        reserve_topic(input_topic, aip=[allowed, wildcard_purpose, "query", "advertisement"])
+        reserve_topic(midway_topic, aip=[allowed, wildcard_purpose, "advertisement", "admin"])
+
+        _log(branch, "Creating Agent 1 (purpose=query) and Agent 2 (purpose=advertisement), both mcp=True...")
+        agent_id_1, agent_id_2 = create_agents(
+            mcp=True,
+            vector=vector,
+            input_topic=input_topic,
+            midway_topic=midway_topic,
+            issue_topic=issue_topic,
+            allowed=allowed,
+            wildcard_purpose=wildcard_purpose,
+            agent_purpose_1="query",
+            agent_purpose_2="advertisement",
+        )
+        _log(branch, f"Agents created: agent_id_1={agent_id_1}, agent_id_2={agent_id_2}")
+
+        _log(branch, "Checking if both agents exist and are healthy...")
+        assert check_agent_exists(agent_id_1), f"Agent 1 with ID {agent_id_1} does not exist."
+        time.sleep(2)
+        assert check_agent_exists(agent_id_2), f"Agent 2 with ID {agent_id_2} does not exist."
+        _log(branch, "Both agents exist and are healthy.")
+
+        _log(branch, f"Publishing message to input topic: {input_topic}")
+        payload = make_trigger_message(customer)
+        publish_response = publish_message(input_topic, json.dumps(payload))
+        assert publish_response["status"] == "success", f"Failed to publish: {publish_response}"
+        _log(branch, f"Message published successfully: {publish_response}")
+
+        _log(branch, f"Waiting for Agent 1 (id={agent_id_1}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
+        _log(branch, f"Agent 1 received a message. This is expected. Agent History: {agent_history_1}")
+
+        _log(branch, f"Waiting for Agent 2 (id={agent_id_2}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_2 = get_agent_history(agent_id_2, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_2) > 0, f" No message was received by Agent 2. Agent History: {agent_history_2}"
+        _log(branch, f"Agent 2 received a message. Agent History: {agent_history_2}")
+
+        _log(branch, "Checking that send_email was called...")
+        email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
+        assert email_calls, f"Expected send_email to be called. Captured messages: {email_calls}"
+        assert "[Name]" not in str(email_calls), (
+            f"Email enthält Platzhalter statt echter Kundendaten: {email_calls}"
+        )
+        _log(branch, f"send_email was called as expected. Tool Call Message(s): {email_calls}")
+        _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
+    finally:
+        _cleanup_agents(branch, agent_id_1, agent_id_2)
+
+
+def workflow_mcp_success_scenario(input_topic,
+                                  midway_topic,
+                                  issue_topic,
+                                  allowed,
+                                  wildcard_purpose,
+                                  vector,
+                                  customer: dict,
+                                  iteration=1,
+                                  total_iterations=1):
+    """Gegenstück zu workflow_mcp_fault_scenario: Agenten nutzen ihren
+    korrekten Purpose (mcp=True, purpose-awareness bleibt an) -> send_email
+    soll aufgerufen werden.
+    Trigger manuell mit:
+    uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --mcp-success-enabled --amount-messages=1 --randomness=True
+    """
+    branch = "MCP-SUCCESS"
+    print("")
+    print("--------------------------------------------------------------")
+    _log(branch, f"Starting iteration {iteration}/{total_iterations}")
+    _log(branch, f"Config: Vector={vector}. Expecting send_email to BE called (agents created with allowed purposes, purpose-awareness on).")
+
+    agent_id_1: str | None = None
+    agent_id_2: str | None = None
+    try:
+        _log(branch, "Creating Agent 1 (purpose=query) and Agent 2 (purpose=advertisement), mcp=True...")
+        agent_id_1, agent_id_2 = create_agents(
+            mcp=True,
+            vector=vector,
+            input_topic=input_topic,
+            midway_topic=midway_topic,
+            issue_topic=issue_topic,
+            allowed=allowed,
+            wildcard_purpose=wildcard_purpose,
+            agent_purpose_1="query",
+            agent_purpose_2="advertisement",
+        )
+        _log(branch, f"Agents created: agent_id_1={agent_id_1}, agent_id_2={agent_id_2}")
+
+        _log(branch, "Checking if both agents exist and are healthy...")
+        assert check_agent_exists(agent_id_1), f"Agent 1 with ID {agent_id_1} does not exist."
+        assert check_agent_exists(agent_id_2), f"Agent 2 with ID {agent_id_2} does not exist."
+        _log(branch, "Both agents exist and are healthy.")
+
+        _log(branch, f"Publishing message to input topic: {input_topic}")
+        payload = make_trigger_message(customer)
+        publish_response = publish_message(input_topic, json.dumps(payload))
+        _log(branch, f"Message published: {publish_response}")
+
+        _log(branch, f"Waiting for Agent 1 (id={agent_id_1}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
+        _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
+
+        _log(branch, "Checking that send_email WAS called by Agent2...")
+        toolcall_exists, toolcall_message = toolcall_listen_for_tool_and_word("send_email", "Agent1")
+        assert toolcall_exists, f"Expected send_email to be called with correct purpose. Tool Call Message: {toolcall_message}"
+        _log(branch, f"send_email was correctly called. This is expected. Tool Call Message: {toolcall_message}")
+        _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
+    finally:
+        _cleanup_agents(branch, agent_id_1, agent_id_2)
+
+
+def workflow_vector_success_scenario(input_topic,
+                                     midway_topic,
+                                     issue_topic,
+                                     allowed,
+                                     wildcard_purpose,
+                                     mcp,
+                                     customer: dict,
+                                     iteration=1,
+                                     total_iterations=1):
+    """Gegenstück zu workflow_vector_fault_scenario: vector_purpose passt zu
+    den echten Daten (Default "subsidy" statt "Leipzig") -> RAG liefert
+    Treffer, kein ACCESS_DENIED_PURPOSE_ISSUE auf issue_topic.
+    Trigger manuell mit:
+    uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --vector-success-enabled --amount-messages=1 --randomness=True
+    """
+    branch = "VECTOR-SUCCESS"
+    print("")
+    print("--------------------------------------------------------------")
+    _log(branch, f"Starting iteration {iteration}/{total_iterations}")
+    _log(branch, f"Config: MCP={mcp}. Expecting search_knowledge_base to succeed for the correct vector_purpose.")
+
+    agent_id_1: str | None = None
+    agent_id_2: str | None = None
+    try:
+        _log(branch, "Creating Agent 1 and Agent 2 (both using wildcard purpose for broker, vector=True)...")
+        agent_id_1, agent_id_2 = create_agents(
+            mcp=mcp,
+            vector=True,
+            input_topic=input_topic,
+            midway_topic=midway_topic,
+            issue_topic=issue_topic,
+            allowed=wildcard_purpose,
+            wildcard_purpose=wildcard_purpose,
+            agent_purpose_1=wildcard_purpose,
+            agent_purpose_2=wildcard_purpose,
+            vector_purpose="subsidy",
+        )
+        _log(branch, f"Agents created: agent_id_1={agent_id_1}, agent_id_2={agent_id_2}")
+
+        _log(branch, "Checking if both agents exist and are healthy...")
+        assert check_agent_exists(agent_id_1), f"Agent 1 with ID {agent_id_1} does not exist."
+        assert check_agent_exists(agent_id_2), f"Agent 2 with ID {agent_id_2} does not exist."
+        _log(branch, "Both agents exist and are healthy.")
+
+        _log(branch, f"Publishing message to input topic: {input_topic} (vector_purpose=subsidy, matching knowledge expected)")
+        payload = make_trigger_message(customer)
+        publish_response = publish_message(input_topic, json.dumps(payload))
+        _log(branch, f"Message published: {publish_response}")
+
+        _log(branch, f"Waiting for Agent 1 (id={agent_id_1}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
+        _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
+
+        _log(branch, "Checking that search_knowledge_base was called...")
+        toolcall_exists, toolcall_message = toolcall_listen_for_tool("search_knowledge_base")
+        assert toolcall_exists, f"Expected search_knowledge_base to be called. Tool Call Message: {toolcall_message}"
+        _log(branch, f"search_knowledge_base was called. Tool Call Message: {toolcall_message}")
+
+        _log(branch, "Checking that send_email was called with real customer data (no ACCESS_DENIED)...")
+        email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
+        assert email_calls, f"Expected send_email to be called. Captured messages: {email_calls}"
+        assert "[Name]" not in str(email_calls), (
+            f"Email enthält Platzhalter statt echter Kundendaten: {email_calls}"
+        )
+        _log(branch, f"send_email was called with real data as expected: {email_calls}")
+        _log(branch, f"Iteration {iteration}/{total_iterations} passed.")
+    finally:
+        _cleanup_agents(branch, agent_id_1, agent_id_2)
+
 
 def workflow_passthrough_scenario(input_topic, 
                                   midway_topic, 
@@ -476,8 +684,11 @@ def test_workload_purpose_isolation_scenario(request,
                                              purpose_factory):
     branch = "SETUP"
     broker_enabled = request.config.getoption("--broker-enabled")
+    broker_success_enabled = request.config.getoption("--broker-success-enabled")
     mcp_enabled = request.config.getoption("--mcp-enabled")
+    mcp_success_enabled = request.config.getoption("--mcp-success-enabled")
     vector_enabled = request.config.getoption("--vector-enabled")
+    vector_success_enabled = request.config.getoption("--vector-success-enabled")
     amount_messages = request.config.getoption("--amount-messages")
     randomness = request.config.getoption("--randomness").lower() == "true"
 
@@ -491,7 +702,6 @@ def test_workload_purpose_isolation_scenario(request,
     input_topic = topic_factory("input")
     midway_topic = topic_factory("midway")
     issue_topic = topic_factory("issue")
-    # purposes for broker
     allowed = purpose_factory("allowed")
     wildcard_purpose = "admin"
     
@@ -530,6 +740,7 @@ def test_workload_purpose_isolation_scenario(request,
         _log(branch, f"Entering NO-FAULT branch for {amount_messages} iteration(s).")
 
         for i in range(amount_messages):
+            # TODO: This is not controlled/asserted for at the moment 
             expected_customer = pick_distinctive_customer(customer)
             
             workflow_no_fault_scenario(
@@ -548,9 +759,10 @@ def test_workload_purpose_isolation_scenario(request,
                 total_iterations=amount_messages,
 
             )
-        return # Exit the test after running the no-fault scenario
+        return 
 
-    selected_branch, broker, mcp, vector = _select_workload_branch(broker, mcp, vector, randomness)
+    selected_branch, broker, mcp, vector = _select_workload_branch( broker, broker_success_enabled, mcp, mcp_success_enabled, vector, vector_success_enabled, randomness
+    )
     _log(branch, f"Randomness enabled. Selected branch: {selected_branch} (Broker={broker}, MCP={mcp}, Vector={vector})")
 
     if selected_branch == "no-fault":
@@ -642,6 +854,51 @@ def test_workload_purpose_isolation_scenario(request,
                 wildcard_purpose=wildcard_purpose,
                 mcp=mcp,
                 vector=vector,
+                iteration=i + 1,
+                total_iterations=amount_messages,
+                customer=expected_customer
+            )
+    elif selected_branch == "broker-success":
+        _log(branch, f"Selected BROKER-SUCCESS branch for {amount_messages} iteration(s).")
+        for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            workflow_broker_success_scenario(
+                input_topic=input_topic,
+                midway_topic=midway_topic,
+                issue_topic=issue_topic,
+                allowed=allowed,
+                wildcard_purpose=wildcard_purpose,
+                vector=vector,
+                iteration=i + 1,
+                total_iterations=amount_messages,
+                customer=expected_customer
+            )
+    elif selected_branch == "mcp-success":
+        _log(branch, f"Selected MCP-SUCCESS branch for {amount_messages} iteration(s).")
+        for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            workflow_mcp_success_scenario(
+                input_topic=input_topic,
+                midway_topic=midway_topic,
+                issue_topic=issue_topic,
+                allowed=allowed,
+                wildcard_purpose=wildcard_purpose,
+                vector=vector,
+                iteration=i + 1,
+                total_iterations=amount_messages,
+                customer=expected_customer
+            )
+    elif selected_branch == "vector-success":
+        _log(branch, f"Selected VECTOR-SUCCESS branch for {amount_messages} iteration(s).")
+        for i in range(amount_messages):
+            expected_customer = pick_distinctive_customer(customer)
+            workflow_vector_success_scenario(
+                input_topic=input_topic,
+                midway_topic=midway_topic,
+                issue_topic=issue_topic,
+                allowed=allowed,
+                wildcard_purpose=wildcard_purpose,
+                mcp=mcp,
                 iteration=i + 1,
                 total_iterations=amount_messages,
                 customer=expected_customer

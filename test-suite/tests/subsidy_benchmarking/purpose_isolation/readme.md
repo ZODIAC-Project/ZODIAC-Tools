@@ -79,49 +79,22 @@ full flow succeeds]:::ok
 
 ## Commands
 
-No-fault path, repeated 1 time:
+# NO-FAULT (alle Layer aus, keine Filterung, muss durchlaufen)
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-enabled --mcp-enabled --vector-enabled --randomness=False
 
-```sh
-uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
-  --broker-enabled --mcp-enabled --vector-enabled \
-  --amount-messages=1 --randomness=False
-```
-
-Broker fault branch, repeated 1 time:
-
-```sh
-uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
-  --broker-enabled \
-  --amount-messages=1 --randomness=True
-```
-
-MCP fault branch, repeated 1 time:
-
-```sh
-uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
-  --mcp-enabled \
-  --amount-messages=1 --randomness=True
-```
-
-Vector fault branch, repeated 1 time:
-
-```sh
-uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
-  --vector-enabled \
-  --amount-messages=1 --randomness=True
-```
-
-Passthrough branch (all PBAC layers disabled), repeated 1 time:
-
-```sh
+# PASSTHROUGH 
 uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
   --amount-messages=1 --randomness=False
-```
 
-Random branch selection, repeated 1 time:
+# BROKER-FAULT / BROKER-SUCCESS
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-enabled --amount-messages=1 --randomness=True
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --broker-success-enabled --amount-messages=1 --randomness=True
 
-```sh
-uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s \
-  --amount-messages=1 --randomness=True
-```
+# MCP-FAULT / MCP-SUCCESS
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --mcp-enabled --amount-messages=1 --randomness=True
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --mcp-success-enabled --amount-messages=1 --randomness=True
+
+# VECTOR-FAULT / VECTOR-SUCCESS
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --vector-enabled --amount-messages=1 --randomness=True
+uv run pytest tests/subsidy_benchmarking/purpose_isolation/test_workload.py -vv -s --vector-success-enabled --amount-messages=1 --randomness=True
 
