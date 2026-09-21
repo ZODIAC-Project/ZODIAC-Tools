@@ -20,8 +20,8 @@ TOOL_USE_WS = os.getenv("TOOL_USE_WS", "ws://130.149.158.133:30084/tool-use")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "130.149.158.133")
 MQTT_PORT = int(os.getenv("MQTT_PORT", "30069"))
 STREAM_MANAGER_URL = os.getenv("STREAM_MANAGER_URL", "http://130.149.158.32:30002")
-RAG_URL_UNRESTRICTED = os.getenv("RAG_URL", "http://localhost:30111")
-MESSAGE_TIMEOUT = 100
+RAG_URL_UNRESTRICTED = os.getenv("RAG_URL", "http://rag-service-unrestrickted.zodiac.svc.cluster.local:30111")
+MESSAGE_TIMEOUT = 150
 
 DEFAULT_LLM_MODEL = os.getenv("DEFAULT_LLM_MODEL", None)
 

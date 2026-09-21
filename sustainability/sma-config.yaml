@@ -9,7 +9,7 @@ data:
       version: 0.2.0
       services:
         prometheus:
-          address: http://130.149.158.132:32426
+                    address: http://130.149.158.132:32426
 
       observation:
         mode: timer

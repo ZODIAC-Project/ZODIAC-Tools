@@ -74,7 +74,7 @@ def build_vector_query_task(query_purpose: str, result_topic: str) -> str:
 
 def Agent_1_task(midway_topic: str, allowed_purpose: str, issue_topic: str, vektor_purpose: str) -> str:
     return (
-        f"The incomming message is a Subsidy Description. Use RAG tool to get all existing Customers from the customers collection. Match those Customers to the Subsidy. Choose ALL if there are multiple matching Customers. Publish those Subsidy-Customer Pairs as a list to the topic: {midway_topic}. For the RAG Call use {vektor_purpose} as Purpose. For the Publish use the Purpose: {allowed_purpose}. If the Toolcall or the RAG call fails or give back any issue/error message, send a retained message: \"ACCESS_DENIED_PURPOSE_ISSUE\" to the Issue topic: {issue_topic}. Dont try more then one time to call RAG."
+        f"The incomming message is a Subsidy Description. Use RAG tool to get all existing Customers from the customers collection. Match those Customers to the Subsidy. Choose ALL if there are multiple matching Customers. Publish those Subsidy-Customer Pairs as a list to the topic: {midway_topic}. For the RAG Call use {vektor_purpose} as Purpose. For the Publish use the Purpose: {allowed_purpose}. If the Toolcall or the RAG call fails or give back any issue/error message, send a retained message: \"ACCESS_DENIED_PURPOSE_ISSUE\" to the Issue topic: {issue_topic}. Dont try more then one time to call RAG. Dont try to call it with a differend purpose if the given one fails."
     )
     
 def Agent_2_task( allowed_purpose: str, issue_topic: str ) -> str:
