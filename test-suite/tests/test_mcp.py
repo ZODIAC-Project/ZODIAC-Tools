@@ -221,4 +221,75 @@ def test_list_subscriptions_tool():
         f"Expected list_subscriptions tool call but got: {ws_message}"
     fuzzy_assert(result2["response"], f"The response includes '{topic}' in the list of subscriptions")
 
+import time
+import requests
+import json
+from .helper import *  # Passe den Importpfad ggf. an
 
+def disable_purpose_awareness(session_id: str) -> None:
+    url = f"{MCP_URL}/disable-purpose" 
+    response = requests.post(url, json={"session_id": session_id})
+    assert response.status_code == 200, f"Failed to disable purpose awareness: {response.text}"
+
+def test_agent_dynamic_disable_purpose():
+    topic_incomming = "zodiac/test/dynamic-purpose/in"
+
+    # 1. Agenten mit einem falschen Purpose ("public") erstellen
+    # Dadurch hat er KEINEN Zugriff auf das "secret_animal" Tool.
+    print("\n[TEST] Creating agent with restricted purpose...")
+    agent_id = create_agent(
+        runOnce=False,
+        text=(
+            "When you receive a message, use the 'secret_animal' tool to get the animal. "
+            "Then output a clear statement containing the name of the animal. "
+            "If you cannot access the tool or it fails, clearly state that you don't have access."
+        ),
+        purpose="nothing",  # Falscher Purpose
+        memoryWindow=10,
+        listenTopic=topic_incomming,
+    )
+    
+    time.sleep(3)
+    
+    try:
+        # 2. Erster Versuch (Sollte scheitern)
+        print("[TEST] Triggering agent (1st attempt) - expecting FAILURE...")
+        publish_message(topic_incomming, "Please use the secret animal tool now.")
+        
+        # LLM Zeit zum Denken und Antworten geben
+        time.sleep(20) 
+        
+        history_before = get_agent_history(agent_id, timeout=10)
+        history_text_before = " ".join([str(msg) for msg in history_before]).lower()
+        
+        # Das Tool darf nicht funktioniert haben -> 'turtle' darf nicht im Kontext sein
+        assert "turtle" not in history_text_before, \
+            f"Agent magically bypassed purpose limitations! History: {history_before}"
+        print("[TEST] Correctly denied. Agent does not know the secret animal.")
+
+        # 3. Purpose Awareness für diesen Agenten/diese Session ausschalten
+        print("[TEST] Disabling purpose awareness for agent...")
+        disable_purpose_awareness(agent_id)
+        
+        # Kurz warten, bis der neue Agent-Zustand geladen ist
+        time.sleep(3)
+        
+        # 4. Zweiter Versuch (Sollte nun erfolgreich sein)
+        print("[TEST] Triggering agent (2nd attempt) - expecting SUCCESS...")
+        publish_message(topic_incomming, "Try again! Please use the private animal tool now.")
+        
+        # Wieder warten auf die LLM-Generierung
+        time.sleep(15)
+        
+        history_after = get_agent_history(agent_id, timeout=10)
+        history_text_after = " ".join([str(msg) for msg in history_after]).lower()
+        
+        # Jetzt MUSS das Tool funktioniert haben
+        assert "turtle" in history_text_after, \
+            f"Expected agent to use the private tool after disabling purpose, but it failed. History: {history_after}"
+        print("[TEST] Success! Agent used the tool after purpose limitations were removed.")
+
+    finally:
+        # Agent sauber beenden, damit er bei weiteren Tests nicht im Hintergrund rumfunkt
+        print(f"[TEST] Cleaning up agent {agent_id}...")
+        delete_agent(agent_id)
