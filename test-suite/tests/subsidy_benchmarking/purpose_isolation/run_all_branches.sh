@@ -53,6 +53,7 @@ for branch in "${BRANCHES[@]}"; do
     uv run pytest "$TEST_FILE" -vv -s \
         --branch="$branch" \
         --amount-messages="$AMOUNT_MESSAGES" \
+        --model="academic/openai-gpt-oss-120b" \
         > "$log_file" 2>&1
 
     exit_code=$?

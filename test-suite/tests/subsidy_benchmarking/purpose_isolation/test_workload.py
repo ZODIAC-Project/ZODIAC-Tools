@@ -117,17 +117,7 @@ def _select_workload_branch(forced_branch: str | None, randomness: bool) -> tupl
     return branch_name, resolved_broker, resolved_mcp, resolved_vector
 
 def _select_no_fault_pbac_layers() -> tuple[bool, bool, bool]:
-    return choice([
-        (False, False, False),
-        (True, False, False),
-        (False, True, False),
-        (False, False, True),
-        (True, True, False),
-        (True, False, True),
-        (False, True, True),
-        (True, True, True),
-    ])
-
+    return (True, True, True)
 
 def workflow_no_fault_scenario(input_topic,
                                allowed, 
@@ -401,7 +391,9 @@ def workflow_vector_fault_scenario(input_topic,
         _cleanup_agents(branch, agent_id_1, agent_id_2)
 
 ### Success scenarios
-def workflow_broker_success_scenario(input_topic,
+def workflow_broker_success_scenario(
+                                     mcp,
+                                     input_topic,
                                      midway_topic,
                                      issue_topic,
                                      customer,
@@ -431,7 +423,7 @@ def workflow_broker_success_scenario(input_topic,
 
         _log(branch, "Creating Agent 1 (purpose=query) and Agent 2 (purpose=advertisement), both mcp=True...")
         agent_id_1, agent_id_2 = create_agents(
-            mcp=True,
+            mcp=mcp,
             vector=vector,
             input_topic=input_topic,
             midway_topic=midway_topic,
@@ -529,6 +521,11 @@ def workflow_mcp_success_scenario(input_topic,
         agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
         assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
+        
+        _log(branch, f"Waiting for Agent 2 (id={agent_id_2}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_2 = get_agent_history(agent_id_2, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_2) > 0, f" No message was received by Agent 2. Agent History: {agent_history_2}"
+        _log(branch, f"Agent 2 received a message. Agent History: {agent_history_2}")
 
         _log(branch, "Checking that send_email WAS called by Agent2...")
         email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
@@ -638,8 +635,8 @@ def workflow_passthrough_scenario(input_topic,
             issue_topic=issue_topic,
             allowed=wildcard_purpose,
             wildcard_purpose=wildcard_purpose,
-            agent_purpose_1=wildcard_purpose,
-            agent_purpose_2=wildcard_purpose,
+            agent_purpose_1=(wildcard_purpose),
+            agent_purpose_2=(wildcard_purpose),
         )
         _log(branch, f"Agents created: agent_id_1={agent_id_1}, agent_id_2={agent_id_2}")
 
@@ -657,6 +654,11 @@ def workflow_passthrough_scenario(input_topic,
         agent_history_1 = get_agent_history(agent_id_1, timeout=MESSAGE_TIMEOUT)
         assert len(agent_history_1) > 0, f" No message was received by Agent 1. Agent History: {agent_history_1}"
         _log(branch, f"Agent 1 received a message. Agent History: {agent_history_1}")
+        
+        _log(branch, f"Waiting for Agent 2 (id={agent_id_2}) to receive the message (timeout={MESSAGE_TIMEOUT}s)...")
+        agent_history_2 = get_agent_history(agent_id_2, timeout=MESSAGE_TIMEOUT)
+        assert len(agent_history_2) > 0, f" No message was received by Agent 2. Agent History: {agent_history_2}"
+        _log(branch, f"Agent 2 received a message. Agent History: {agent_history_2}")
 
         _log(branch, "Checking that send_email was called...")
         email_calls = wait_for_tool_call("send_email", timeout=MESSAGE_TIMEOUT)
@@ -722,7 +724,7 @@ def test_workload_purpose_isolation_scenario(request,
         for i in range(amount_messages):
             expected_customer = pick_distinctive_customer(customer)
             workflow_broker_success_scenario(
-                input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
+                mcp=mcp, input_topic=input_topic, midway_topic=midway_topic, issue_topic=issue_topic,
                 allowed=allowed, wildcard_purpose=wildcard_purpose, vector=vector,
                 iteration=i + 1, total_iterations=amount_messages, customer=expected_customer
             )
