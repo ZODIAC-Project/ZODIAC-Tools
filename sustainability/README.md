@@ -5,7 +5,7 @@ This directory contains a first deployment template for running the `sustainabil
 ## Current cluster inputs
 
 - Namespace: `zodiac`
-- Prometheus: `http://prometheus.zodiac.svc.cluster.local:9090`
+- Prometheus: `http://130.149.158.132:32426`
 - Relevant workloads:
   - `mcp-client`
   - `mcp-server`
